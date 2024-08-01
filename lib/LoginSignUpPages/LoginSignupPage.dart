@@ -1,8 +1,8 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, prefer_const_constructors, library_private_types_in_public_api, use_build_context_synchronously, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
-import 'package:myapp/services/authentication.dart';
-import 'package:myapp/snackbar.dart';
+import 'package:myapp/LoginSignUpPages/Login.dart';
+import 'package:myapp/LoginSignUpPages/Signup.dart';
 
 class LoginSignupPage extends StatefulWidget {
   const LoginSignupPage({super.key});
@@ -26,7 +26,7 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 1) {
-        // Navigate to SignupPage
+        
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SignupPage()),
@@ -43,22 +43,22 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set background color to white
+      backgroundColor: Colors.white, 
       body: Stack(
         children: <Widget>[
-          // Top Center: Logo Image
+          
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
               padding: const EdgeInsets.only(top: 40.0),
               child: Image.asset(
-                '../lib/assets/logo.png', // Adjust path as per your project structure
+                '../lib/assets/logo.png',  
                 width: 150,
                 height: 150,
               ),
             ),
           ),
-          // Center: Text
+         
           const Center(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -75,10 +75,10 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
               ),
             ),
           ),
-          // Center Bottom: Toggle Buttons
+         
           Padding(
             padding:
-                const EdgeInsets.only(bottom: 50.0), // Adjust padding as needed
+                const EdgeInsets.only(bottom: 50.0), 
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Column(
@@ -113,510 +113,6 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: LoginSignupPage(),
-  ));
-}
-
-class LoginPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  LoginPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 159, 41, 33),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: SizedBox(
-            width: 20,
-            height: 20,
-            child: Image.asset('../lib/assets/back.png'),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-            );
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, top: 5.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'WELCOME',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                  Text(
-                    'BACK!',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            Material(
-              elevation: 5.0,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(40.0),
-                topRight: Radius.circular(40.0),
-                bottomLeft: Radius.zero,
-                bottomRight: Radius.zero,
-              ),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
-                    bottomLeft: Radius.zero,
-                    bottomRight: Radius.zero,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10.0),
-                    _buildTextFieldWithShadow(
-                      controller: _emailController,
-                      labelText: 'Email',
-                    ),
-                    const SizedBox(height: 20.0),
-                    PasswordField(
-                      controller: _passwordController,
-                      labelText: 'Password',
-                    ),
-                    const SizedBox(height: 5.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            // Implement forgot password logic
-                          },
-                          child: const MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 3, 3, 3),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 25.0),
-                    Center(
-                      // Center the login button
-                      child: ElevatedButton(
-                        onPressed: () {
-                          //   Navigator.pushReplacement(
-                          //  context,
-                          //   MaterialPageRoute(builder: (context) => homeg10()),
-                          //  );
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 159, 41, 33),
-                          ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(
-                              horizontal: 80.0,
-                              vertical: 15.0,
-                            ),
-                          ),
-                        ),
-                        child: const Text('LOGIN'),
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    const Row(
-                      children: [
-                        Expanded(child: Divider()),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('OR CONTINUE WITH'),
-                        ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-                    const SizedBox(height: 5.0),
-                    Center(
-                      // Center the Google button
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Implement Google login logic
-                        },
-                        style: ButtonStyle(
-                          side: MaterialStateProperty.all(
-                            BorderSide.none,
-                          ),
-                        ),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset(
-                              '../lib/assets/google.png',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextFieldWithShadow({
-    required TextEditingController controller,
-    required String labelText,
-    bool obscureText = false,
-    double height = 40.0,
-  }) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        style: const TextStyle(fontSize: 16.0),
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: labelText,
-          labelStyle: const TextStyle(color: Colors.black),
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PasswordField extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-
-  const PasswordField(
-      {super.key, required this.controller, required this.labelText});
-
-  @override
-  _PasswordFieldState createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40.0,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: TextField(
-        controller: widget.controller,
-        obscureText: _obscureText,
-        style: const TextStyle(fontSize: 16.0),
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: widget.labelText,
-          labelStyle: const TextStyle(color: Colors.black),
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off,
-            ),
-            onPressed: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
-
-  @override
-  _SignupPageState createState() => _SignupPageState();
-}
-
-class _SignupPageState extends State<SignupPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  bool isLoading = false;
-
-  // In your SignupPage
-  void signUpUser() async {
-    String res = await AuthServicews().signUpUser(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-    if (res == "Success") {
-      setState(() {
-        isLoading = true;
-      });
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => BlankPage()),
-      );
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(context, res); // Display the error message
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 159, 41, 33),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: SizedBox(
-            width: 20,
-            height: 20,
-            child: Image.asset('../lib/assets/back.png'),
-          ),
-          onPressed: () {
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-            // );
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, top: 0.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'LET\'S GET',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                  Text(
-                    'STARTED!',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            Material(
-              elevation: 5.0,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(40.0),
-                topRight: Radius.circular(40.0),
-              ),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10.0),
-                    _buildTextFieldWithShadow(
-                      controller: _emailController,
-                      labelText: 'Email',
-                    ),
-                    const SizedBox(height: 20.0),
-                    PasswordField(
-                      controller: _passwordController,
-                      labelText: 'Password',
-                    ),
-                    const SizedBox(height: 20.0),
-                    PasswordField(
-                      controller: _confirmPasswordController,
-                      labelText: 'Confirm Password',
-                    ),
-                    const SizedBox(height: 25.0),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          signUpUser();
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 159, 41, 33),
-                          ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(
-                              horizontal: 80.0,
-                              vertical: 15.0,
-                            ),
-                          ),
-                        ),
-                        child: const Text('SIGN UP'),
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    const Row(
-                      children: [
-                        Expanded(child: Divider()),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('OR CONTINUE WITH'),
-                        ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-                    const SizedBox(height: 5.0),
-                    Center(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Implement Google login logic
-                        },
-                        style: ButtonStyle(
-                          side: MaterialStateProperty.all(BorderSide.none),
-                        ),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset('../lib/assets/google.png'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextFieldWithShadow({
-    required TextEditingController controller,
-    required String labelText,
-    double height = 40.0,
-  }) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller,
-        style: const TextStyle(fontSize: 15.0),
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: labelText,
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-        ),
       ),
     );
   }
@@ -772,7 +268,7 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          // Handle Next button press
+                         
                           if (_selectedGradeLevel == 'GRADE 10') {
                             Navigator.push(
                               context,
@@ -915,7 +411,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               decoration: const BoxDecoration(
                 color:
-                    Color.fromARGB(255, 229, 228, 228), // Slightly transparent
+                    Color.fromARGB(255, 229, 228, 228),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0),
@@ -965,7 +461,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
-                  height: 110), // Space for the overlapping containers
+                  height: 110),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -1206,7 +702,7 @@ class _CreateAccountScreenState2 extends State<CreateAccountScreen2> {
                       //   MaterialPageRoute(
                       //       builder: (context) =>
                       //           const ConfirmAccountScreen2()),
-                      // ); // Handle Ok button press
+                      // ); 
                     },
                     child: const Text(
                       'Ok',
@@ -1375,7 +871,7 @@ class _CreateAccountScreenState3 extends State<CreateAccountScreen3> {
                 ),
               ),
               child: const Text(
-                'Create Account', // Your desired text here
+                'Create Account', 
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
@@ -1474,7 +970,7 @@ class _CreateAccountScreenState3 extends State<CreateAccountScreen3> {
                 });
               },
               child: Container(
-                width: double.infinity, // Occupy full width
+                width: double.infinity, 
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
