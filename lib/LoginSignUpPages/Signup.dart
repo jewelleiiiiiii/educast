@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:myapp/services/authentication.dart';
 import 'package:myapp/services/snackbar.dart';
@@ -17,7 +19,8 @@ class _SignupPageState extends State<SignupPage> {
       TextEditingController();
   bool isLoading = false;
 
-  void despose() {
+  @override
+  void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -25,22 +28,41 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void signUpUser() async {
-    String res = await AuthServices().signUpUser(
-      email: _emailController.text,
+    setState(() {
+      isLoading = true;
+    });
+
+    // Ensure the passwords match
+    if (_passwordController.text != _confirmPasswordController.text) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(context, "Passwords do not match.");
+      return;
+    }
+
+    // Append the domain to the email
+    String email = '${_emailController.text.trim()}@g.batstate-u.edu.ph';
+
+    String result = await AuthServices().signUpUser(
+      email: email,
       password: _passwordController.text,
     );
-    if (res == "Success") {
-      setState(() {
-        isLoading = true;
-      });
+
+    if (result == "Success") {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => BlankPage()),
+        MaterialPageRoute(
+          builder: (context) => CreateAccountPage(
+            uid: FirebaseAuth.instance.currentUser!.uid,
+            email: email, // Pass the email here
+          ),
+        ),
       );
     } else {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, res);
+      showSnackBar(context, result); // Use the dynamic error message here
     }
   }
 
@@ -54,7 +76,7 @@ class _SignupPageState extends State<SignupPage> {
           icon: SizedBox(
             width: 20,
             height: 20,
-            child: Image.asset('../lib/assets/back.png'),
+            child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
             // Navigator.pushReplacement(
@@ -113,10 +135,7 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10.0),
-                    _buildTextFieldWithShadow(
-                      controller: _emailController,
-                      labelText: 'Email',
-                    ),
+                    _buildEmailTextField(),
                     const SizedBox(height: 20.0),
                     PasswordField(
                       controller: _passwordController,
@@ -167,9 +186,7 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(height: 5.0),
                     Center(
                       child: OutlinedButton(
-                        onPressed: () {
-                          
-                        },
+                        onPressed: () {},
                         style: ButtonStyle(
                           side: MaterialStateProperty.all(BorderSide.none),
                         ),
@@ -178,7 +195,7 @@ class _SignupPageState extends State<SignupPage> {
                           child: SizedBox(
                             width: 50,
                             height: 50,
-                            child: Image.asset('../lib/assets/google.png'),
+                            child: Image.asset('assets/google.png'),
                           ),
                         ),
                       ),
@@ -193,13 +210,9 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Widget _buildTextFieldWithShadow({
-    required TextEditingController controller,
-    required String labelText,
-    double height = 40.0,
-  }) {
+  Widget _buildEmailTextField() {
     return Container(
-      height: height,
+      height: 40.0, // Match the height of the password field
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -209,24 +222,75 @@ class _SignupPageState extends State<SignupPage> {
             offset: const Offset(0, 2),
           ),
         ],
+        borderRadius: BorderRadius.circular(15.0),
       ),
-      child: TextField(
-        controller: controller,
+      child: TextFormField(
+        controller: _emailController,
         style: const TextStyle(fontSize: 15.0),
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: labelText,
+          labelText: 'Email',
+          labelStyle: const TextStyle(color: Colors.black),
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none, // Remove border
           ),
+          hintText: 'XX-XXXXX', // Main part of the hint text
+          hintStyle:
+              const TextStyle(color: Colors.grey), // Style for the main part
+          suffixText: '@g.batstate-u.edu.ph', // Domain part
+          suffixStyle:
+              const TextStyle(color: Colors.grey), // Style for the domain part
         ),
+        keyboardType: TextInputType.emailAddress,
+        inputFormatters: [EmailInputFormatter()],
       ),
     );
   }
 }
+
+class EmailInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only numbers
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Ensure the length of the text matches the pattern
+    if (newText.length > 8) {
+      newText = newText.substring(0, 8);
+    }
+
+    // Insert hyphen at the right place
+    if (newText.length > 2) {
+      newText = '${newText.substring(0, 2)}-${newText.substring(2)}';
+    }
+
+    // Maintain the format before @ symbol
+    String formattedText;
+    if (newText.length > 8) {
+      formattedText = '${newText.substring(0, 8)}';
+    } else {
+      formattedText =
+          '$newText'; // Do not add the suffix if the length is less than 8
+    }
+
+    // Calculate cursor position
+    int cursorPosition = newText.length;
+    if (cursorPosition > 8) {
+      cursorPosition = 8;
+    }
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: cursorPosition),
+    );
+  }
+}
+
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
@@ -283,6 +347,246 @@ class _PasswordFieldState extends State<PasswordField> {
                 _obscureText = !_obscureText;
               });
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//--------------------- CREATE ACCOUNT PAGE ---------------------//
+
+class CreateAccountPage extends StatefulWidget {
+  final String uid;
+  final String email; // Add email field
+
+  const CreateAccountPage({super.key, required this.uid, required this.email});
+
+  @override
+  _CreateAccountScreenState1 createState() => _CreateAccountScreenState1();
+}
+
+class _CreateAccountScreenState1 extends State<CreateAccountPage> {
+  final TextEditingController _firstnameController = TextEditingController();
+  final TextEditingController _lastnameController = TextEditingController();
+  final TextEditingController _campusController = TextEditingController();
+  String _selectedGradeLevel = 'GRADE 10';
+
+  void storeUserData() async {
+    await AuthServices().storeAdditionalUserData(
+      uid: widget.uid,
+      fname: _firstnameController.text,
+      lname: _lastnameController.text,
+      campus: _campusController.text,
+      gradeLevel: _selectedGradeLevel,
+      email: widget.email, // Pass the email here
+    );
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => BlankPage(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 158, 39, 39),
+        elevation: 0,
+        leading: IconButton(
+          icon: Image.asset(
+            '../lib/assets/back.png',
+            width: 24.0,
+            height: 24.0,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const SignupPage()),
+            );
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 45.0,
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 158, 39, 39),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.zero,
+                  topRight: Radius.zero,
+                  bottomLeft: Radius.circular(40.0),
+                  bottomRight: Radius.circular(40.0),
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.only(top: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(width: 5.0),
+                        ],
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'Create account',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 253, 248, 248),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTextFieldWithShadow(
+                    controller: _firstnameController,
+                    labelText: 'Firstname',
+                    height: 40.0,
+                  ),
+                  const SizedBox(height: 15.0),
+                  _buildTextFieldWithShadow(
+                    controller: _lastnameController,
+                    labelText: 'Lastname',
+                    height: 40.0,
+                  ),
+                  const SizedBox(height: 15.0),
+                  _buildTextFieldWithShadow(
+                    controller: _campusController,
+                    labelText: 'Campus',
+                    height: 40.0,
+                  ),
+                  const SizedBox(height: 15.0),
+                  DropdownButtonFormField<String>(
+                    value: _selectedGradeLevel,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedGradeLevel = newValue!;
+                      });
+                    },
+                    items: <String>['GRADE 10', 'GRADE 12', '4th Year College']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      labelText: 'Grade Level',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Center(
+                    child: Image.asset(
+                      '../lib/assets/logo2.png',
+                      height: 70.0,
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          storeUserData(); // Always store data before navigating
+                          if (_selectedGradeLevel == 'GRADE 10') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateAccountScreen2(),
+                              ),
+                            );
+                          } else if (_selectedGradeLevel == 'GRADE 12') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateAccountScreen2(),
+                              ),
+                            );
+                          } else if (_selectedGradeLevel ==
+                              '4th Year College') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateAccountScreen3(),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text(
+                          'Next',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 5.0),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextFieldWithShadow({
+    required TextEditingController controller,
+    required String labelText,
+    double height = 40.0,
+  }) {
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        style: const TextStyle(fontSize: 15.0),
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          labelText: labelText,
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
           ),
         ),
       ),

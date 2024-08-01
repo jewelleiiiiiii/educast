@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:myapp/services/authentication.dart';
 import 'package:myapp/services/snackbar.dart';
@@ -14,15 +15,18 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool isLoading = false;
+
   void loginUsers() async {
+    setState(() {
+      isLoading = true;
+    });
+
     String res = await AuthServices().loginUser(
       email: _emailController.text,
       password: _passwordController.text,
     );
+
     if (res == "Success") {
-      setState(() {
-        isLoading = true;
-      });
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => BlankPage()),
       );
@@ -51,13 +55,10 @@ class _LoginPageState extends State<LoginPage> {
           icon: SizedBox(
             width: 20,
             height: 20,
-            child: Image.asset('../lib/assets/back.png'),
+            child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-            // );
+            // Implement back navigation
           },
         ),
       ),
@@ -110,10 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10.0),
-                    _buildTextFieldWithShadow(
-                      controller: _emailController,
-                      labelText: 'Email',
-                    ),
+                    _buildEmailTextField(),
                     const SizedBox(height: 20.0),
                     PasswordField(
                       controller: _passwordController,
@@ -143,9 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 25.0),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          loginUsers();
-                        },
+                        onPressed: loginUsers,
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             const Color.fromARGB(255, 159, 41, 33),
@@ -190,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 50,
                             height: 50,
                             child: Image.asset(
-                              '../lib/assets/google.png',
+                              'assets/google.png',
                             ),
                           ),
                         ),
@@ -206,14 +202,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextFieldWithShadow({
-    required TextEditingController controller,
-    required String labelText,
-    bool obscureText = false,
-    double height = 40.0,
-  }) {
+  Widget _buildEmailTextField() {
     return Container(
-      height: height,
+      height: 40.0, // Match the height of the password field
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -225,23 +216,69 @@ class _LoginPageState extends State<LoginPage> {
         ],
         borderRadius: BorderRadius.circular(15.0),
       ),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        style: const TextStyle(fontSize: 16.0),
+      child: TextFormField(
+        controller: _emailController,
+        style: const TextStyle(fontSize: 15.0),
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: labelText,
+          labelText: 'Email',
           labelStyle: const TextStyle(color: Colors.black),
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide.none, // Remove border
           ),
+          hintText: 'XX-XXXXX', // Main part of the hint text
+          hintStyle:
+              const TextStyle(color: Colors.grey), // Style for the main part
+          suffixText: '@g.batstate-u.edu.ph', // Domain part
+          suffixStyle:
+              const TextStyle(color: Colors.grey), // Style for the domain part
         ),
+        keyboardType: TextInputType.emailAddress,
+        inputFormatters: [EmailInputFormatter()],
       ),
+    );
+  }
+}
+
+class EmailInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only numbers
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Ensure the length of the text matches the pattern
+    if (newText.length > 8) {
+      newText = newText.substring(0, 8);
+    }
+
+    // Insert hyphen at the right place
+    if (newText.length > 2) {
+      newText = '${newText.substring(0, 2)}-${newText.substring(2)}';
+    }
+
+    // Maintain the format before @ symbol
+    String formattedText;
+    if (newText.length > 8) {
+      formattedText = '${newText.substring(0, 8)}';
+    } else {
+      formattedText =
+          '$newText'; // Do not add the suffix if the length is less than 8
+    }
+
+    // Calculate cursor position
+    int cursorPosition = newText.length;
+    if (cursorPosition > 8) {
+      cursorPosition = 8;
+    }
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: cursorPosition),
     );
   }
 }
@@ -249,12 +286,14 @@ class _LoginPageState extends State<LoginPage> {
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
+  final bool isPass;
 
-  const PasswordField(
-      {super.key,
-      required this.controller,
-      required this.labelText,
-      required bool isPass});
+  const PasswordField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.isPass,
+  });
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -278,15 +317,14 @@ class _PasswordFieldState extends State<PasswordField> {
         ],
         borderRadius: BorderRadius.circular(15.0),
       ),
-      child: TextField(
+      child: TextFormField(
         controller: widget.controller,
         obscureText: _obscureText,
-        style: const TextStyle(fontSize: 16.0),
         decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           labelText: widget.labelText,
           labelStyle: const TextStyle(color: Colors.black),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
@@ -295,7 +333,7 @@ class _PasswordFieldState extends State<PasswordField> {
           ),
           suffixIcon: IconButton(
             icon: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off,
+              _obscureText ? Icons.visibility_off : Icons.visibility,
             ),
             onPressed: () {
               setState(() {

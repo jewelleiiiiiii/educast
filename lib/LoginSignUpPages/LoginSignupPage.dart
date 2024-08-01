@@ -26,7 +26,6 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 1) {
-        
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SignupPage()),
@@ -43,26 +42,25 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, 
-      body: Stack(
-        children: <Widget>[
-          
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 40.0),
-              child: Image.asset(
-                '../lib/assets/logo.png',  
-                width: 150,
-                height: 150,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          // Wrap with SingleChildScrollView
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Image.asset(
+                    'assets/logo.png',
+                    width: 150,
+                    height: 150,
+                  ),
+                ),
               ),
-            ),
-          ),
-         
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Welcome to EduCAST!\n'
                 'Your mapping pathways\n'
                 'to unlock your potential\n'
@@ -73,46 +71,38 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
                   fontSize: 16.0,
                 ),
               ),
-            ),
-          ),
-         
-          Padding(
-            padding:
-                const EdgeInsets.only(bottom: 50.0), 
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  ToggleButtons(
-                    isSelected: [_selectedIndex == 0, _selectedIndex == 1],
-                    selectedColor: Colors.white,
-                    fillColor: buttonColors[_selectedIndex],
-                    borderRadius: BorderRadius.circular(10),
-                    onPressed: (index) => _navigateToPage(index),
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          buttonTitles[0],
-                          style: const TextStyle(fontSize: 16),
-                        ),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.2), // Spacer-like behavior
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: ToggleButtons(
+                  isSelected: [_selectedIndex == 0, _selectedIndex == 1],
+                  selectedColor: Colors.white,
+                  fillColor: buttonColors[_selectedIndex],
+                  borderRadius: BorderRadius.circular(10),
+                  onPressed: (index) => _navigateToPage(index),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        buttonTitles[0],
+                        style: const TextStyle(fontSize: 16),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          buttonTitles[1],
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        buttonTitles[1],
+                        style: const TextStyle(fontSize: 16),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -127,224 +117,6 @@ class BlankPage extends StatelessWidget {
       ),
       body: Center(
         child: Text('This is a blank page.'),
-      ),
-    );
-  }
-}
-
-class CreateAccountPage extends StatefulWidget {
-  const CreateAccountPage({super.key});
-
-  @override
-  _CreateAccountScreenState1 createState() => _CreateAccountScreenState1();
-}
-
-class _CreateAccountScreenState1 extends State<CreateAccountPage> {
-  final TextEditingController _firstnameController = TextEditingController();
-  final TextEditingController _lastnameController = TextEditingController();
-  final TextEditingController _campusController = TextEditingController();
-  String _selectedGradeLevel = 'GRADE 10';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 158, 39, 39),
-        elevation: 0,
-        leading: IconButton(
-          icon: Image.asset(
-            '../lib/assets/back.png',
-            width: 24.0,
-            height: 24.0,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SignupPage()),
-            );
-          },
-        ),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 45.0,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 158, 39, 39),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.zero,
-                  topRight: Radius.zero,
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
-                ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.only(top: 5.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(width: 5.0),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Create account',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 253, 248, 248),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTextFieldWithShadow(
-                    controller: _firstnameController,
-                    labelText: 'Firstname',
-                    height: 40.0,
-                  ),
-                  const SizedBox(height: 15.0),
-                  _buildTextFieldWithShadow(
-                    controller: _lastnameController,
-                    labelText: 'Lastname',
-                    height: 40.0,
-                  ),
-                  const SizedBox(height: 15.0),
-                  _buildTextFieldWithShadow(
-                    controller: _campusController,
-                    labelText: 'Campus',
-                    height: 40.0,
-                  ),
-                  const SizedBox(height: 15.0),
-                  DropdownButtonFormField<String>(
-                    value: _selectedGradeLevel,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedGradeLevel = newValue!;
-                      });
-                    },
-                    items: <String>['GRADE 10', 'GRADE 12', '4th Year College']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    decoration: InputDecoration(
-                      labelText: 'Grade Level',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Center(
-                    child: Image.asset(
-                      '../lib/assets/logo2.png',
-                      height: 70.0,
-                    ),
-                  ),
-                  const SizedBox(height: 5.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                         
-                          if (_selectedGradeLevel == 'GRADE 10') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountScreen(),
-                              ),
-                            );
-                          } else if (_selectedGradeLevel == 'GRADE 12') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountScreen2(),
-                              ),
-                            );
-                          } else if (_selectedGradeLevel ==
-                              '4th Year College') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountScreen3(),
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text(
-                          'Next',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5.0),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextFieldWithShadow({
-    required TextEditingController controller,
-    required String labelText,
-    double height = 40.0,
-  }) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller,
-        style: const TextStyle(fontSize: 15.0),
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: labelText,
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-        ),
       ),
     );
   }
@@ -391,7 +163,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Image.asset(
-            '../lib/assets/back.png',
+            'assets/back.png',
             width: 24.0,
             height: 24.0,
           ),
@@ -410,8 +182,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               decoration: const BoxDecoration(
-                color:
-                    Color.fromARGB(255, 229, 228, 228),
+                color: Color.fromARGB(255, 229, 228, 228),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0),
@@ -460,8 +231,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                  height: 110),
+              const SizedBox(height: 110),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -598,7 +368,7 @@ class _CreateAccountScreenState2 extends State<CreateAccountScreen2> {
           icon: SizedBox(
             width: 20,
             height: 20,
-            child: Image.asset('../lib/assets/back.png'),
+            child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -702,7 +472,7 @@ class _CreateAccountScreenState2 extends State<CreateAccountScreen2> {
                       //   MaterialPageRoute(
                       //       builder: (context) =>
                       //           const ConfirmAccountScreen2()),
-                      // ); 
+                      // );
                     },
                     child: const Text(
                       'Ok',
@@ -819,7 +589,7 @@ class _CreateAccountScreenState3 extends State<CreateAccountScreen3> {
           icon: SizedBox(
             width: 24,
             height: 24,
-            child: Image.asset('../lib/assets/back.png'),
+            child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -871,7 +641,7 @@ class _CreateAccountScreenState3 extends State<CreateAccountScreen3> {
                 ),
               ),
               child: const Text(
-                'Create Account', 
+                'Create Account',
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
@@ -970,7 +740,7 @@ class _CreateAccountScreenState3 extends State<CreateAccountScreen3> {
                 });
               },
               child: Container(
-                width: double.infinity, 
+                width: double.infinity,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
