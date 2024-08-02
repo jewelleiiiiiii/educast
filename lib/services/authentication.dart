@@ -32,16 +32,6 @@ class AuthServices {
 
       print("User created with UID: ${credential.user!.uid}");
 
-      // Store additional user data
-      await storeAdditionalUserData(
-        uid: credential.user!.uid,
-        email: email,
-        fname: '', // Placeholder, will be updated later
-        lname: '', // Placeholder, will be updated later
-        campus: '', // Placeholder, will be updated later
-        gradeLevel: '', // Placeholder, will be updated later
-      );
-
       return "Success"; // Return success message
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -78,10 +68,7 @@ class AuthServices {
     required String campus,
     required String gradeLevel,
   }) async {
-    if (fname.isNotEmpty &&
-        lname.isNotEmpty &&
-        campus.isNotEmpty &&
-        gradeLevel.isNotEmpty) {
+    try {
       await _fireStore.collection("users").doc(uid).set({
         "email": email,
         "firstName": fname,
@@ -90,8 +77,8 @@ class AuthServices {
         "gradeLevel": gradeLevel,
       });
       print('User data stored successfully.');
-    } else {
-      print('All fields must be filled out.');
+    } catch (e) {
+      print('Error storing user data: $e');
     }
   }
 

@@ -50,6 +50,16 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     if (result == "Success") {
+      // Store additional user data after successful signup
+      await AuthServices().storeAdditionalUserData(
+        uid: FirebaseAuth.instance.currentUser!.uid,
+        email: email,
+        fname: '', // Will be updated later in CreateAccountPage
+        lname: '', // Will be updated later in CreateAccountPage
+        campus: '', // Will be updated later in CreateAccountPage
+        gradeLevel: '', // Will be updated later in CreateAccountPage
+      );
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => CreateAccountPage(
@@ -358,7 +368,7 @@ class _PasswordFieldState extends State<PasswordField> {
 
 class CreateAccountPage extends StatefulWidget {
   final String uid;
-  final String email; // Add email field
+  final String email;
 
   const CreateAccountPage({super.key, required this.uid, required this.email});
 
@@ -369,24 +379,72 @@ class CreateAccountPage extends StatefulWidget {
 class _CreateAccountScreenState1 extends State<CreateAccountPage> {
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
-  final TextEditingController _campusController = TextEditingController();
-  String _selectedGradeLevel = 'GRADE 10';
+  String? _selectedCampus;
+  String? _selectedGradeLevel;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+  }
 
   void storeUserData() async {
-    await AuthServices().storeAdditionalUserData(
-      uid: widget.uid,
-      fname: _firstnameController.text,
-      lname: _lastnameController.text,
-      campus: _campusController.text,
-      gradeLevel: _selectedGradeLevel,
-      email: widget.email, // Pass the email here
-    );
+    if (_validateInput()) {
+      await AuthServices().storeAdditionalUserData(
+        uid: widget.uid,
+        fname: _firstnameController.text,
+        lname: _lastnameController.text,
+        campus: _selectedCampus!,
+        gradeLevel: _selectedGradeLevel!,
+        email: widget.email,
+      );
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => BlankPage(),
-      ),
-    );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => BlankPage(),
+        ),
+      );
+    }
+  }
+
+  bool _validateInput() {
+    if (_firstnameController.text.isEmpty ||
+        _lastnameController.text.isEmpty ||
+        _selectedCampus == null ||
+        _selectedGradeLevel == null) {
+      showSnackBar(context, "Please fill out all fields.");
+      return false;
+    }
+    return true;
+  }
+
+  void _proceedToNextPage() {
+    if (_validateInput()) {
+      storeUserData();
+      if (_selectedGradeLevel == 'Grade 10') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CreateAccountScreen2(),
+          ),
+        );
+      } else if (_selectedGradeLevel == 'Grade 12') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CreateAccountScreen2(),
+          ),
+        );
+      } else if (_selectedGradeLevel == 'Fourth-year College') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CreateAccountScreen3(),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -397,7 +455,7 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
         elevation: 0,
         leading: IconButton(
           icon: Image.asset(
-            '../lib/assets/back.png',
+            'assets/back.png',
             width: 24.0,
             height: 24.0,
           ),
@@ -470,39 +528,37 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
                     height: 40.0,
                   ),
                   const SizedBox(height: 15.0),
-                  _buildTextFieldWithShadow(
-                    controller: _campusController,
+                  _buildDropdownButtonFormField(
+                    value: _selectedCampus,
                     labelText: 'Campus',
-                    height: 40.0,
-                  ),
-                  const SizedBox(height: 15.0),
-                  DropdownButtonFormField<String>(
-                    value: _selectedGradeLevel,
+                    items: [
+                      'Alangilan',
+                      'JPLPC-Malvar',
+                      'Lemery',
+                      'Lipa',
+                      'Pablo Borbon'
+                    ],
                     onChanged: (String? newValue) {
                       setState(() {
-                        _selectedGradeLevel = newValue!;
+                        _selectedCampus = newValue;
                       });
                     },
-                    items: <String>['GRADE 10', 'GRADE 12', '4th Year College']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    decoration: InputDecoration(
-                      labelText: 'Grade Level',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
+                  ),
+                  const SizedBox(height: 15.0),
+                  _buildDropdownButtonFormField(
+                    value: _selectedGradeLevel,
+                    labelText: 'Grade Level',
+                    items: ['Grade 10', 'Grade 12', 'Fourth-year College'],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedGradeLevel = newValue;
+                      });
+                    },
                   ),
                   const SizedBox(height: 5.0),
                   Center(
                     child: Image.asset(
-                      '../lib/assets/logo2.png',
+                      'assets/logo2.png',
                       height: 70.0,
                     ),
                   ),
@@ -511,35 +567,7 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {
-                          storeUserData(); // Always store data before navigating
-                          if (_selectedGradeLevel == 'GRADE 10') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountScreen2(),
-                              ),
-                            );
-                          } else if (_selectedGradeLevel == 'GRADE 12') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountScreen2(),
-                              ),
-                            );
-                          } else if (_selectedGradeLevel ==
-                              '4th Year College') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountScreen3(),
-                              ),
-                            );
-                          }
-                        },
+                        onPressed: _proceedToNextPage,
                         child: const Text(
                           'Next',
                           style: TextStyle(
@@ -575,6 +603,7 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
             offset: const Offset(0, 2),
           ),
         ],
+        borderRadius: BorderRadius.circular(15.0),
       ),
       child: TextField(
         controller: controller,
@@ -587,6 +616,50 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownButtonFormField({
+    required String? value,
+    required String labelText,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Container(
+      height: 40.0,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: DropdownButtonFormField<String>(
+        value: value,
+        onChanged: onChanged,
+        hint: Text(labelText), // Show the label inside the input box
+        items: items.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
           ),
         ),
       ),
