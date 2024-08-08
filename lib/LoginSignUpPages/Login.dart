@@ -17,26 +17,33 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   void loginUsers() async {
+  // Format the email before passing it to the loginUser function
+  String email = '${_emailController.text}@g.batstate-u.edu.ph';
+  
+  String res = await AuthServices().loginUser(
+    email: email,
+    password: _passwordController.text,
+    context: context,
+  );
+  
+  if (res == "Success") {
     setState(() {
       isLoading = true;
     });
-
-    String res = await AuthServices().loginUser(
-      email: _emailController.text,
-      password: _passwordController.text,
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlankPage(),
+      ),
     );
-
-    if (res == "Success") {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => BlankPage()),
-      );
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(context, res); // Display the error message
-    }
+  } else {
+    showSnackBar(
+      context,
+      res,
+    );
   }
+}
+
 
   @override
   void dispose() {
@@ -141,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 25.0),
                     Center(
                       child: ElevatedButton(
-                        onPressed: loginUsers,
+                        onPressed: isLoading ? null : loginUsers,
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             const Color.fromARGB(255, 159, 41, 33),
@@ -157,7 +164,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        child: const Text('LOGIN'),
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text('LOGIN'),
                       ),
                     ),
                     const SizedBox(height: 20.0),
@@ -204,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildEmailTextField() {
     return Container(
-      height: 40.0, // Match the height of the password field
+      height: 40.0,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -228,14 +239,12 @@ class _LoginPageState extends State<LoginPage> {
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none, // Remove border
+            borderSide: BorderSide.none,
           ),
-          hintText: 'XX-XXXXX', // Main part of the hint text
-          hintStyle:
-              const TextStyle(color: Colors.grey), // Style for the main part
-          suffixText: '@g.batstate-u.edu.ph', // Domain part
-          suffixStyle:
-              const TextStyle(color: Colors.grey), // Style for the domain part
+          hintText: 'XX-XXXXX',
+          hintStyle: const TextStyle(color: Colors.grey),
+          suffixText: '@g.batstate-u.edu.ph',
+          suffixStyle: const TextStyle(color: Colors.grey),
         ),
         keyboardType: TextInputType.emailAddress,
         inputFormatters: [EmailInputFormatter()],
@@ -248,37 +257,19 @@ class EmailInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    // Allow only numbers
     String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
-    // Ensure the length of the text matches the pattern
-    if (newText.length > 8) {
-      newText = newText.substring(0, 8);
+    if (newText.length > 7) {
+      newText = newText.substring(0, 7);
     }
 
-    // Insert hyphen at the right place
     if (newText.length > 2) {
       newText = '${newText.substring(0, 2)}-${newText.substring(2)}';
     }
 
-    // Maintain the format before @ symbol
-    String formattedText;
-    if (newText.length > 8) {
-      formattedText = '${newText.substring(0, 8)}';
-    } else {
-      formattedText =
-          '$newText'; // Do not add the suffix if the length is less than 8
-    }
-
-    // Calculate cursor position
-    int cursorPosition = newText.length;
-    if (cursorPosition > 8) {
-      cursorPosition = 8;
-    }
-
     return TextEditingValue(
-      text: formattedText,
-      selection: TextSelection.collapsed(offset: cursorPosition),
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }
@@ -322,24 +313,24 @@ class _PasswordFieldState extends State<PasswordField> {
         obscureText: _obscureText,
         decoration: InputDecoration(
           labelText: widget.labelText,
-          labelStyle: const TextStyle(color: Colors.black),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
           ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscureText ? Icons.visibility_off : Icons.visibility,
-            ),
-            onPressed: () {
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          suffixIcon: InkWell(
+            onTap: () {
               setState(() {
                 _obscureText = !_obscureText;
               });
             },
+            child: Icon(
+              _obscureText ? Icons.visibility : Icons.visibility_off,
+              color: const Color.fromARGB(255, 3, 3, 3),
+            ),
           ),
         ),
       ),

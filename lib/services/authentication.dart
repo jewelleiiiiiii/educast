@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthServices {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -8,6 +9,7 @@ class AuthServices {
   Future<String> signUpUser({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
       if (email.isEmpty || password.isEmpty) {
@@ -25,25 +27,42 @@ class AuthServices {
         return passwordValidationResult;
       }
 
+      try {
+        // Check if account already exists
+        final signInMethods = await _auth.fetchSignInMethodsForEmail(email);
+        if (signInMethods.isNotEmpty) {
+          _showSnackbar(context, "Account already exists.");
+          return 'Account already exists.';
+        }
+      } catch (e) {
+        _showSnackbar(context, "An error occurred during email verification.");
+        return 'An error occurred during email verification.';
+      }
+
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       print("User created with UID: ${credential.user!.uid}");
-
-      return "Success"; // Return success message
+      _showSnackbar(context, "Account created successfully.");
+      return "Success";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
+        _showSnackbar(context, "Account already exists.");
         return 'The account already exists.';
       } else {
+        _showSnackbar(
+            context, "An error occurred during signup. Please try again.");
         return 'An error occurred during signup. Please try again.';
       }
     } on FirebaseException catch (e) {
+      _showSnackbar(context, "FirebaseException: ${e.message}");
       return "FirebaseException: ${e.message}";
     } catch (e) {
+      _showSnackbar(context, "Exception: $e");
       return "Exception: $e";
     }
   }
@@ -85,16 +104,32 @@ class AuthServices {
   Future<String> loginUser({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
-      if (email.isEmpty || password.isEmpty) {
-        return "Please fill out all fields!";
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        return 'Success';
+      } else {
+        return 'Please fill up all fields.';
       }
-
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return "Success";
+    } on FirebaseAuthException catch (e) {
+      if (e.message ==
+          'The supplied auth credential is incorrect, malformed or has expired.') {
+        return 'Email or Password is incorrect.';
+      } else {
+        return e.toString();
+      }
     } catch (e) {
       return e.toString();
     }
+  }
+
+  void _showSnackbar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

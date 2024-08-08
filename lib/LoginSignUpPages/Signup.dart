@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
-import 'package:myapp/services/authentication.dart';
 import 'package:myapp/services/snackbar.dart';
 
 class SignupPage extends StatefulWidget {
@@ -44,36 +44,15 @@ class _SignupPageState extends State<SignupPage> {
     // Append the domain to the email
     String email = '${_emailController.text.trim()}@g.batstate-u.edu.ph';
 
-    String result = await AuthServices().signUpUser(
-      email: email,
-      password: _passwordController.text,
-    );
-
-    if (result == "Success") {
-      // Store additional user data after successful signup
-      await AuthServices().storeAdditionalUserData(
-        uid: FirebaseAuth.instance.currentUser!.uid,
-        email: email,
-        fname: '', // Will be updated later in CreateAccountPage
-        lname: '', // Will be updated later in CreateAccountPage
-        campus: '', // Will be updated later in CreateAccountPage
-        gradeLevel: '', // Will be updated later in CreateAccountPage
-      );
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => CreateAccountPage(
-            uid: FirebaseAuth.instance.currentUser!.uid,
-            email: email, // Pass the email here
-          ),
+    // Navigate to the create account page with the captured data
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CreateAccountPage(
+          email: email,
+          password: _passwordController.text,
         ),
-      );
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      showSnackBar(context, result); // Use the dynamic error message here
-    }
+      ),
+    );
   }
 
   @override
@@ -222,7 +201,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget _buildEmailTextField() {
     return Container(
-      height: 40.0, // Match the height of the password field
+      height: 40.0,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -246,7 +225,7 @@ class _SignupPageState extends State<SignupPage> {
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none, // Remove border
+            borderSide: BorderSide.none,
           ),
           hintText: 'XX-XXXXX', // Main part of the hint text
           hintStyle:
@@ -262,121 +241,20 @@ class _SignupPageState extends State<SignupPage> {
   }
 }
 
-class EmailInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Allow only numbers
-    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-
-    // Ensure the length of the text matches the pattern
-    if (newText.length > 8) {
-      newText = newText.substring(0, 8);
-    }
-
-    // Insert hyphen at the right place
-    if (newText.length > 2) {
-      newText = '${newText.substring(0, 2)}-${newText.substring(2)}';
-    }
-
-    // Maintain the format before @ symbol
-    String formattedText;
-    if (newText.length > 8) {
-      formattedText = '${newText.substring(0, 8)}';
-    } else {
-      formattedText =
-          '$newText'; // Do not add the suffix if the length is less than 8
-    }
-
-    // Calculate cursor position
-    int cursorPosition = newText.length;
-    if (cursorPosition > 8) {
-      cursorPosition = 8;
-    }
-
-    return TextEditingValue(
-      text: formattedText,
-      selection: TextSelection.collapsed(offset: cursorPosition),
-    );
-  }
-}
-
-class PasswordField extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-
-  const PasswordField(
-      {super.key,
-      required this.controller,
-      required this.labelText,
-      required bool isPass});
-
-  @override
-  _PasswordFieldState createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40.0,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: TextField(
-        controller: widget.controller,
-        obscureText: _obscureText,
-        style: const TextStyle(fontSize: 16.0),
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: widget.labelText,
-          labelStyle: const TextStyle(color: Colors.black),
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off,
-            ),
-            onPressed: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 //--------------------- CREATE ACCOUNT PAGE ---------------------//
 
 class CreateAccountPage extends StatefulWidget {
-  final String uid;
   final String email;
+  final String password;
 
-  const CreateAccountPage({super.key, required this.uid, required this.email});
+  const CreateAccountPage(
+      {super.key, required this.email, required this.password});
 
   @override
-  _CreateAccountScreenState1 createState() => _CreateAccountScreenState1();
+  _CreateAccountScreenState createState() => _CreateAccountScreenState();
 }
 
-class _CreateAccountScreenState1 extends State<CreateAccountPage> {
+class _CreateAccountScreenState extends State<CreateAccountPage> {
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
   String? _selectedCampus;
@@ -391,20 +269,33 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
 
   void storeUserData() async {
     if (_validateInput()) {
-      await AuthServices().storeAdditionalUserData(
-        uid: widget.uid,
-        fname: _firstnameController.text,
-        lname: _lastnameController.text,
-        campus: _selectedCampus!,
-        gradeLevel: _selectedGradeLevel!,
-        email: widget.email,
-      );
+      try {
+        // Create user in Firebase Auth
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: widget.email, password: widget.password);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => BlankPage(),
-        ),
-      );
+        // Store additional information in Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'firstName': _firstnameController.text,
+          'lastName': _lastnameController.text,
+          'campus': _selectedCampus!,
+          'gradeLevel': _selectedGradeLevel!,
+          'email': widget.email,
+        });
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => BlankPage(),
+          ),
+        );
+      } catch (e) {
+        // Handle errors (e.g., email already in use)
+        showSnackBar(context, e.toString());
+      }
     }
   }
 
@@ -422,14 +313,8 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
   void _proceedToNextPage() {
     if (_validateInput()) {
       storeUserData();
-      if (_selectedGradeLevel == 'Grade 10') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CreateAccountScreen2(),
-          ),
-        );
-      } else if (_selectedGradeLevel == 'Grade 12') {
+      if (_selectedGradeLevel == 'Grade 10' ||
+          _selectedGradeLevel == 'Grade 12') {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -663,6 +548,109 @@ class _CreateAccountScreenState1 extends State<CreateAccountPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+//---------------------------------------------------------------------
+class PasswordField extends StatefulWidget {
+  final TextEditingController controller;
+  final String labelText;
+
+  const PasswordField(
+      {super.key,
+      required this.controller,
+      required this.labelText,
+      required bool isPass});
+
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40.0,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextField(
+        controller: widget.controller,
+        obscureText: _obscureText,
+        style: const TextStyle(fontSize: 16.0),
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          labelText: widget.labelText,
+          labelStyle: const TextStyle(color: Colors.black),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureText ? Icons.visibility : Icons.visibility_off,
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EmailInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only numbers
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Ensure the length of the text matches the pattern
+    if (newText.length > 8) {
+      newText = newText.substring(0, 8);
+    }
+
+    // Insert hyphen at the right place
+    if (newText.length > 2) {
+      newText = '${newText.substring(0, 2)}-${newText.substring(2)}';
+    }
+
+    // Maintain the format before @ symbol
+    String formattedText;
+    if (newText.length > 8) {
+      formattedText = '${newText.substring(0, 8)}';
+    } else {
+      formattedText =
+          '$newText'; // Do not add the suffix if the length is less than 8
+    }
+
+    // Calculate cursor position
+    int cursorPosition = newText.length;
+    if (cursorPosition > 8) {
+      cursorPosition = 8;
+    }
+
+    return TextEditingValue(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: cursorPosition),
     );
   }
 }
