@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:myapp/services/snackbar.dart';
+<<<<<<< HEAD
 import 'package:myapp/Home/homeg10.dart';
+=======
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -60,7 +63,10 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 159, 41, 33),
+<<<<<<< HEAD
       resizeToAvoidBottomInset: false, // Prevents content from moving when the keyboard appears
+=======
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
@@ -70,6 +76,7 @@ class _SignupPageState extends State<SignupPage> {
             child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
+<<<<<<< HEAD
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LoginSignupPage()),
@@ -99,6 +106,37 @@ class _SignupPageState extends State<SignupPage> {
           const SizedBox(height: 20.0),
           Expanded(
             child: Material(
+=======
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const LoginSignupPage()),
+            // );
+          },
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 20.0, top: 0.0),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'LET\'S GET',
+                    style: TextStyle(fontSize: 24.0, color: Colors.white),
+                  ),
+                  Text(
+                    'STARTED!',
+                    style: TextStyle(fontSize: 24.0, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            Material(
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
               elevation: 5.0,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(40.0),
@@ -125,21 +163,35 @@ class _SignupPageState extends State<SignupPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+<<<<<<< HEAD
                     const Spacer(),
                     _buildEmailTextField(),
                     const Spacer(),
+=======
+                    const SizedBox(height: 10.0),
+                    _buildEmailTextField(),
+                    const SizedBox(height: 20.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                     PasswordField(
                       controller: _passwordController,
                       labelText: 'Password',
                       isPass: true,
                     ),
+<<<<<<< HEAD
                     const Spacer(),
+=======
+                    const SizedBox(height: 20.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                     PasswordField(
                       controller: _confirmPasswordController,
                       labelText: 'Confirm Password',
                       isPass: true,
                     ),
+<<<<<<< HEAD
                     const Spacer(),
+=======
+                    const SizedBox(height: 25.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
@@ -152,7 +204,12 @@ class _SignupPageState extends State<SignupPage> {
                           foregroundColor: MaterialStateProperty.all<Color>(
                             Colors.white,
                           ),
+<<<<<<< HEAD
                           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+=======
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                             const EdgeInsets.symmetric(
                               horizontal: 80.0,
                               vertical: 15.0,
@@ -162,7 +219,11 @@ class _SignupPageState extends State<SignupPage> {
                         child: const Text('SIGN UP'),
                       ),
                     ),
+<<<<<<< HEAD
                     const Spacer(),
+=======
+                    const SizedBox(height: 20.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                     const Row(
                       children: [
                         Expanded(child: Divider()),
@@ -173,7 +234,11 @@ class _SignupPageState extends State<SignupPage> {
                         Expanded(child: Divider()),
                       ],
                     ),
+<<<<<<< HEAD
                     const Spacer(flex: 1),
+=======
+                    const SizedBox(height: 5.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                     Center(
                       child: OutlinedButton(
                         onPressed: () {},
@@ -194,16 +259,27 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ),
             ),
+<<<<<<< HEAD
           ),
         ],
+=======
+          ],
+        ),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       ),
     );
   }
 
+<<<<<<< HEAD
 
   Widget _buildEmailTextField() {
     return Container(
       height: 50.0,
+=======
+  Widget _buildEmailTextField() {
+    return Container(
+      height: 40.0,
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -244,6 +320,10 @@ class _SignupPageState extends State<SignupPage> {
 }
 
 //--------------------- CREATE ACCOUNT PAGE ---------------------//
+<<<<<<< HEAD
+=======
+
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
 class CreateAccountPage extends StatefulWidget {
   final String email;
   final String password;
@@ -274,7 +354,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         // Create user in Firebase Auth
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
+<<<<<<< HEAD
             email: widget.email, password: widget.password);
+=======
+                email: widget.email, password: widget.password);
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
 
         // Store additional information in Firestore
         await FirebaseFirestore.instance
@@ -293,7 +377,10 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
             builder: (context) => BlankPage(),
           ),
         );
+<<<<<<< HEAD
         showSnackBar(context, "Account Created Successfully");
+=======
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       } catch (e) {
         // Handle errors (e.g., email already in use)
         showSnackBar(context, e.toString());
@@ -315,6 +402,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
   void _proceedToNextPage() {
     if (_validateInput()) {
       storeUserData();
+<<<<<<< HEAD
       if (_selectedGradeLevel == 'Grade 10') {
         Navigator.push(
           context,
@@ -323,6 +411,10 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
           ),
         );
       } else if (_selectedGradeLevel == 'Grade 12') {
+=======
+      if (_selectedGradeLevel == 'Grade 10' ||
+          _selectedGradeLevel == 'Grade 12') {
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -342,6 +434,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     List<String> campusOptions = _selectedGradeLevel == 'Fourth-year College'
         ? [
       'Alangilan',
@@ -352,6 +445,8 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
     ]
         : ['Pablo Borbon'];
 
+=======
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 158, 39, 39),
@@ -370,6 +465,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
           },
         ),
       ),
+<<<<<<< HEAD
       resizeToAvoidBottomInset: false, // Prevents content from moving when the keyboard appears
       body: SafeArea(
         child: Column(
@@ -381,10 +477,24 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 158, 39, 39),
                 borderRadius: BorderRadius.only(
+=======
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 45.0,
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 158, 39, 39),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.zero,
+                  topRight: Radius.zero,
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0),
                 ),
               ),
+<<<<<<< HEAD
               child: const Center(
                 child: Text(
                   'CREATE ACCOUNT',
@@ -455,13 +565,93 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
                     ),
                   ),
                   const Spacer(),
+=======
+              child: const Padding(
+                padding: EdgeInsets.only(top: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(width: 5.0),
+                        ],
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'Create account',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 253, 248, 248),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTextFieldWithShadow(
+                    controller: _firstnameController,
+                    labelText: 'Firstname',
+                    height: 40.0,
+                  ),
+                  const SizedBox(height: 15.0),
+                  _buildTextFieldWithShadow(
+                    controller: _lastnameController,
+                    labelText: 'Lastname',
+                    height: 40.0,
+                  ),
+                  const SizedBox(height: 15.0),
+                  _buildDropdownButtonFormField(
+                    value: _selectedCampus,
+                    labelText: 'Campus',
+                    items: [
+                      'Alangilan',
+                      'JPLPC-Malvar',
+                      'Lemery',
+                      'Lipa',
+                      'Pablo Borbon'
+                    ],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedCampus = newValue;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 15.0),
+                  _buildDropdownButtonFormField(
+                    value: _selectedGradeLevel,
+                    labelText: 'Grade Level',
+                    items: ['Grade 10', 'Grade 12', 'Fourth-year College'],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedGradeLevel = newValue;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 5.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                   Center(
                     child: Image.asset(
                       'assets/logo2.png',
                       height: 70.0,
                     ),
                   ),
+<<<<<<< HEAD
                   const Spacer(),
+=======
+                  const SizedBox(height: 5.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -489,7 +679,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
   Widget _buildTextFieldWithShadow({
     required TextEditingController controller,
     required String labelText,
+<<<<<<< HEAD
     double height = 50.0,
+=======
+    double height = 40.0,
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   }) {
     return Container(
       height: height,
@@ -509,7 +703,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         style: const TextStyle(fontSize: 15.0),
         decoration: InputDecoration(
           contentPadding:
+<<<<<<< HEAD
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+=======
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
           labelText: labelText,
           filled: true,
           fillColor: Colors.grey[200],
@@ -529,7 +727,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
     required ValueChanged<String?> onChanged,
   }) {
     return Container(
+<<<<<<< HEAD
       height: 50.0,
+=======
+      height: 40.0,
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -553,7 +755,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         }).toList(),
         decoration: InputDecoration(
           contentPadding:
+<<<<<<< HEAD
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+=======
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
@@ -587,7 +793,11 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return Container(
+<<<<<<< HEAD
       height: 50.0,
+=======
+      height: 40.0,
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

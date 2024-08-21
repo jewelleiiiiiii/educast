@@ -1,5 +1,9 @@
 {
     "IDX.aI.enableInlineCompletion": true,
+<<<<<<< HEAD
     "IDX.aI.enableCodebaseIndexing": true,
     "java.compile.nullAnalysis.mode": "automatic"
+=======
+    "IDX.aI.enableCodebaseIndexing": true
+>>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
 }
