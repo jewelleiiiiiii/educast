@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors, library_private_types_in_public_api, use_build_context_synchronously, use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/LoginSignUpPages/Signup.dart';
@@ -17,21 +15,18 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     Color.fromARGB(255, 159, 41, 33),
     Color.fromARGB(255, 159, 41, 33),
   ];
-  static const List<String> buttonTitles = [
-    'Login',
-    'Signup',
-  ];
+  static const List<String> buttonTitles = ['Login', 'Signup'];
 
   void _navigateToPage(int index) {
     setState(() {
       _selectedIndex = index;
       if (_selectedIndex == 1) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => SignupPage()),
         );
       } else if (_selectedIndex == 0) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
@@ -44,8 +39,7 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-<<<<<<< HEAD
-        child: Center(  // Center the entire content
+        child: Center(
           child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -53,10 +47,10 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
                 maxHeight: MediaQuery.of(context).size.height,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,  // Start the content from the top
-                crossAxisAlignment: CrossAxisAlignment.center, // Center the content horizontally
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(height: 40), // Adjusted padding to bring logo closer to the top
+                  const SizedBox(height: 40),
                   Align(
                     alignment: Alignment.topCenter,
                     child: Image.asset(
@@ -77,7 +71,7 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
                       fontSize: 16.0,
                     ),
                   ),
-                  const SizedBox(height: 130), // Increase space between text and buttons
+                  const SizedBox(height: 130),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: ToggleButtons(
@@ -107,65 +101,6 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
                 ],
               ),
             ),
-=======
-        child: SingleChildScrollView(
-          // Wrap with SingleChildScrollView
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 40.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    'assets/logo.png',
-                    width: 150,
-                    height: 150,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Welcome to EduCAST!\n'
-                'Your mapping pathways\n'
-                'to unlock your potential\n'
-                'and navigate your future.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 16.0,
-                ),
-              ),
-              SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.2), // Spacer-like behavior
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: ToggleButtons(
-                  isSelected: [_selectedIndex == 0, _selectedIndex == 1],
-                  selectedColor: Colors.white,
-                  fillColor: buttonColors[_selectedIndex],
-                  borderRadius: BorderRadius.circular(10),
-                  onPressed: (index) => _navigateToPage(index),
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        buttonTitles[0],
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        buttonTitles[1],
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
           ),
         ),
       ),
@@ -173,10 +108,6 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
   }
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
 class BlankPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

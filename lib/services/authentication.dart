@@ -1,17 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-<<<<<<< HEAD
 import 'package:flutter/scheduler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
 import 'package:flutter/material.dart';
 
 class AuthServices {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-<<<<<<< HEAD
   Future<String> loginWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -63,12 +59,6 @@ class AuthServices {
     }
   }
 
-
-
-
-
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   Future<String> signUpUser({
     required String email,
     required String password,

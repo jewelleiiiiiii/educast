@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/firebase_options.dart';
-<<<<<<< HEAD
 import 'LoginSignUpPages/LoginSignupPage.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -21,44 +20,24 @@ void main() async {
   ));
 
   // Run the application
-  runApp(EduCAST());
+  runApp(const EduCAST());
 }
 
 class EduCAST extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'EduCAST',
-      home: SplashScreen(),
-=======
-//import 'package:myapp/login_signup.dart';
-import 'LoginSignUpPages/LoginSignupPage.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const EduCAST({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Container Application',
-      home: HomeScreen(),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
+      debugShowCheckedModeBanner: false,
+      title: 'EduCAST',
+      home: SplashScreen(),
     );
-  }
+    }
 }
 
-<<<<<<< HEAD
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -76,30 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,  // Set the background to white
-        child: Center(       // Center the content
-          child: Image.asset(
-            "assets/logo.png",
-            height: 300.0,
-            width: 300.0,
-          ),
-=======
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-      );
-    });
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -121,7 +76,6 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ],
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
         ),
       ),
     );

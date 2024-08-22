@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
-import 'package:myapp/services/snackbar.dart';
-<<<<<<< HEAD
-import 'package:myapp/Home/homeg10.dart';
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
+import 'package:myapp/services/snackbar.dart'; // Ensure this import is correct
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -19,8 +15,7 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -31,10 +26,36 @@ class _SignupPageState extends State<SignupPage> {
     _confirmPasswordController.dispose();
   }
 
+  bool _isPasswordValid(String password) {
+    // Minimum 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character
+    return password.length >= 8 &&
+        password.contains(RegExp(r'[A-Z]')) &&
+        password.contains(RegExp(r'[a-z]')) &&
+        password.contains(RegExp(r'[0-9]')) &&
+        password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+  }
+
+  bool _isEmailValid(String email) {
+    // Extract the number part of the email
+    String numericPart = email.split('-').join();
+    return numericPart.length == 7 && RegExp(r'^\d{2}-\d{5}$').hasMatch(email);
+  }
+
   void signUpUser() async {
     setState(() {
       isLoading = true;
     });
+
+    String email = _emailController.text.trim();
+
+    // Ensure the email number is exactly 7 digits
+    if (!_isEmailValid(email)) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(context, "INVALID EMAIL");
+      return;
+    }
 
     // Ensure the passwords match
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -45,14 +66,22 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
-    // Append the domain to the email
-    String email = '${_emailController.text.trim()}@g.batstate-u.edu.ph';
+    // Check if the password meets the validation criteria
+    if (!_isPasswordValid(_passwordController.text)) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(context,
+          "Password must be at least 8 characters long, and include 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character.");
+      return;
+    }
 
-    // Navigate to the create account page with the captured data
+    String fullEmail = '$email@g.batstate-u.edu.ph';
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => CreateAccountPage(
-          email: email,
+          email: fullEmail,
           password: _passwordController.text,
         ),
       ),
@@ -63,10 +92,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 159, 41, 33),
-<<<<<<< HEAD
-      resizeToAvoidBottomInset: false, // Prevents content from moving when the keyboard appears
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
@@ -76,7 +102,6 @@ class _SignupPageState extends State<SignupPage> {
             child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
-<<<<<<< HEAD
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LoginSignupPage()),
@@ -84,59 +109,368 @@ class _SignupPageState extends State<SignupPage> {
           },
         ),
       ),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10,),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'LET\'S GET',
+                      style: TextStyle(fontSize: 24.0, color: Colors.white),
+                    ),
+                    Text(
+                      'STARTED!',
+                      style: TextStyle(fontSize: 24.0, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Expanded(
+                child: Material(
+                  elevation: 5.0,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                        topRight: Radius.circular(40.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Spacer(),
+                              _buildEmailTextField(),
+                              const Spacer(),
+                              PasswordField(
+                                controller: _passwordController,
+                                labelText: 'Password',
+                                isPass: true,
+                              ),
+                              const Spacer(),
+                              PasswordField(
+                                controller: _confirmPasswordController,
+                                labelText: 'Confirm Password',
+                                isPass: true,
+                              ),
+                              const SizedBox(height: 20.0),
+                              const Spacer(),
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    signUpUser();
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all<Color>(
+                                      const Color.fromARGB(255, 159, 41, 33),
+                                    ),
+                                    foregroundColor: MaterialStateProperty.all<Color>(
+                                      Colors.white,
+                                    ),
+                                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      const EdgeInsets.symmetric(
+                                        horizontal: 80.0,
+                                        vertical: 15.0,
+                                      ),
+                                    ),
+                                  ),
+                                  child: const Text('SIGN UP'),
+                                ),
+                              ),
+                              const Spacer(),
+                              const Row(
+                                children: [
+                                  Expanded(child: Divider()),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: Text('OR CONTINUE WITH'),
+                                  ),
+                                  Expanded(child: Divider()),
+                                ],
+                              ),
+                              const Spacer(),
+                              Center(
+                                child: OutlinedButton(
+                                  onPressed: () {},
+                                  style: ButtonStyle(
+                                    side: MaterialStateProperty.all(BorderSide.none),
+                                  ),
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Image.asset('assets/google.png'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildEmailTextField() {
+    return Container(
+      height: 50.0,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextFormField(
+        controller: _emailController,
+        style: const TextStyle(
+          fontSize: 15.0,
+          fontFamily: 'Inter',
+        ),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16.0, vertical: 10.0,
+          ),
+          labelText: 'Email',
+          labelStyle: const TextStyle(
+            color: Colors.black,
+            fontFamily: 'Inter',
+            fontSize: 15.0,
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
+          ),
+          hintText: 'XX-XXXXX',
+          hintStyle: const TextStyle(
+            color: Colors.grey,
+            fontFamily: 'Inter',
+            fontSize: 15.0,
+          ),
+          suffixText: '@g.batstate-u.edu.ph',
+          suffixStyle: const TextStyle(
+            color: Colors.grey,
+            fontFamily: 'Inter',
+            fontSize: 15.0,
+          ),
+        ),
+        keyboardType: TextInputType.emailAddress,
+        inputFormatters: [EmailInputFormatter()],
+      ),
+    );
+  }
+}
+
+
+//--------------------- CREATE ACCOUNT PAGE ---------------------//
+
+class CreateAccountPage extends StatefulWidget {
+  final String email;
+  final String password;
+
+  const CreateAccountPage({super.key, required this.email, required this.password});
+
+  @override
+  _CreateAccountScreenState createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends State<CreateAccountPage> {
+  final TextEditingController _firstnameController = TextEditingController();
+  final TextEditingController _lastnameController = TextEditingController();
+  String? _selectedCampus;
+  String? _selectedGradeLevel;
+
+  // Initial list of campuses
+  final List<String> _allCampuses = [
+    'Alangilan', 'Balayan', 'Lemery', 'Lipa', 'Lobo', 'Malvar',
+    'Nasugbu', 'Pablo Borbon (Main)', 'Rosario', 'San Juan'
+  ];
+  List<String> _filteredCampuses = []; // Filtered campuses based on grade level
+
+  @override
+  void initState() {
+    super.initState();
+    // Initially, display all campuses
+    _filteredCampuses = List.from(_allCampuses);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+  }
+
+  void storeUserData() async {
+    if (_validateInput()) {
+      try {
+        // Create user in Firebase Auth
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+          email: widget.email,
+          password: widget.password,
+        );
+
+        // Store additional information in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(
+            userCredential.user!.uid).set({
+          'firstName': _firstnameController.text,
+          'lastName': _lastnameController.text,
+          'campus': _selectedCampus!,
+          'gradeLevel': _selectedGradeLevel!,
+          'email': widget.email,
+        });
+
+        // Navigate to different pages based on selected grade level
+        if (_selectedGradeLevel == 'Grade 10') {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => BlankPage(), // Replace with the actual target page for Grade 10
+            ),
+          );
+        } else if (_selectedGradeLevel == 'Grade 12') {
+          // Navigator.of(context).pushReplacement(
+          //   MaterialPageRoute(
+          //     builder: (context) => Grade12Page(), // Replace with the actual target page for Grade 12
+          //   ),
+          // );
+        } else if (_selectedGradeLevel == 'Fourth-year College') {
+          // Navigator.of(context).pushReplacement(
+          //   MaterialPageRoute(
+          //     builder: (context) => FourthYearCollegePage(), // Replace with the actual target page for Fourth-year College
+          //   ),
+          // );
+        }
+
+        showSnackBar(context, "Account Created Successfully");
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          showSnackBar(context, "This email is already in use.");
+        } else {
+          showSnackBar(context, "An error occurred. Please try again.");
+        }
+      } catch (e) {
+        // Handle other exceptions
+        showSnackBar(context, "An unexpected error occurred. Please try again.");
+      }
+    }
+  }
+
+
+  bool _validateInput() {
+    if (_firstnameController.text.isEmpty) {
+      showSnackBar(context, "First Name is required.");
+      return false;
+    }
+    if (_lastnameController.text.isEmpty) {
+      showSnackBar(context, "Last Name is required.");
+      return false;
+    }
+    if (_selectedGradeLevel == null) {
+      showSnackBar(context, "Grade Level is required.");
+      return false;
+    }
+    if (_selectedCampus == null) {
+      showSnackBar(context, "Campus is required.");
+      return false;
+    }
+
+    return true;
+  }
+
+  void _onGradeLevelChanged(String? newValue) {
+    setState(() {
+      _selectedGradeLevel = newValue;
+      _selectedCampus = null; // Reset campus selection
+
+      if (newValue == 'Grade 10' || newValue == 'Grade 12') {
+        _filteredCampuses = ['Pablo Borbon (Main)'];
+      } else if (newValue == 'Fourth-year College') {
+        _filteredCampuses = List.from(_allCampuses); // Show all campuses
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 159, 41, 33),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: SizedBox(
+            width: 20,
+            height: 20,
+            child: Image.asset('assets/back.png'),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 20.0, top: 20.0),
+            margin: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10,),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'LET\'S GET',
+                  'TELL US MORE',
                   style: TextStyle(fontSize: 24.0, color: Colors.white),
                 ),
                 Text(
-                  'STARTED!',
+                  'ABOUT YOURSELF',
                   style: TextStyle(fontSize: 24.0, color: Colors.white),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: 10.0),
           Expanded(
             child: Material(
-=======
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-            // );
-          },
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, top: 0.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'LET\'S GET',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                  Text(
-                    'STARTED!',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            Material(
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
               elevation: 5.0,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(40.0),
@@ -163,123 +497,104 @@ class _SignupPageState extends State<SignupPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-<<<<<<< HEAD
                     const Spacer(),
-                    _buildEmailTextField(),
+                    _buildNameTextField(_firstnameController, 'First Name'),
                     const Spacer(),
-=======
-                    const SizedBox(height: 10.0),
-                    _buildEmailTextField(),
-                    const SizedBox(height: 20.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                    PasswordField(
-                      controller: _passwordController,
-                      labelText: 'Password',
-                      isPass: true,
+                    _buildNameTextField(_lastnameController, 'Last Name'),
+                    const Spacer(),
+                    _buildDropdownField(
+                      label: 'Grade Level',
+                      value: _selectedGradeLevel,
+                      items: ['Grade 10', 'Grade 12', 'Fourth-year College'],
+                      onChanged: _onGradeLevelChanged,
                     ),
-<<<<<<< HEAD
                     const Spacer(),
-=======
-                    const SizedBox(height: 20.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                    PasswordField(
-                      controller: _confirmPasswordController,
-                      labelText: 'Confirm Password',
-                      isPass: true,
+                    _buildDropdownField(
+                      label: 'Campus',
+                      value: _selectedCampus,
+                      items: _filteredCampuses,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCampus = newValue;
+                        });
+                      },
                     ),
-<<<<<<< HEAD
                     const Spacer(),
-=======
-                    const SizedBox(height: 25.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                     Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          signUpUser();
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 159, 41, 33),
-                          ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-<<<<<<< HEAD
-                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-=======
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                            const EdgeInsets.symmetric(
-                              horizontal: 80.0,
-                              vertical: 15.0,
-                            ),
-                          ),
-                        ),
-                        child: const Text('SIGN UP'),
+                      child: _selectedGradeLevel == 'Grade 12' || _selectedGradeLevel == 'Fourth-year College'
+                          ? _buildNextButton()
+                          : _buildCreateAccountButton(),
+                    ),
+                    const Spacer(),
+                    Center(
+                      child: Image.asset(
+                        'assets/logo2.png',
+                        height: 100,
+                        width: 100,
                       ),
                     ),
-<<<<<<< HEAD
                     const Spacer(),
-=======
-                    const SizedBox(height: 20.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                    const Row(
-                      children: [
-                        Expanded(child: Divider()),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('OR CONTINUE WITH'),
-                        ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-<<<<<<< HEAD
-                    const Spacer(flex: 1),
-=======
-                    const SizedBox(height: 5.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                    Center(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          side: MaterialStateProperty.all(BorderSide.none),
-                        ),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset('assets/google.png'),
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-<<<<<<< HEAD
           ),
         ],
-=======
-          ],
-        ),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       ),
     );
   }
 
-<<<<<<< HEAD
 
-  Widget _buildEmailTextField() {
+  Widget _buildCreateAccountButton() {
+    return ElevatedButton(
+      onPressed: () {
+        storeUserData();
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          const Color.fromARGB(255, 159, 41, 33),
+        ),
+        foregroundColor: MaterialStateProperty.all<Color>(
+          Colors.white,
+        ),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.symmetric(
+            horizontal: 80.0,
+            vertical: 15.0,
+          ),
+        ),
+      ),
+      child: const Text('CREATE ACCOUNT'),
+    );
+  }
+
+  Widget _buildNextButton() {
+    return ElevatedButton(
+      onPressed: () {
+        storeUserData();
+      },
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          const Color.fromARGB(255, 159, 41, 33),
+        ),
+        foregroundColor: MaterialStateProperty.all<Color>(
+          Colors.white,
+        ),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.symmetric(
+            horizontal: 80.0,
+            vertical: 15.0,
+          ),
+        ),
+      ),
+      child: const Text('NEXT'),
+    );
+  }
+
+
+  Widget _buildNameTextField(TextEditingController controller, String labelText) {
     return Container(
       height: 50.0,
-=======
-  Widget _buildEmailTextField() {
-    return Container(
-      height: 40.0,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -292,423 +607,21 @@ class _SignupPageState extends State<SignupPage> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: TextFormField(
-        controller: _emailController,
-        style: const TextStyle(fontSize: 15.0),
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          labelText: 'Email',
-          labelStyle: const TextStyle(color: Colors.black),
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          hintText: 'XX-XXXXX', // Main part of the hint text
-          hintStyle:
-              const TextStyle(color: Colors.grey), // Style for the main part
-          suffixText: '@g.batstate-u.edu.ph', // Domain part
-          suffixStyle:
-              const TextStyle(color: Colors.grey), // Style for the domain part
-        ),
-        keyboardType: TextInputType.emailAddress,
-        inputFormatters: [EmailInputFormatter()],
-      ),
-    );
-  }
-}
-
-//--------------------- CREATE ACCOUNT PAGE ---------------------//
-<<<<<<< HEAD
-=======
-
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-class CreateAccountPage extends StatefulWidget {
-  final String email;
-  final String password;
-
-  const CreateAccountPage(
-      {super.key, required this.email, required this.password});
-
-  @override
-  _CreateAccountScreenState createState() => _CreateAccountScreenState();
-}
-
-class _CreateAccountScreenState extends State<CreateAccountPage> {
-  final TextEditingController _firstnameController = TextEditingController();
-  final TextEditingController _lastnameController = TextEditingController();
-  String? _selectedCampus;
-  String? _selectedGradeLevel;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _firstnameController.dispose();
-    _lastnameController.dispose();
-  }
-
-  void storeUserData() async {
-    if (_validateInput()) {
-      try {
-        // Create user in Firebase Auth
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-<<<<<<< HEAD
-            email: widget.email, password: widget.password);
-=======
-                email: widget.email, password: widget.password);
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-
-        // Store additional information in Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'firstName': _firstnameController.text,
-          'lastName': _lastnameController.text,
-          'campus': _selectedCampus!,
-          'gradeLevel': _selectedGradeLevel!,
-          'email': widget.email,
-        });
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => BlankPage(),
-          ),
-        );
-<<<<<<< HEAD
-        showSnackBar(context, "Account Created Successfully");
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-      } catch (e) {
-        // Handle errors (e.g., email already in use)
-        showSnackBar(context, e.toString());
-      }
-    }
-  }
-
-  bool _validateInput() {
-    if (_firstnameController.text.isEmpty ||
-        _lastnameController.text.isEmpty ||
-        _selectedCampus == null ||
-        _selectedGradeLevel == null) {
-      showSnackBar(context, "Please fill out all fields.");
-      return false;
-    }
-    return true;
-  }
-
-  void _proceedToNextPage() {
-    if (_validateInput()) {
-      storeUserData();
-<<<<<<< HEAD
-      if (_selectedGradeLevel == 'Grade 10') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const homeg10(),
-          ),
-        );
-      } else if (_selectedGradeLevel == 'Grade 12') {
-=======
-      if (_selectedGradeLevel == 'Grade 10' ||
-          _selectedGradeLevel == 'Grade 12') {
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CreateAccountScreen2(),
-          ),
-        );
-      } else if (_selectedGradeLevel == 'Fourth-year College') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CreateAccountScreen3(),
-          ),
-        );
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-<<<<<<< HEAD
-    List<String> campusOptions = _selectedGradeLevel == 'Fourth-year College'
-        ? [
-      'Alangilan',
-      'JPLPC-Malvar',
-      'Lemery',
-      'Lipa',
-      'Pablo Borbon'
-    ]
-        : ['Pablo Borbon'];
-
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 158, 39, 39),
-        elevation: 0,
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/back.png',
-            width: 24.0,
-            height: 24.0,
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const SignupPage()),
-            );
-          },
-        ),
-      ),
-<<<<<<< HEAD
-      resizeToAvoidBottomInset: false, // Prevents content from moving when the keyboard appears
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 60.0,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 158, 39, 39),
-                borderRadius: BorderRadius.only(
-=======
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 45.0,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 158, 39, 39),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.zero,
-                  topRight: Radius.zero,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
-                ),
-              ),
-<<<<<<< HEAD
-              child: const Center(
-                child: Text(
-                  'CREATE ACCOUNT',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 253, 248, 248),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 40.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: _buildTextFieldWithShadow(
-                      controller: _firstnameController,
-                      labelText: 'Firstname',
-                      height: 50.0,
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: _buildTextFieldWithShadow(
-                      controller: _lastnameController,
-                      labelText: 'Lastname',
-                      height: 50.0,
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: _buildDropdownButtonFormField(
-                      value: _selectedGradeLevel,
-                      labelText: 'Grade Level',
-                      items: ['Grade 10', 'Grade 12', 'Fourth-year College'],
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedGradeLevel = newValue;
-                          // Update campus based on grade level
-                          if (_selectedGradeLevel == 'Grade 10' ||
-                              _selectedGradeLevel == 'Grade 12') {
-                            _selectedCampus = 'Pablo Borbon';
-                          } else {
-                            _selectedCampus = null;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: _buildDropdownButtonFormField(
-                      value: _selectedCampus,
-                      labelText: 'Campus',
-                      items: campusOptions,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedCampus = newValue;
-                        });
-                      },
-                    ),
-                  ),
-                  const Spacer(),
-=======
-              child: const Padding(
-                padding: EdgeInsets.only(top: 5.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(width: 5.0),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Create account',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 253, 248, 248),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16.0, 70.0, 16.0, 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTextFieldWithShadow(
-                    controller: _firstnameController,
-                    labelText: 'Firstname',
-                    height: 40.0,
-                  ),
-                  const SizedBox(height: 15.0),
-                  _buildTextFieldWithShadow(
-                    controller: _lastnameController,
-                    labelText: 'Lastname',
-                    height: 40.0,
-                  ),
-                  const SizedBox(height: 15.0),
-                  _buildDropdownButtonFormField(
-                    value: _selectedCampus,
-                    labelText: 'Campus',
-                    items: [
-                      'Alangilan',
-                      'JPLPC-Malvar',
-                      'Lemery',
-                      'Lipa',
-                      'Pablo Borbon'
-                    ],
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedCampus = newValue;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 15.0),
-                  _buildDropdownButtonFormField(
-                    value: _selectedGradeLevel,
-                    labelText: 'Grade Level',
-                    items: ['Grade 10', 'Grade 12', 'Fourth-year College'],
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedGradeLevel = newValue;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 5.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                  Center(
-                    child: Image.asset(
-                      'assets/logo2.png',
-                      height: 70.0,
-                    ),
-                  ),
-<<<<<<< HEAD
-                  const Spacer(),
-=======
-                  const SizedBox(height: 5.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: _proceedToNextPage,
-                        child: const Text(
-                          'Next',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 5.0),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextFieldWithShadow({
-    required TextEditingController controller,
-    required String labelText,
-<<<<<<< HEAD
-    double height = 50.0,
-=======
-    double height = 40.0,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-  }) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: TextField(
         controller: controller,
-        style: const TextStyle(fontSize: 15.0),
+        style: const TextStyle(
+          fontSize: 15.0,
+          fontFamily: 'Inter',
+        ),
         decoration: InputDecoration(
-          contentPadding:
-<<<<<<< HEAD
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-=======
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16.0, vertical: 10.0,
+          ),
           labelText: labelText,
+          labelStyle: const TextStyle(
+            color: Colors.black,
+            fontFamily: 'Inter',
+            fontSize: 15.0,
+          ),
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
@@ -716,23 +629,23 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
             borderSide: BorderSide.none,
           ),
         ),
+        keyboardType: TextInputType.text,
       ),
     );
   }
 
-  Widget _buildDropdownButtonFormField({
+  Widget _buildDropdownField({
+    required String label,
     required String? value,
-    required String labelText,
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
     return Container(
-<<<<<<< HEAD
       height: 50.0,
-=======
-      height: 40.0,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(15.0),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -741,47 +654,57 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
             offset: const Offset(0, 2),
           ),
         ],
-        borderRadius: BorderRadius.circular(15.0),
       ),
-      child: DropdownButtonFormField<String>(
-        value: value,
-        onChanged: onChanged,
-        hint: Text(labelText), // Show the label inside the input box
-        items: items.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        decoration: InputDecoration(
-          contentPadding:
-<<<<<<< HEAD
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-=======
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
+      child: Stack(
+        alignment: Alignment.centerLeft,
+        children: [
+          if (value == null)
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.black,
+                fontFamily: 'Inter',
+                fontSize: 15.0,
+              ),
+            ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: value,
+              isExpanded: true,
+              icon: const Icon(Icons.arrow_drop_down),
+              onChanged: onChanged,
+              items: items.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
-//---------------------------------------------------------------------
+
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
+  final bool isPass;
 
-  const PasswordField(
-      {super.key,
-      required this.controller,
-      required this.labelText,
-      required bool isPass});
+  const PasswordField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.isPass,
+  });
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -793,11 +716,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-<<<<<<< HEAD
       height: 50.0,
-=======
-      height: 40.0,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -809,72 +728,42 @@ class _PasswordFieldState extends State<PasswordField> {
         ],
         borderRadius: BorderRadius.circular(15.0),
       ),
-      child: TextField(
+      child: TextFormField(
         controller: widget.controller,
         obscureText: _obscureText,
-        style: const TextStyle(fontSize: 16.0),
+        style: const TextStyle(
+          fontSize: 15.0,
+          fontFamily: 'Inter',
+        ),
         decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           labelText: widget.labelText,
-          labelStyle: const TextStyle(color: Colors.black),
+          labelStyle: const TextStyle(
+            color: Colors.black,
+            fontFamily: 'Inter',
+            fontSize: 15.0,
+          ),
           filled: true,
           fillColor: Colors.grey[200],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
           ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off,
-            ),
-            onPressed: () {
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16.0, vertical: 10.0,
+          ),
+          suffixIcon: InkWell(
+            onTap: () {
               setState(() {
                 _obscureText = !_obscureText;
               });
             },
+            child: Icon(
+              _obscureText ? Icons.visibility : Icons.visibility_off,
+              color: const Color.fromARGB(255, 3, 3, 3),
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class EmailInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Allow only numbers
-    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-
-    // Ensure the length of the text matches the pattern
-    if (newText.length > 8) {
-      newText = newText.substring(0, 8);
-    }
-
-    // Insert hyphen at the right place
-    if (newText.length > 2) {
-      newText = '${newText.substring(0, 2)}-${newText.substring(2)}';
-    }
-
-    // Maintain the format before @ symbol
-    String formattedText;
-    if (newText.length > 8) {
-      formattedText = '${newText.substring(0, 8)}';
-    } else {
-      formattedText =
-          '$newText'; // Do not add the suffix if the length is less than 8
-    }
-
-    // Calculate cursor position
-    int cursorPosition = newText.length;
-    if (cursorPosition > 8) {
-      cursorPosition = 8;
-    }
-
-    return TextEditingValue(
-      text: formattedText,
-      selection: TextSelection.collapsed(offset: cursorPosition),
     );
   }
 }

@@ -14,9 +14,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-<<<<<<< HEAD
   final AuthServices _auth = AuthServices();
   bool isLoading = false;
+
   void loginUsers() async {
     setState(() {
       isLoading = true;
@@ -51,39 +51,6 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-=======
-  bool isLoading = false;
-
-  void loginUsers() async {
-  // Format the email before passing it to the loginUser function
-  String email = '${_emailController.text}@g.batstate-u.edu.ph';
-  
-  String res = await AuthServices().loginUser(
-    email: email,
-    password: _passwordController.text,
-    context: context,
-  );
-  
-  if (res == "Success") {
-    setState(() {
-      isLoading = true;
-    });
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlankPage(),
-      ),
-    );
-  } else {
-    showSnackBar(
-      context,
-      res,
-    );
-  }
-}
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
-
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -104,7 +71,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Image.asset('assets/back.png'),
           ),
           onPressed: () {
-<<<<<<< HEAD
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LoginSignupPage()),
@@ -113,75 +79,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 20.0, top: 20.0),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'WELCOME',
-                  style: TextStyle(fontSize: 24.0, color: Colors.white),
-                ),
-                Text(
-                  'BACK!',
-                  style: TextStyle(fontSize: 24.0, color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20.0),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40.0),
-                  topRight: Radius.circular(40.0),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 1,
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  _buildEmailTextField(),
-                  const Spacer(),
-                  PasswordField(
-                    controller: _passwordController,
-                    labelText: 'Password',
-                    isPass: true,
-                  ),
-                  const SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          // Implement forgot password logic
-                        },
-                        child: const MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 3, 3, 3),
-=======
-            // Implement back navigation
-          },
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                             Colors.white,
                           ),
                           padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          MaterialStateProperty.all<EdgeInsetsGeometry>(
                             const EdgeInsets.symmetric(
                               horizontal: 80.0,
                               vertical: 15.0,
@@ -279,8 +176,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: isLoading
                             ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
+                          color: Colors.white,
+                        )
                             : const Text('LOGIN'),
                       ),
                     ),
@@ -311,75 +208,66 @@ class _LoginPageState extends State<LoginPage> {
                             height: 50,
                             child: Image.asset(
                               'assets/google.png',
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
                             ),
                           ),
                         ),
                       ),
-<<<<<<< HEAD
-                    ],
-                  ),
-                  const Spacer(),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: isLoading ? null : loginUsers,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromARGB(255, 159, 41, 33),
+                    ),
+                    const Spacer(),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: isLoading ? null : loginUsers,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 159, 41, 33),
+                          ),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                            Colors.white,
+                          ),
+                          padding: MaterialStateProperty.all<
+                              EdgeInsetsGeometry>(
+                            const EdgeInsets.symmetric(
+                              horizontal: 80.0,
+                              vertical: 15.0,
+                            ),
+                          ),
                         ),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                          Colors.white,
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                            : const Text('LOGIN'),
+                      ),
+                    ),
+                    const Spacer(flex: 1),
+                    const Row(
+                      children: [
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text('OR CONTINUE WITH'),
                         ),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          const EdgeInsets.symmetric(
-                            horizontal: 80.0,
-                            vertical: 15.0,
+                        Expanded(child: Divider()),
+                      ],
+                    ),
+                    const Spacer(),
+                    Center(
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          await _auth.loginWithGoogle(context);
+                        },
+                        style: ButtonStyle(
+                          side: MaterialStateProperty.all(BorderSide.none),
+                        ),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: Image.asset('assets/google.png'),
                           ),
                         ),
                       ),
-                      child: isLoading
-                          ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                          : const Text('LOGIN'),
-                    ),
-                  ),
-                  const Spacer(flex: 1),
-                  const Row(
-                    children: [
-                      Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text('OR CONTINUE WITH'),
-                      ),
-                      Expanded(child: Divider()),
-                    ],
-                  ),
-                  const Spacer(),
-                  Center(
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        await _auth.loginWithGoogle(context);
-                      },
-                      style: ButtonStyle(
-                        side: MaterialStateProperty.all(BorderSide.none),
-                      ),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Image.asset('assets/google.png'),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-=======
                     ),
                   ],
                 ),
@@ -387,21 +275,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       ),
     );
   }
 
-<<<<<<< HEAD
 
   Widget _buildEmailTextField() {
     return Container(
       height: 50.0,
-=======
-  Widget _buildEmailTextField() {
-    return Container(
-      height: 40.0,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -418,11 +299,7 @@ class _LoginPageState extends State<LoginPage> {
         style: const TextStyle(fontSize: 15.0),
         decoration: InputDecoration(
           contentPadding:
-<<<<<<< HEAD
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-=======
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
           labelText: 'Email',
           labelStyle: const TextStyle(color: Colors.black),
           filled: true,
@@ -486,11 +363,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-<<<<<<< HEAD
       height: 50.0,
-=======
-      height: 40.0,
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -514,11 +387,7 @@ class _PasswordFieldState extends State<PasswordField> {
             borderSide: BorderSide.none,
           ),
           contentPadding:
-<<<<<<< HEAD
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-=======
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
           suffixIcon: InkWell(
             onTap: () {
               setState(() {

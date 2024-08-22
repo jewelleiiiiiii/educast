@@ -9,7 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.40"
-<<<<<<< HEAD
   ansicolor:
     dependency: transitive
     description:
@@ -34,8 +33,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.0"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   async:
     dependency: transitive
     description:
@@ -72,47 +69,26 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_firestore
-<<<<<<< HEAD
       sha256: a31eec60eadaa859f0677bf661d9f86ed15961c716512f64884e59edcb341472
       url: "https://pub.dev"
     source: hosted
     version: "5.2.1"
-=======
-      sha256: a7782612945fffa07cb99cf2e1e152f6c6152ee57fc201a7249e08a97a875bdb
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.2.0"
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
-<<<<<<< HEAD
       sha256: "3224e6158441c8897325e74f9971140cde2c85ee75a26704407a91b969b50829"
       url: "https://pub.dev"
     source: hosted
     version: "6.3.1"
-=======
-      sha256: "4ea584875e9c192559a21a8198727ad333b2b85b22af8ca2fa8b0b112de069dc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.3.0"
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
-<<<<<<< HEAD
       sha256: c1312945cb7dd55921bcc10445f6c9a494bc04104b7d0821c3ed577b970ab088
       url: "https://pub.dev"
     source: hosted
     version: "4.1.1"
-=======
-      sha256: "530066aa006b7d23e4cd8312d08cef996f80e6cbb0f1c2e7256b5fa200404127"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.1.0"
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   collection:
     dependency: transitive
     description:
@@ -121,7 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
-<<<<<<< HEAD
   crypto:
     dependency: transitive
     description:
@@ -138,8 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -160,17 +133,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_auth
-<<<<<<< HEAD
       sha256: "2457ac6cbc152fa464aad3fb35f98039b0c4ab8e9bedf476672508b291bdbc3a"
       url: "https://pub.dev"
     source: hosted
     version: "5.1.4"
-=======
-      sha256: b0dde65595b65c0c2c2c2127da0ce7772a375fcefbea8490c1563a4aecbd0195
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.3"
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -224,7 +190,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-<<<<<<< HEAD
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -233,8 +198,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.1"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -245,7 +208,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
   google_identity_services_web:
     dependency: transitive
     description:
@@ -310,8 +272,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   http_parser:
     dependency: transitive
     description:
@@ -320,7 +280,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-<<<<<<< HEAD
   image:
     dependency: transitive
     description:
@@ -329,8 +288,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   leak_tracker:
     dependency: transitive
     description:
@@ -395,7 +352,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
-<<<<<<< HEAD
   petitparser:
     dependency: transitive
     description:
@@ -404,8 +360,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -475,7 +429,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
-<<<<<<< HEAD
   universal_io:
     dependency: transitive
     description:
@@ -484,8 +437,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
-=======
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
   vector_math:
     dependency: transitive
     description:
@@ -510,7 +461,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-<<<<<<< HEAD
   xml:
     dependency: transitive
     description:
@@ -530,8 +480,3 @@ packages:
 sdks:
   dart: ">=3.4.3 <4.0.0"
   flutter: ">=3.22.0"
-=======
-sdks:
-  dart: ">=3.4.3 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
->>>>>>> 228c91baaff5cdfefcdb6719f26514113ee61cc2
