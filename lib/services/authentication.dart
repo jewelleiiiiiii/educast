@@ -8,6 +8,26 @@ class AuthServices {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Future<DocumentSnapshot?> getUserData(String uid) async {
+    try {
+      var userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      if (userSnapshot.exists) {
+        return userSnapshot;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error retrieving user data: $e');
+      return null;
+    }
+  }
+
+
+
   Future<String> loginWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

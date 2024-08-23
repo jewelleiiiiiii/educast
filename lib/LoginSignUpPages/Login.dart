@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
+import 'package:myapp/LoginSignUpPages/Signup.dart';
 import 'package:myapp/services/authentication.dart';
 import 'package:myapp/services/snackbar.dart';
+import 'package:myapp/Home/homeg10.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,34 +25,75 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    String email = '${_emailController.text}@g.batstate-u.edu.ph';
+    try {
+      String email = '${_emailController.text}@g.batstate-u.edu.ph';
 
-    String res = await AuthServices().loginUser(
-      email: email,
-      password: _passwordController.text,
-      context: context,
-    );
-
-    if (!mounted) return;
-
-    if (res == "Success") {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BlankPage(),
-        ),
+      // Attempt to log in the user
+      String res = await _auth.loginUser(
+        email: email,
+        password: _passwordController.text,
+        context: context,
       );
-    } else {
-      showSnackBar(
-        context,
-        res,
-      );
+
+      if (!mounted) return;
+
+      if (res == "Success") {
+        // Get the current user's UID from Firebase Auth
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          String uid = user.uid;
+
+          // Retrieve user data from Firestore using UID
+          var userSnapshot = await _auth.getUserData(uid);
+
+          if (userSnapshot != null) {
+            String gradeLevel = userSnapshot['gradeLevel'];
+
+            // Redirect based on grade level
+            if (gradeLevel == 'Grade 10') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeG10(),
+                ),
+              );
+            } else if (gradeLevel == 'Grade 12') {
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => homeG12(),
+              //   ),
+              // );
+            } else if (gradeLevel == 'Fourth-year College') {
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => home4th(),
+              //   ),
+              // );
+            } else {
+              // If no valid grade level is found
+              showSnackBar(context, 'Grade level not recognized.');
+            }
+          } else {
+            // Handle the case where user data is not found
+            showSnackBar(context, 'User data not found.');
+          }
+        } else {
+          showSnackBar(context, 'User not authenticated.');
+        }
+      } else {
+        showSnackBar(context, res);
+      }
+    } catch (e) {
+      showSnackBar(context, 'Error during login: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-
-    setState(() {
-      isLoading = false;
-    });
   }
+
 
   @override
   void dispose() {
@@ -79,28 +123,40 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, top: 5.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'WELCOME',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                  Text(
-                    'BACK!',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  ),
-                ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 30.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: const Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'WELCOME\n',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Colors.white,
+                        height: 1.2, // Line height for text spacing
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'BACK!',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Colors.white,
+                        height: 1.2, // Line height for text spacing
+                      ),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.left,
               ),
             ),
-            const SizedBox(height: 10.0),
-            Material(
+          ),
+          Expanded(
+            flex: 7,
+            child: Material(
               elevation: 5.0,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(40.0),
@@ -127,15 +183,15 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10.0),
+                    const Spacer(),
                     _buildEmailTextField(),
-                    const SizedBox(height: 20.0),
+                    const Spacer(),
                     PasswordField(
                       controller: _passwordController,
                       labelText: 'Password',
                       isPass: true,
                     ),
-                    const SizedBox(height: 5.0),
+                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -155,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 25.0),
+                    const Spacer(flex: 2),
                     Center(
                       child: ElevatedButton(
                         onPressed: isLoading ? null : loginUsers,
@@ -166,8 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                           foregroundColor: MaterialStateProperty.all<Color>(
                             Colors.white,
                           ),
-                          padding:
-                          MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                             const EdgeInsets.symmetric(
                               horizontal: 80.0,
                               vertical: 15.0,
@@ -179,67 +234,9 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.white,
                         )
                             : const Text('LOGIN'),
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    const Row(
-                      children: [
-                        Expanded(child: Divider()),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text('OR CONTINUE WITH'),
-                        ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-                    const SizedBox(height: 5.0),
-                    Center(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          side: MaterialStateProperty.all(
-                            BorderSide.none,
-                          ),
-                        ),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset(
-                              'assets/google.png',
-                            ),
-                          ),
-                        ),
                       ),
                     ),
                     const Spacer(),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: isLoading ? null : loginUsers,
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 159, 41, 33),
-                          ),
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white,
-                          ),
-                          padding: MaterialStateProperty.all<
-                              EdgeInsetsGeometry>(
-                            const EdgeInsets.symmetric(
-                              horizontal: 80.0,
-                              vertical: 15.0,
-                            ),
-                          ),
-                        ),
-                        child: isLoading
-                            ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                            : const Text('LOGIN'),
-                      ),
-                    ),
-                    const Spacer(flex: 1),
                     const Row(
                       children: [
                         Expanded(child: Divider()),
@@ -273,11 +270,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
 
 
   Widget _buildEmailTextField() {
@@ -337,70 +335,6 @@ class EmailInputFormatter extends TextInputFormatter {
     return TextEditingValue(
       text: newText,
       selection: TextSelection.collapsed(offset: newText.length),
-    );
-  }
-}
-
-class PasswordField extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final bool isPass;
-
-  const PasswordField({
-    super.key,
-    required this.controller,
-    required this.labelText,
-    required this.isPass,
-  });
-
-  @override
-  _PasswordFieldState createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50.0,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: TextFormField(
-        controller: widget.controller,
-        obscureText: _obscureText,
-        decoration: InputDecoration(
-          labelText: widget.labelText,
-          filled: true,
-          fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-          suffixIcon: InkWell(
-            onTap: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            child: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off,
-              color: const Color.fromARGB(255, 3, 3, 3),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
