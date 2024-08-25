@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Home/Info/Abm.dart';
+import 'package:myapp/Home/Info/Gas.dart';
+import 'package:myapp/Home/Info/Humss.dart';
+import 'package:myapp/Home/Info/Stem.dart';
 
 class HomeG10 extends StatefulWidget {
-  const HomeG10({Key? key}) : super(key: key);
+  const HomeG10({super.key});
 
   @override
   _HomeG10State createState() => _HomeG10State();
@@ -31,11 +35,11 @@ class _HomeG10State extends State<HomeG10> {
     // Define responsive sizes based on screen dimensions
     final appBarHeight = screenHeight * 0.15;
     final appBarInnerHeight = screenHeight * 0.05;
-    final iconSize = screenWidth * 0.07;
+    final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
     final paddingVertical = screenHeight * 0.01;
     final cardHeight = screenHeight * 0.68;
-    final bottomNavHeight = screenHeight * 0.10;
+    final double bottomNavHeight = MediaQuery.of(context).size.height * 0.10;
 
     return Scaffold(
       body: Stack(
@@ -49,54 +53,56 @@ class _HomeG10State extends State<HomeG10> {
                   child: Container(
                     width: double.infinity,
                     height: appBarInnerHeight,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 158, 39, 39),
-                      borderRadius: const BorderRadius.only(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 158, 39, 39),
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.zero,
                         topRight: Radius.zero,
                         bottomLeft: Radius.circular(40.0),
                         bottomRight: Radius.circular(40.0),
                       ),
                     ),
-                    padding: EdgeInsets.fromLTRB(
-                        paddingHorizontal, 0, paddingHorizontal, paddingVertical),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: _toggleDrawer,
-                          child: Image.asset(
-                            'assets/menu.png',
-                            width: iconSize,
-                            height: iconSize,
+                    padding: EdgeInsets.symmetric(horizontal: paddingHorizontal,vertical: paddingVertical),
+                    child: Center(  // Center widget to vertically center the Row
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: _toggleDrawer,
+                            child: Image.asset(
+                              'assets/menu.png',
+                              width: iconSize,
+                              height: iconSize,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          'HOME',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
+                          const Text(
+                            'HOME',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => UserG10()),
-                            // );
-                          },
-                          child: Image.asset(
-                            'assets/profile.png',
-                            width: iconSize,
-                            height: iconSize,
+                          GestureDetector(
+                            onTap: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => UserG10()),
+                              // );
+                            },
+                            child: Image.asset(
+                              'assets/profile.png',
+                              width: iconSize,
+                              height: iconSize,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 pinned: true,
               ),
+
               SliverToBoxAdapter(
                 child: SizedBox(height: screenHeight * 0.05), // Add space between header and content
               ),
@@ -148,11 +154,10 @@ class _HomeG10State extends State<HomeG10> {
                                   padding: EdgeInsets.all(screenWidth * 0.04), // Add padding here
                                   child: ListView(
                                     children: const [
+                                      StrandCard(strandName: 'ABM'),
+                                      StrandCard(strandName: 'GAS'),
                                       StrandCard(strandName: 'HUMSS'),
                                       StrandCard(strandName: 'STEM'),
-                                      StrandCard(strandName: 'ABM'),
-                                      StrandCard(strandName: 'ICT'),
-                                      StrandCard(strandName: 'TOURISM'),
                                     ],
                                   ),
                                 ),
@@ -186,7 +191,7 @@ class _HomeG10State extends State<HomeG10> {
                         child: Column(
                           children: [
                             DrawerHeader(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.transparent,
                               ),
                               child: Center(
@@ -202,36 +207,46 @@ class _HomeG10State extends State<HomeG10> {
                                 padding: EdgeInsets.all(paddingHorizontal),
                                 children: [
                                   ListTile(
-                                    leading: Icon(Icons.settings, color: Colors.black),
-                                    title: Text('Settings'),
+                                    leading: const Icon(Icons.settings, color: Colors.black),
+                                    title: const Text('Settings', style: const TextStyle(
+                                      fontSize: 18,
+                                    ),),
+                                    onTap: () {
+
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.history, color: Colors.black),
+                                    title: const Text('History', style: const TextStyle(
+                                      fontSize: 18,
+                                    ),),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: Icon(Icons.history, color: Colors.black),
-                                    title: Text('History'),
+                                    leading: const Icon(Icons.info, color: Colors.black),
+                                    title: const Text('About', style: const TextStyle(
+                                      fontSize: 18,
+                                    ),),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: Icon(Icons.info, color: Colors.black),
-                                    title: Text('About'),
+                                    leading: const Icon(Icons.feedback, color: Colors.black),
+                                    title: const Text('Feedback', style: const TextStyle(
+                                      fontSize: 18,
+                                    ),),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: Icon(Icons.feedback, color: Colors.black),
-                                    title: Text('Feedback'),
-                                    onTap: () {
-                                      // Handle menu item tap
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: Icon(Icons.logout, color: Colors.black),
-                                    title: Text('Logout'),
+                                    leading: const Icon(Icons.logout, color: Colors.black),
+                                    title: const Text('Logout', style: const TextStyle(
+                                      fontSize: 18,
+                                    ),),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
@@ -251,7 +266,7 @@ class _HomeG10State extends State<HomeG10> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: bottomNavHeight,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border(
@@ -260,16 +275,23 @@ class _HomeG10State extends State<HomeG10> {
               width: 0.2,
             ),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              offset: Offset(0, -2), // Shadow above the bar
+              blurRadius: 6, // Soft shadow
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const HomeG10()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeG10()),
+                );
               },
               icon: Image.asset(
                 'assets/home.png',
@@ -279,10 +301,7 @@ class _HomeG10State extends State<HomeG10> {
             ),
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SearchScreen()),
-                // );
+                // Add navigation logic
               },
               icon: Image.asset(
                 'assets/search.png',
@@ -292,23 +311,17 @@ class _HomeG10State extends State<HomeG10> {
             ),
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => MainG10()),
-                // );
+                // Add navigation logic
               },
               icon: Image.asset(
                 'assets/main.png',
-                width: iconSize * 1.3, // Slightly larger for emphasis
-                height: iconSize * 1.3,
+                width: iconSize,
+                height: iconSize,
               ),
             ),
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => NotificationScreen()),
-                // );
+                // Add navigation logic
               },
               icon: Image.asset(
                 'assets/notif.png',
@@ -318,10 +331,7 @@ class _HomeG10State extends State<HomeG10> {
             ),
             IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => MyProgressPage()),
-                // );
+                // Add navigation logic
               },
               icon: Image.asset(
                 'assets/stats.png',
@@ -370,48 +380,76 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 class StrandCard extends StatelessWidget {
   final String strandName;
 
-  const StrandCard({Key? key, required this.strandName}) : super(key: key);
+  const StrandCard({super.key, required this.strandName});
 
   @override
   Widget build(BuildContext context) {
     // Obtain screen width for responsive design
     final screenWidth = MediaQuery.of(context).size.width;
-    final iconSize = screenWidth * 0.10;  // Increased icon size
+    final double iconSize = MediaQuery.of(context).size.width * 0.10;
 
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      color: Color(0xFFF8F8F8),
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.04),
-      child: Stack(
-        children: [
-          SizedBox(
-            height: screenWidth * 0.20,  // Adjust the height here
-            child: Container(
-              padding: EdgeInsets.all(screenWidth * 0.04),
-              child: Center(
-                child: Text(
-                  strandName,
-                  style: const TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
+    return InkWell(
+      onTap: () {
+        // Navigate to different pages based on strandName
+        if (strandName == 'STEM') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AcademicStemScreen()),
+          );
+        } else if (strandName == 'HUMSS') {
+           Navigator.push(
+             context,
+             MaterialPageRoute(builder: (context) => AcademicHumssScreen()),
+           );
+         } else if (strandName == 'ABM') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AcademicAbmScreen()),
+          );
+        }else if (strandName == 'GAS') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AcademicGasScreen()),
+          );
+        }
+        // Add other conditions for ABM, ICT, TOURISM...
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        color: const Color(0xFFF8F8F8),
+        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.04),
+        child: Stack(
+          children: [
+            SizedBox(
+              height: screenWidth * 0.20,  // Adjust the height here
+              child: Container(
+                padding: EdgeInsets.all(screenWidth * 0.04),
+                child: Center(
+                  child: Text(
+                    strandName,
+                    style: const TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: screenWidth * 0.02,  // Adjust top padding
-            right: screenWidth * 0.02,  // Adjust right padding
-            child: Image.asset(
-              'assets/manual.png', // Ensure this asset exists
-              width: iconSize,
-              height: iconSize,
+            Positioned(
+              top: screenWidth * 0.02,  // Adjust top padding
+              right: screenWidth * 0.02,  // Adjust right padding
+              child: Image.asset(
+                'assets/manual.png', // Ensure this asset exists
+                width: iconSize,
+                height: iconSize,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+

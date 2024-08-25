@@ -23,12 +23,12 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
       if (_selectedIndex == 1) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SignupPage()),
+          MaterialPageRoute(builder: (context) => const SignupPage()),
         );
       } else if (_selectedIndex == 0) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
         );
       }
     });
@@ -109,13 +109,15 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
 }
 
 class BlankPage extends StatelessWidget {
+  const BlankPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Blank Page'),
+        title: const Text('Blank Page'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('This is a blank page.'),
       ),
     );

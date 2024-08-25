@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeG10(),
+                  builder: (context) => const HomeG10(),
                 ),
               );
             } else if (gradeLevel == 'Grade 12') {
@@ -125,11 +125,11 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 30.0),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 30.0),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(

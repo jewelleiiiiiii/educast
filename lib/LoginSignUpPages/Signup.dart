@@ -365,7 +365,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         if (_selectedGradeLevel == 'Grade 10') {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => BlankPage(), // Replace with the actual target page for Grade 10
+              builder: (context) => const BlankPage(), // Replace with the actual target page for Grade 10
             ),
           );
         } else if (_selectedGradeLevel == 'Grade 12') {
