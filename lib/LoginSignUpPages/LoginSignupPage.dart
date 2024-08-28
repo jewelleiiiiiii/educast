@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/LoginSignUpPages/Signup.dart';
 
@@ -32,6 +33,17 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
         );
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Set the status bar text color to black
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // Optional: to make the status bar transparent
+      statusBarIconBrightness: Brightness.dark, // Set the status bar icons to black
+      statusBarBrightness: Brightness.light, // For iOS: Sets status bar text to black
+    ));
   }
 
   @override
@@ -107,6 +119,7 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     );
   }
 }
+
 
 class BlankPage extends StatelessWidget {
   const BlankPage({super.key});

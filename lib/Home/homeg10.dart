@@ -3,9 +3,10 @@ import 'package:myapp/Home/Info/Abm.dart';
 import 'package:myapp/Home/Info/Gas.dart';
 import 'package:myapp/Home/Info/Humss.dart';
 import 'package:myapp/Home/Info/Stem.dart';
+import 'package:myapp/Search/searchg10.dart';
 
 class HomeG10 extends StatefulWidget {
-  const HomeG10({super.key});
+  const HomeG10({super.key,});
 
   @override
   _HomeG10State createState() => _HomeG10State();
@@ -301,7 +302,10 @@ class _HomeG10State extends State<HomeG10> {
             ),
             IconButton(
               onPressed: () {
-                // Add navigation logic
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchG10()),
+                );
               },
               icon: Image.asset(
                 'assets/search.png',
