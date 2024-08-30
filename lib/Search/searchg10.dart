@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Search/filterg10.dart';
 import '../Home/Info/Abm.dart';
 import '../Home/Info/Gas.dart';
 import '../Home/Info/Humss.dart';
@@ -135,117 +136,66 @@ class _SearchG10 extends State<SearchG10> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.12,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 158, 39, 39), // Red color matching the status bar
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 30.0,
-              right: 16.0,
-              child: GestureDetector(
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => FilterScreen()),
-                  // );
-                },
-                child: Image.asset(
-                  'assets/filter.png', // Replace with your image path
-                  width: 30.0,
-                  height: 30.0,
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                Container(
-                  height: 150.0,
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Search',
-                              prefixIcon: Icon(Icons.search),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                            ),
-                            onChanged: (value) {
-                              performSearch();
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 10.0),
-                        TextButton(
-                          onPressed: performSearch,
-                          child: Text(
-                            'Search',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.12,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 158, 39, 39), // Red color matching the status bar
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        if (showSearchResults) ...[
-                          for (int i = 0; i < visibleResults.length; i++)
-                            SearchResultTile(
-                              text: visibleResults[i],
-                              onTap: () {
-                                navigateToScreen(visibleResults[i]);
-                              },
-                              onRemove: () {
-                                removeSearchResult(i);
-                              },
-                            ),
-                          if (searchResults.length > 3) ...[
-                            SizedBox(height: 10.0),
-                            TextButton(
-                              onPressed: toggleSeeMore,
-                              child: Text(
-                                visibleResults.length < searchResults.length
-                                    ? 'See More'
-                                    : 'See Less',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
+              ),
+              Positioned(
+                top: 30.0,
+                right: 16.0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FilterG10()),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/filter.png', // Replace with your image path
+                    width: 30.0,
+                    height: 30.0,
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  Container(
+                    height: 150.0,
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: searchController,
+                              decoration: InputDecoration(
+                                hintText: 'Search',
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
                                 ),
                               ),
+                              onChanged: (value) {
+                                performSearch();
+                              },
                             ),
-                            Icon(Icons.keyboard_arrow_down),
-                          ],
-                        ],
-                        SizedBox(height: 20.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
+                          ),
+                          SizedBox(width: 10.0),
+                          TextButton(
+                            onPressed: performSearch,
                             child: Text(
-                              'You may like',
+                              'Search',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16.0,
@@ -253,104 +203,153 @@ class _SearchG10 extends State<SearchG10> {
                               ),
                             ),
                           ),
-                        ),
-                        // List of titles for the "You may like" section
-                        for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
-                          YouMayLikeTile(
-                            title: title,
-                            onTap: () {
-                              navigateToScreen(title);
-                            },
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 0.2,
-            ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (showSearchResults) ...[
+                            for (int i = 0; i < visibleResults.length; i++)
+                              SearchResultTile(
+                                text: visibleResults[i],
+                                onTap: () {
+                                  navigateToScreen(visibleResults[i]);
+                                },
+
+                              ),
+                            if (searchResults.length > 3) ...[
+                              SizedBox(height: 10.0),
+                              TextButton(
+                                onPressed: toggleSeeMore,
+                                child: Text(
+                                  visibleResults.length < searchResults.length
+                                      ? 'See More'
+                                      : 'See Less',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Icon(Icons.keyboard_arrow_down),
+                            ],
+                          ],
+                          SizedBox(height: 20.0),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'You may like',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // List of titles for the "You may like" section
+                          for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
+                            YouMayLikeTile(
+                              title: title,
+                              onTap: () {
+                                navigateToScreen(title);
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: Offset(0, -2), // Shadow above the bar
-              blurRadius: 6, // Soft shadow
-            ),
-          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/home.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.width * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/search.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.width * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Add navigation logic
-              },
-              icon: Image.asset(
-                'assets/main.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.width * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Add navigation logic
-              },
-              icon: Image.asset(
-                'assets/notif.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.width * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Add navigation logic
-              },
-              icon: Image.asset(
-                'assets/stats.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.width * 0.10,
-              ),
-            ),
-          ],
+        bottomNavigationBar: Container(
+        height: MediaQuery.of(context).size.height * 0.10,
+    decoration: BoxDecoration(
+    color: Colors.white,
+    border: Border(
+    top: BorderSide(
+    color: Colors.grey,
+    width: 0.2,
+    ),
+    ),
+    boxShadow: [
+    BoxShadow(
+    color: Colors.black.withOpacity(0.2),
+    offset: Offset(0, -2), // Shadow above the bar
+    blurRadius: 6, // Soft shadow
+    ),
+    ],
+    ),
+    child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+    IconButton(
+    onPressed: () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const HomeG10()),
+    );
+    },
+      icon: Image.asset(
+        'assets/home.png',
+        width: MediaQuery.of(context).size.width * 0.10,
+        height: MediaQuery.of(context).size.width * 0.10,
+      ),
+    ),
+      IconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchG10()),
+          );
+        },
+        icon: Image.asset(
+          'assets/search.png',
+          width: MediaQuery.of(context).size.width * 0.10,
+          height: MediaQuery.of(context).size.width * 0.10,
         ),
       ),
+      IconButton(
+        onPressed: () {
+          // Add navigation logic
+        },
+        icon: Image.asset(
+          'assets/main.png',
+          width: MediaQuery.of(context).size.width * 0.10,
+          height: MediaQuery.of(context).size.width * 0.10,
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+          // Add navigation logic
+        },
+        icon: Image.asset(
+          'assets/notif.png',
+          width: MediaQuery.of(context).size.width * 0.10,
+          height: MediaQuery.of(context).size.width * 0.10,
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+          // Add navigation logic
+        },
+        icon: Image.asset(
+          'assets/stats.png',
+          width: MediaQuery.of(context).size.width * 0.10,
+          height: MediaQuery.of(context).size.width * 0.10,
+        ),
+      ),
+    ],
+    ),
+        ),
     );
   }
 }
@@ -358,12 +357,10 @@ class _SearchG10 extends State<SearchG10> {
 class SearchResultTile extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  final VoidCallback onRemove;
 
   const SearchResultTile({
     required this.text,
     required this.onTap,
-    required this.onRemove,
   });
 
   @override
@@ -372,13 +369,10 @@ class SearchResultTile extends StatelessWidget {
       leading: Icon(Icons.timer),
       title: Text(text),
       onTap: onTap,
-      trailing: IconButton(
-        icon: Icon(Icons.close),
-        onPressed: onRemove,
-      ),
     );
   }
 }
+
 
 class YouMayLikeTile extends StatelessWidget {
   final String title;
@@ -398,3 +392,4 @@ class YouMayLikeTile extends StatelessWidget {
     );
   }
 }
+

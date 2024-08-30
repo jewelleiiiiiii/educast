@@ -1,8 +1,76 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myapp/Search/searchg10.dart'; // Import Firestore
 
-class FilterG10 extends StatelessWidget {
+class FilterG10 extends StatefulWidget {
+  @override
+  _FilterG10State createState() => _FilterG10State();
+}
+
+class _FilterG10State extends State<FilterG10> {
+  List<String> selectedButtons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFilters(); // Load filters when the widget is initialized
+  }
+
+  Future<void> _loadFilters() async {
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid != null) {
+      try {
+        DocumentSnapshot doc = await FirebaseFirestore.instance.collection('userAction').doc(uid).get();
+        if (doc.exists) {
+          setState(() {
+            selectedButtons = List<String>.from(doc.get('filter') ?? []);
+          });
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to load filters: $e'),
+        ));
+      }
+    }
+  }
+
+  void _toggleButton(String buttonName) {
+    setState(() {
+      if (selectedButtons.contains(buttonName)) {
+        selectedButtons.remove(buttonName);
+      } else {
+        selectedButtons.add(buttonName);
+      }
+    });
+  }
+
+  Future<void> _saveFilters() async {
+    String? uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (uid == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('User not authenticated.'),
+      ));
+      return;
+    }
+
+    try {
+      await FirebaseFirestore.instance.collection('userAction').doc(uid).set({
+        'filter': selectedButtons,
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Filters saved successfully!'),
+      ));
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to save filters: $e'),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +84,6 @@ class FilterG10 extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 158, 39, 39),
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.zero,
-                  topRight: Radius.zero,
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0),
                 ),
@@ -38,10 +104,10 @@ class FilterG10 extends StatelessWidget {
               left: 16.0,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context); // Navigate back to previous screen
+                  Navigator.pop(context); // Navigate back to the previous screen
                 },
                 child: Image.asset(
-                  '../lib/assets/back.png', // Replace with your back button image path
+                  'assets/back.png', // Replace with your back button image path
                   width: 30.0,
                   height: 30.0,
                 ),
@@ -49,177 +115,202 @@ class FilterG10 extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  top: 100.0,
-                  left: 16.0,
-                  right: 16.0), // Adjust top padding to make space for header
-              child: Column(
-                crossAxisAlignment:
-                CrossAxisAlignment.start, // Align children to the left
-                children: [
-                  Container(
-                    height: 40.0,
-                    alignment: Alignment.bottomLeft, // Align text to the left
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Category',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                top: 130.0,
+                left: 16.0,
+                right: 16.0,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 40.0,
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'Category',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 10.0),
-                  // First Layer: Three clickable containers for Category
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween, // Align to the left
-                    children: [
-                      RoundedButtonContainer(buttonName: 'English'),
-                      RoundedButtonContainer(buttonName: 'Math'),
-                      RoundedButtonContainer(buttonName: 'Science'),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  // Second Layer: Two clickable containers centered for Category
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.center, // Align to the left
-                    children: [
-                      RoundedButtonContainer(buttonName: 'Filipino'),
-                      SizedBox(width: 10.0),
-                      RoundedButtonContainer(buttonName: 'Mapeh'),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  // Third Layer: Three clickable containers for Category
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween, // Align to the left
-                    children: [
-                      RoundedButtonContainer(buttonName: 'AP'),
-                      RoundedButtonContainer(buttonName: 'ESP'),
-                      RoundedButtonContainer(buttonName: 'TLE'),
-                    ],
-                  ),
-                  SizedBox(height: 20.0), // Increased spacing for clarity
-                  Container(
-                    height: 35.0,
-                    alignment: Alignment.bottomLeft, // Align text to the left
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Skills', // Changed text to "Skills"
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                    SizedBox(height: 10.0),
+                    // Buttons in two-column rows
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'English',
+                                isSelected: selectedButtons.contains('English'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Math',
+                                isSelected: selectedButtons.contains('Math'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Science',
+                                isSelected: selectedButtons.contains('Science'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Filipino',
+                                isSelected: selectedButtons.contains('Filipino'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Mapeh',
+                                isSelected: selectedButtons.contains('Mapeh'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'AP',
+                                isSelected: selectedButtons.contains('AP'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'ESP',
+                                isSelected: selectedButtons.contains('ESP'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'TLE',
+                                isSelected: selectedButtons.contains('TLE'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Container(
+                      height: 35.0,
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'Skills',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 10.0),
-                  // First Layer: Three clickable containers for Skills
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween, // Align to the left
-                    children: [
-                      RoundedButtonContainer(buttonName: 'Critical Thinking'),
-                      RoundedButtonContainer(buttonName: 'Communication'),
-                      RoundedButtonContainer(buttonName: 'Collaboration'),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  // Second Layer: Two clickable containers centered for Skills
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween, // Align to the left
-                    children: [
-                      RoundedButtonContainer(buttonName: 'Analysis'),
-                      RoundedButtonContainer(buttonName: 'Technical'),
-                      RoundedButtonContainer(buttonName: 'Management'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 60.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(
-              color: Colors.grey, // Border color
-              width: .2, // Border width
-            ),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
-                );
-              },
-              icon: Image.asset(
-                '../lib/assets/home.png',
-                width: 25.0,
-                height: 25.0,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                '../lib/assets/search.png',
-                width: 25.0,
-                height: 25.0,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => MainG10()),
-                // );
-              },
-              icon: Image.asset(
-                '../lib/assets/main.png',
-                width: 40.0,
-                height: 40.0,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => NotificationScreen()),
-                // );
-              },
-              icon: Image.asset(
-                '../lib/assets/notif.png',
-                width: 25.0,
-                height: 25.0,
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Image.asset(
-                '../lib/assets/stats.png',
-                width: 25.0,
-                height: 25.0,
+                    SizedBox(height: 10.0),
+                    // Buttons in two-column rows for Skills
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Critical Thinking',
+                                isSelected: selectedButtons.contains('Critical Thinking'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Communication',
+                                isSelected: selectedButtons.contains('Communication'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Collaboration',
+                                isSelected: selectedButtons.contains('Collaboration'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                            Flexible(
+                              flex: 4, // 40% width
+                              child: RoundedButtonContainer(
+                                buttonName: 'Creativity',
+                                isSelected: selectedButtons.contains('Creativity'),
+                                onPressed: _toggleButton,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30.0),
+                    ElevatedButton(
+                      onPressed: _saveFilters,
+                      child: Text('Save'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -229,56 +320,34 @@ class FilterG10 extends StatelessWidget {
   }
 }
 
-class RoundedButtonContainer extends StatefulWidget {
+class RoundedButtonContainer extends StatelessWidget {
   final String buttonName;
+  final bool isSelected;
+  final void Function(String) onPressed;
 
-  RoundedButtonContainer({required this.buttonName});
-
-  @override
-  _RoundedButtonContainerState createState() => _RoundedButtonContainerState();
-}
-
-class _RoundedButtonContainerState extends State<RoundedButtonContainer> {
-  bool _isHovered = false;
-  bool _isSelected = false;
+  RoundedButtonContainer({
+    required this.buttonName,
+    required this.isSelected,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isSelected = !_isSelected;
-        });
-        // Implement your onTap logic here
-        print('Button ${widget.buttonName} tapped');
-      },
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        child: Container(
-          width: 80.0,
-          height: 25.0,
-          decoration: BoxDecoration(
-            color: _isSelected
-                ? Colors.pink
-                : (_isHovered
-                ? Colors.pink
-                : const Color.fromARGB(255, 255, 255, 255)),
-            borderRadius: BorderRadius.circular(20.0),
-            border: Border.all(
-              color: Colors.black, // Set your stroke color here
-              width: 1.0, // Set the width of the stroke
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isSelected ? Colors.red : Colors.grey[300],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
           ),
-          child: Center(
-            child: Text(
-              widget.buttonName,
-              style: TextStyle(
-                color: Colors.black, // Text color
-                fontSize: 10.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          padding: EdgeInsets.symmetric(vertical: 12.0),
+        ),
+        onPressed: () => onPressed(buttonName),
+        child: Text(
+          buttonName,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
           ),
         ),
       ),
