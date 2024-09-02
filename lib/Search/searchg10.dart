@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_collection_literals
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Search/filterg10.dart';
@@ -8,6 +10,8 @@ import '../Home/Info/Stem.dart';
 import '../Home/homeg10.dart';
 
 class SearchG10 extends StatefulWidget {
+  const SearchG10({super.key});
+
   @override
   _SearchG10 createState() => _SearchG10();
 }
@@ -112,19 +116,19 @@ class _SearchG10 extends State<SearchG10> {
 
     switch (normalizedTitle) {
       case 'STEM':
-        screen = AcademicStemScreen();
+        screen = const AcademicStemScreen();
         break;
       case 'ABM':
-        screen = AcademicAbmScreen();
+        screen = const AcademicAbmScreen();
         break;
       case 'HUMSS':
-        screen = AcademicHumssScreen();
+        screen = const AcademicHumssScreen();
         break;
       case 'GAS':
-        screen = AcademicGasScreen();
+        screen = const AcademicGasScreen();
         break;
       default:
-        screen = HomeG10(); // Default screen
+        screen = const HomeG10(); // Default screen
     }
 
     Navigator.push(
@@ -157,7 +161,7 @@ class _SearchG10 extends State<SearchG10> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FilterG10()),
+                      MaterialPageRoute(builder: (context) => const FilterG10()),
                     );
                   },
                   child: Image.asset(
@@ -181,7 +185,7 @@ class _SearchG10 extends State<SearchG10> {
                               controller: searchController,
                               decoration: InputDecoration(
                                 hintText: 'Search',
-                                prefixIcon: Icon(Icons.search),
+                                prefixIcon: const Icon(Icons.search),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
@@ -191,10 +195,10 @@ class _SearchG10 extends State<SearchG10> {
                               },
                             ),
                           ),
-                          SizedBox(width: 10.0),
+                          const SizedBox(width: 10.0),
                           TextButton(
                             onPressed: performSearch,
-                            child: Text(
+                            child: const Text(
                               'Search',
                               style: TextStyle(
                                 color: Colors.black,
@@ -221,26 +225,26 @@ class _SearchG10 extends State<SearchG10> {
 
                               ),
                             if (searchResults.length > 3) ...[
-                              SizedBox(height: 10.0),
+                              const SizedBox(height: 10.0),
                               TextButton(
                                 onPressed: toggleSeeMore,
                                 child: Text(
                                   visibleResults.length < searchResults.length
                                       ? 'See More'
                                       : 'See Less',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              Icon(Icons.keyboard_arrow_down),
+                              const Icon(Icons.keyboard_arrow_down),
                             ],
                           ],
-                          SizedBox(height: 20.0),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          const SizedBox(height: 20.0),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -274,7 +278,7 @@ class _SearchG10 extends State<SearchG10> {
         height: MediaQuery.of(context).size.height * 0.10,
     decoration: BoxDecoration(
     color: Colors.white,
-    border: Border(
+    border: const Border(
     top: BorderSide(
     color: Colors.grey,
     width: 0.2,
@@ -283,7 +287,7 @@ class _SearchG10 extends State<SearchG10> {
     boxShadow: [
     BoxShadow(
     color: Colors.black.withOpacity(0.2),
-    offset: Offset(0, -2), // Shadow above the bar
+    offset: const Offset(0, -2), // Shadow above the bar
     blurRadius: 6, // Soft shadow
     ),
     ],
@@ -308,7 +312,7 @@ class _SearchG10 extends State<SearchG10> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SearchG10()),
+            MaterialPageRoute(builder: (context) => const SearchG10()),
           );
         },
         icon: Image.asset(
@@ -358,7 +362,7 @@ class SearchResultTile extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const SearchResultTile({
+  const SearchResultTile({super.key,
     required this.text,
     required this.onTap,
   });
@@ -366,7 +370,7 @@ class SearchResultTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.timer),
+      leading: const Icon(Icons.timer),
       title: Text(text),
       onTap: onTap,
     );
@@ -378,7 +382,7 @@ class YouMayLikeTile extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const YouMayLikeTile({
+  const YouMayLikeTile({super.key,
     required this.title,
     required this.onTap,
   });
@@ -386,7 +390,7 @@ class YouMayLikeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.local_fire_department),
+      leading: const Icon(Icons.local_fire_department),
       title: Text(title),
       onTap: onTap,
     );

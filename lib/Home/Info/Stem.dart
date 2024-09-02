@@ -38,7 +38,6 @@ class AcademicStemScreen extends StatelessWidget {
     ));
 
     // Define sizes for bottom navigation bar and icons
-    final double bottomNavHeight = MediaQuery.of(context).size.height * 0.10;
     final double iconSize = MediaQuery.of(context).size.width * 0.10;
 
     return Scaffold(
@@ -48,11 +47,11 @@ class AcademicStemScreen extends StatelessWidget {
           future: fetchContent(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No data available.'));
+              return const Center(child: Text('No data available.'));
             } else {
               final contentList = snapshot.data!;
 
@@ -71,11 +70,11 @@ class AcademicStemScreen extends StatelessWidget {
                     ),
                     child: Stack(
                       children: [
-                        Center(
+                        const Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text(
                                 'Science, Technology,',
                                 style: TextStyle(
@@ -103,7 +102,7 @@ class AcademicStemScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomeG10(),
+                                  builder: (context) => const HomeG10(),
                                 ),
                               );
                             },
@@ -238,13 +237,13 @@ class AcademicStemScreen extends StatelessWidget {
                                                     ),
                                                     child: Column(
                                                       children: [
-                                                        Row(
+                                                        const Row(
                                                           children: [
                                                             Expanded(
                                                               child: Center(
                                                                 child: Text(
                                                                   'What is STEM all about?',
-                                                                  style: const TextStyle(
+                                                                  style: TextStyle(
                                                                     fontSize: 16,
                                                                     fontWeight: FontWeight.bold,
                                                                   ),
@@ -342,7 +341,7 @@ class AcademicStemScreen extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(
+          border: const Border(
             top: BorderSide(
               color: Colors.grey,
               width: 0.2,
@@ -351,7 +350,7 @@ class AcademicStemScreen extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              offset: Offset(0, -2), // Shadow above the bar
+              offset: const Offset(0, -2), // Shadow above the bar
               blurRadius: 6, // Soft shadow
             ),
           ],
@@ -376,7 +375,7 @@ class AcademicStemScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchG10()),
+                  MaterialPageRoute(builder: (context) => const SearchG10()),
                 );
               },
               icon: Image.asset(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Assessment/assess1g10.dart';
 import 'package:myapp/Home/Info/Abm.dart';
 import 'package:myapp/Home/Info/Gas.dart';
 import 'package:myapp/Home/Info/Humss.dart';
@@ -40,6 +41,7 @@ class _HomeG10State extends State<HomeG10> {
     final paddingHorizontal = screenWidth * 0.04;
     final paddingVertical = screenHeight * 0.01;
     final cardHeight = screenHeight * 0.68;
+    // ignore: unused_local_variable
     final double bottomNavHeight = MediaQuery.of(context).size.height * 0.10;
 
     return Scaffold(
@@ -209,7 +211,7 @@ class _HomeG10State extends State<HomeG10> {
                                 children: [
                                   ListTile(
                                     leading: const Icon(Icons.settings, color: Colors.black),
-                                    title: const Text('Settings', style: const TextStyle(
+                                    title: const Text('Settings', style: TextStyle(
                                       fontSize: 18,
                                     ),),
                                     onTap: () {
@@ -218,7 +220,7 @@ class _HomeG10State extends State<HomeG10> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.history, color: Colors.black),
-                                    title: const Text('History', style: const TextStyle(
+                                    title: const Text('History', style: TextStyle(
                                       fontSize: 18,
                                     ),),
                                     onTap: () {
@@ -227,7 +229,7 @@ class _HomeG10State extends State<HomeG10> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.info, color: Colors.black),
-                                    title: const Text('About', style: const TextStyle(
+                                    title: const Text('About', style: TextStyle(
                                       fontSize: 18,
                                     ),),
                                     onTap: () {
@@ -236,7 +238,7 @@ class _HomeG10State extends State<HomeG10> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.feedback, color: Colors.black),
-                                    title: const Text('Feedback', style: const TextStyle(
+                                    title: const Text('Feedback', style: TextStyle(
                                       fontSize: 18,
                                     ),),
                                     onTap: () {
@@ -245,7 +247,7 @@ class _HomeG10State extends State<HomeG10> {
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.logout, color: Colors.black),
-                                    title: const Text('Logout', style: const TextStyle(
+                                    title: const Text('Logout', style: TextStyle(
                                       fontSize: 18,
                                     ),),
                                     onTap: () {
@@ -270,7 +272,7 @@ class _HomeG10State extends State<HomeG10> {
         height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(
+          border: const Border(
             top: BorderSide(
               color: Colors.grey,
               width: 0.2,
@@ -279,7 +281,7 @@ class _HomeG10State extends State<HomeG10> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              offset: Offset(0, -2), // Shadow above the bar
+              offset: const Offset(0, -2), // Shadow above the bar
               blurRadius: 6, // Soft shadow
             ),
           ],
@@ -304,7 +306,7 @@ class _HomeG10State extends State<HomeG10> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchG10()),
+                  MaterialPageRoute(builder: (context) => const SearchG10()),
                 );
               },
               icon: Image.asset(
@@ -315,7 +317,10 @@ class _HomeG10State extends State<HomeG10> {
             ),
             IconButton(
               onPressed: () {
-                // Add navigation logic
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
+                );
               },
               icon: Image.asset(
                 'assets/main.png',
@@ -403,17 +408,17 @@ class StrandCard extends StatelessWidget {
         } else if (strandName == 'HUMSS') {
            Navigator.push(
              context,
-             MaterialPageRoute(builder: (context) => AcademicHumssScreen()),
+             MaterialPageRoute(builder: (context) => const AcademicHumssScreen()),
            );
          } else if (strandName == 'ABM') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AcademicAbmScreen()),
+            MaterialPageRoute(builder: (context) => const AcademicAbmScreen()),
           );
         }else if (strandName == 'GAS') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AcademicGasScreen()),
+            MaterialPageRoute(builder: (context) => const AcademicGasScreen()),
           );
         }
         // Add other conditions for ABM, ICT, TOURISM...

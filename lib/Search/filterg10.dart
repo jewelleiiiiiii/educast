@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/Search/searchg10.dart'; // Import Firestore
+// Import Firestore
 
 class FilterG10 extends StatefulWidget {
+  const FilterG10({super.key});
+
   @override
   _FilterG10State createState() => _FilterG10State();
 }
@@ -50,7 +52,7 @@ class _FilterG10State extends State<FilterG10> {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
 
     if (uid == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('User not authenticated.'),
       ));
       return;
@@ -60,7 +62,7 @@ class _FilterG10State extends State<FilterG10> {
       await FirebaseFirestore.instance.collection('userAction').doc(uid).set({
         'filter': selectedButtons,
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Filters saved successfully!'),
       ));
       Navigator.pop(context);
@@ -81,14 +83,14 @@ class _FilterG10State extends State<FilterG10> {
             Container(
               width: double.infinity,
               height: 100.0,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 158, 39, 39),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 158, 39, 39),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0),
                 ),
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Filter',
                   style: TextStyle(
@@ -126,8 +128,8 @@ class _FilterG10State extends State<FilterG10> {
                     Container(
                       height: 40.0,
                       alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
                           'Category',
                           style: TextStyle(
@@ -138,7 +140,7 @@ class _FilterG10State extends State<FilterG10> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     // Buttons in two-column rows
                     Column(
                       children: [
@@ -164,7 +166,7 @@ class _FilterG10State extends State<FilterG10> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -187,7 +189,7 @@ class _FilterG10State extends State<FilterG10> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -210,7 +212,7 @@ class _FilterG10State extends State<FilterG10> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -235,12 +237,12 @@ class _FilterG10State extends State<FilterG10> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     Container(
                       height: 35.0,
                       alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
                           'Skills',
                           style: TextStyle(
@@ -251,7 +253,7 @@ class _FilterG10State extends State<FilterG10> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     // Buttons in two-column rows for Skills
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -279,7 +281,7 @@ class _FilterG10State extends State<FilterG10> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -304,10 +306,10 @@ class _FilterG10State extends State<FilterG10> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 30.0),
+                    const SizedBox(height: 30.0),
                     ElevatedButton(
                       onPressed: _saveFilters,
-                      child: Text('Save'),
+                      child: const Text('Save'),
                     ),
                   ],
                 ),
@@ -325,7 +327,7 @@ class RoundedButtonContainer extends StatelessWidget {
   final bool isSelected;
   final void Function(String) onPressed;
 
-  RoundedButtonContainer({
+  const RoundedButtonContainer({super.key,
     required this.buttonName,
     required this.isSelected,
     required this.onPressed,
@@ -341,7 +343,7 @@ class RoundedButtonContainer extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          padding: EdgeInsets.symmetric(vertical: 12.0),
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
         ),
         onPressed: () => onPressed(buttonName),
         child: Text(
