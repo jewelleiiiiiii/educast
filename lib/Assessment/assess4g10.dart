@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:myapp/Home/homeg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 import 'package:video_player/video_player.dart';
+import '../Result/resultg10.dart';
 
 
 class Questionnaire4G10 extends StatefulWidget {
@@ -313,13 +314,26 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                   Container(
                     margin: const EdgeInsets.only(right: 20.0),
                     child: Text(
-                      '30 out of 42 questions',
+                      '42 out of 42 questions',
                       style: TextStyle(
                         fontSize: 13.0,
                       ),
                     ),
                   ),
                   Spacer(),
+                  Spacer(),
+
+                  ElevatedButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]!),
+                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20.0)),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black.withOpacity(0.6)), // Semi-black text color
+                    ),
+                    child: Text('Previous'),
+                  ),
                   ElevatedButton(
                     onPressed: _submitAnswers,
                     style: ButtonStyle(
@@ -441,6 +455,97 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
     super.dispose();
   }
 
+  void _viewResults() async {
+    // Get the current user's UID
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    // Fetch the user's answers from the userAnswerG10 collection
+    DocumentSnapshot userAnswersSnapshot = await FirebaseFirestore.instance
+        .collection('userAnswerG10')
+        .doc(uid)
+        .get();
+
+    if (!userAnswersSnapshot.exists) {
+      print('No answers found for the user');
+      return;
+    }
+
+    // Initialize fields for Realistic, Investigative, etc.
+    Map<String, int> results = {
+      'Realistic': 0,
+      'Investigative': 0,
+      'Artistic': 0,
+      'Social': 0,
+      'Enterprising': 0,
+      'Conventional': 0,
+    };
+
+    // Mapping of fields to the corresponding categories
+    Map<int, String> fieldMapping = {
+      1: 'Realistic',
+      2: 'Investigative',
+      3: 'Artistic',
+      4: 'Social',
+      5: 'Enterprising',
+      6: 'Conventional',
+      7: 'Realistic',
+      8: 'Artistic',
+      9: 'Conventional',
+      10: 'Enterprising',
+      11: 'Investigative',
+      12: 'Social',
+      13: 'Social',
+      14: 'Realistic',
+      15: 'Conventional',
+      16: 'Enterprising',
+      17: 'Artistic',
+      18: 'Investigative',
+      19: 'Enterprising',
+      20: 'Social',
+      21: 'Investigative',
+      22: 'Realistic',
+      23: 'Artistic',
+      24: 'Conventional',
+      25: 'Conventional',
+      26: 'Investigative',
+      27: 'Artistic',
+      28: 'Social',
+      29: 'Enterprising',
+      30: 'Realistic',
+      31: 'Artistic',
+      32: 'Realistic',
+      33: 'Investigative',
+      34: 'Social',
+      35: 'Conventional',
+      36: 'Enterprising',
+      37: 'Realistic',
+      38: 'Conventional',
+      39: 'Investigative',
+      40: 'Social',
+      41: 'Artistic',
+      42: 'Enterprising',
+    };
+
+    // Evaluate the answers
+    for (int i = 1; i <= 42; i++) {
+      if (userAnswersSnapshot.get('$i') == 0) { // Updated to access field as "1", "2", etc.
+        results[fieldMapping[i]!] = results[fieldMapping[i]!]! + 1;
+      }
+    }
+
+    // Store the results in the userResultG10 collection
+    await FirebaseFirestore.instance
+        .collection('userResultG10')
+        .doc(uid)
+        .set(results);
+
+    // Navigate to the results page or perform further actions
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ResultG10()), // Replace with your actual results page widget
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -523,6 +628,21 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 30.0),
+                    ElevatedButton(
+                      onPressed: _viewResults,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 158, 39, 39),
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: Text(
+                        'View Results',
+                        style: TextStyle(fontSize: 16.0, color: Colors.white),
                       ),
                     ),
                   ],

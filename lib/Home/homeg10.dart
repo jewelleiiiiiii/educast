@@ -4,6 +4,7 @@ import 'package:myapp/Home/Info/Abm.dart';
 import 'package:myapp/Home/Info/Gas.dart';
 import 'package:myapp/Home/Info/Humss.dart';
 import 'package:myapp/Home/Info/Stem.dart';
+import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 
 class HomeG10 extends StatefulWidget {
@@ -340,7 +341,10 @@ class _HomeG10State extends State<HomeG10> {
             ),
             IconButton(
               onPressed: () {
-                // Add navigation logic
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ResultG10()),
+                );
               },
               icon: Image.asset(
                 'assets/stats.png',
