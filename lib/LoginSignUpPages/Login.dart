@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/Home/homeg12.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:myapp/LoginSignUpPages/Signup.dart';
 import 'package:myapp/services/authentication.dart';
@@ -58,12 +59,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             } else if (gradeLevel == 'Grade 12') {
-              // Navigator.pushReplacement(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => homeG12(),
-              //   ),
-              // );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeG12(),
+                ),
+              );
             } else if (gradeLevel == 'Fourth-year College') {
               // Navigator.pushReplacement(
               //   context,

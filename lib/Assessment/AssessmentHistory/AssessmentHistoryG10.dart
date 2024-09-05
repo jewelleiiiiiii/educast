@@ -70,7 +70,6 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,59 +120,62 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               ),
             ),
             SizedBox(height: 20.0),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
+            // Sticky header section
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'QUESTIONS',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        for (String label in ['AGREE', 'DISAGREE'])
                           Expanded(
                             child: Center(
                               child: Text(
-                                'QUESTIONS',
+                                label,
                                 style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                textAlign: TextAlign.left,
                               ),
                             ),
                           ),
-                          SizedBox(width: 10.0),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                for (String label in ['AGREE', 'DISAGREE'])
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        label,
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.0),
-                      _buildQuestionRange(0, 10),
-                      SizedBox(height: 20.0),
-                      _buildQuestionRange(10, 20),
-                      SizedBox(height: 20.0),
-                      _buildQuestionRange(20, 30),
-                      SizedBox(height: 20.0),
-                      _buildQuestionRange(30, 42),
-                    ],
+                      ],
+                    ),
                   ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildQuestionRange(0, 10),
+                    SizedBox(height: 20.0),
+                    _buildQuestionRange(10, 20),
+                    SizedBox(height: 20.0),
+                    _buildQuestionRange(20, 30),
+                    SizedBox(height: 20.0),
+                    _buildQuestionRange(30, 42),
+                  ],
                 ),
               ),
             ),
@@ -203,14 +205,8 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               },
               icon: Image.asset(
                 'assets/home.png',
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.10,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.10,
+                width: MediaQuery.of(context).size.width * 0.10,
+                height: MediaQuery.of(context).size.height * 0.10,
               ),
             ),
             IconButton(
@@ -222,14 +218,8 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               },
               icon: Image.asset(
                 'assets/search.png',
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.10,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.10,
+                width: MediaQuery.of(context).size.width * 0.10,
+                height: MediaQuery.of(context).size.height * 0.10,
               ),
             ),
             IconButton(
@@ -241,14 +231,8 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               },
               icon: Image.asset(
                 'assets/main.png',
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.10,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.10,
+                width: MediaQuery.of(context).size.width * 0.10,
+                height: MediaQuery.of(context).size.height * 0.10,
               ),
             ),
             IconButton(
@@ -257,14 +241,8 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               },
               icon: Image.asset(
                 'assets/notif.png',
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.10,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.10,
+                width: MediaQuery.of(context).size.width * 0.10,
+                height: MediaQuery.of(context).size.height * 0.10,
               ),
             ),
             IconButton(
@@ -273,14 +251,8 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               },
               icon: Image.asset(
                 'assets/stats.png',
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.10,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.10,
+                width: MediaQuery.of(context).size.width * 0.10,
+                height: MediaQuery.of(context).size.height * 0.10,
               ),
             ),
           ],
@@ -288,6 +260,7 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
       ),
     );
   }
+
   Widget _buildQuestionRange(int start, int end) {
     end = end > _questions.length ? _questions.length : end;
 

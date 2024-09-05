@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Assessment/assess1g10.dart';
 import 'package:myapp/Home/Info/Abm.dart';
@@ -8,15 +10,89 @@ import 'package:myapp/Home/UserG10/UserG10.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 
-class HomeG10 extends StatefulWidget {
-  const HomeG10({super.key,});
+class HomeG12 extends StatefulWidget {
+  const HomeG12({super.key,});
 
   @override
-  _HomeG10State createState() => _HomeG10State();
+  _HomeG12State createState() => _HomeG12State();
 }
 
-class _HomeG10State extends State<HomeG10> {
+class _HomeG12State extends State<HomeG12> {
   bool _isDrawerOpen = false;
+  String? userStrand;
+  List<String> courses = [];
+  String relatedProgramsText = 'GAS-RELATED PROGRAMS';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserStrand();
+  }
+
+  // Function to fetch user's strand
+  void _fetchUserStrand() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        userStrand = userDoc['strand'];
+        _updateCoursesBasedOnStrand(userStrand!); // Update courses based on the strand
+        _updateRelatedProgramsText(userStrand!);  // Update dynamic text based on the strand
+      });
+    }
+  }
+
+// Function to update the related programs text
+  void _updateRelatedProgramsText(String strand) {
+    if (strand == 'Science, Technology, Engineering, and Mathematics') {
+      relatedProgramsText = 'STEM-Related Programs';
+    } else if (strand == 'Accountancy, Business, and Management') {
+      relatedProgramsText = 'ABM-Related Programs';
+    } else if (strand == 'Humanities and Social Sciences') {
+      relatedProgramsText = 'HUMSS-Related Programs';
+    } else if (strand == 'General Academic Strand') {
+      relatedProgramsText = 'GAS-Related Programs';
+    }
+  }
+
+
+  // Function to update the course list based on the user's strand
+  void _updateCoursesBasedOnStrand(String strand) {
+    if (strand == 'Science, Technology, Engineering, and Mathematics') {
+      courses = [
+        'Automotive Engineering Technology',
+        'Civil Engineering Technology',
+        'Criminology',
+        'Computer Engineering Technology',
+        'Drafting Engineering Technology',
+        'Electrical Engineering Technology',
+        'Electronics Engineering Technology',
+        'Food Engineering Technology',
+        'Information Technology',
+        'Mechanical Engineering Technology',
+        'Mechatronics Engineering Technology',
+        'Psychology',
+      ];
+    } else if (strand == 'Accountancy, Business, and Management') {
+      courses = ['Criminology'];
+    } else if (strand == 'Humanities and Social Sciences') {
+      courses = ['Criminology', 'Psychology'];
+    } else if (strand == 'General Academic Strand') {
+      courses = [
+        'Automotive Engineering Technology',
+        'Civil Engineering Technology',
+        'Criminology',
+        'Computer Engineering Technology',
+        'Drafting Engineering Technology',
+        'Electrical Engineering Technology',
+        'Electronics Engineering Technology',
+        'Food Engineering Technology',
+        'Mechanical Engineering Technology',
+        'Mechatronics Engineering Technology',
+        'Psychology',
+      ];
+    }
+  }
 
   void _toggleDrawer() {
     setState(() {
@@ -112,18 +188,15 @@ class _HomeG10State extends State<HomeG10> {
                 child: SizedBox(height: screenHeight * 0.05), // Add space between header and content
               ),
               SliverToBoxAdapter(
-                child:
-                Container(
+                child: Container(
                   padding: EdgeInsets.zero,
                   color: Colors.white,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        margin:
-                        EdgeInsets.symmetric(horizontal: paddingHorizontal),
-                        padding: EdgeInsets.fromLTRB(
-                            0, screenHeight * 0.02, 0.2, 0.2),
+                        margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                        padding: EdgeInsets.fromLTRB(0, screenHeight * 0.02, 0.2, 0.2),
                         height: cardHeight,
                         decoration: BoxDecoration(
                           color: const Color.fromARGB(36, 30, 30, 30),
@@ -133,17 +206,20 @@ class _HomeG10State extends State<HomeG10> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Padding(
-                              padding:
-                              EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                              child: const Text(
-                                'STRANDS OVERVIEW',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                              child: Text(
+                                relatedProgramsText,
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
-                            ),Expanded(
+                            ),
+                            // Remove Expanded and use SizedBox
+                            SizedBox(
+                              height: cardHeight * .85, // Define height for ListView
+                              width: double.infinity,
                               child: Container(
-                                width: double.infinity,
                                 decoration: BoxDecoration(
                                   color: const Color.fromARGB(255, 158, 39, 39),
                                   borderRadius: BorderRadius.circular(20.0),
@@ -156,19 +232,16 @@ class _HomeG10State extends State<HomeG10> {
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(screenWidth * 0.04), // Add padding here
-                                  child: ListView(
-                                    children: const [
-                                      StrandCard(strandName: 'ABM'),
-                                      StrandCard(strandName: 'GAS'),
-                                      StrandCard(strandName: 'HUMSS'),
-                                      StrandCard(strandName: 'STEM'),
-                                    ],
+                                  padding: EdgeInsets.all(screenWidth * 0.04),
+                                  child: ListView.builder(
+                                    itemCount: courses.length,
+                                    itemBuilder: (context, index) {
+                                      return Coursecard(CourseName: courses[index]);
+                                    },
                                   ),
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -177,6 +250,7 @@ class _HomeG10State extends State<HomeG10> {
                   ),
                 ),
               ),
+
             ],
           ),
           // Drawer Implementation
@@ -295,7 +369,7 @@ class _HomeG10State extends State<HomeG10> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
+                  MaterialPageRoute(builder: (context) => const HomeG12()),
                 );
               },
               icon: Image.asset(
@@ -390,11 +464,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         child != oldDelegate.child;
   }
 }
+class Coursecard extends StatelessWidget {
+  final String CourseName;
 
-class StrandCard extends StatelessWidget {
-  final String strandName;
-
-  const StrandCard({super.key, required this.strandName});
+  const Coursecard({super.key, required this.CourseName});
 
   @override
   Widget build(BuildContext context) {
@@ -402,25 +475,39 @@ class StrandCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final double iconSize = MediaQuery.of(context).size.width * 0.10;
 
+    // Split the course name into individual words
+    List<String> words = CourseName.split(' ');
+    String formattedCourseName = '';
+
+    // Combine words into lines with a maximum of two words per line
+    for (int i = 0; i < words.length; i++) {
+      formattedCourseName += words[i];
+      if ((i + 1) % 2 == 0 && i != words.length - 1) {
+        formattedCourseName += '\n'; // Add new line after every two words
+      } else if (i != words.length - 1) {
+        formattedCourseName += ' ';  // Add space between words
+      }
+    }
+
     return InkWell(
       onTap: () {
-        // Navigate to different pages based on strandName
-        if (strandName == 'STEM') {
+        // Navigate to different pages based on CourseName
+        if (CourseName == 'STEM') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AcademicStemScreen()),
           );
-        } else if (strandName == 'HUMSS') {
-           Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => const AcademicHumssScreen()),
-           );
-         } else if (strandName == 'ABM') {
+        } else if (CourseName == 'HUMSS') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AcademicHumssScreen()),
+          );
+        } else if (CourseName == 'ABM') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AcademicAbmScreen()),
           );
-        }else if (strandName == 'GAS') {
+        } else if (CourseName == 'GAS') {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AcademicGasScreen()),
@@ -442,11 +529,12 @@ class StrandCard extends StatelessWidget {
                 padding: EdgeInsets.all(screenWidth * 0.04),
                 child: Center(
                   child: Text(
-                    strandName,
+                    formattedCourseName,  // Use the formatted course name with new lines
                     style: const TextStyle(
-                      fontSize: 23,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
@@ -466,4 +554,3 @@ class StrandCard extends StatelessWidget {
     );
   }
 }
-

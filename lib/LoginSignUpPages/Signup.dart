@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
+import 'package:myapp/LoginSignUpPages/StrandSelection.dart';
 import 'package:myapp/services/snackbar.dart'; // Ensure this import is correct
 
 class SignupPage extends StatefulWidget {
@@ -369,11 +370,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
             ),
           );
         } else if (_selectedGradeLevel == 'Grade 12') {
-          // Navigator.of(context).pushReplacement(
-          //   MaterialPageRoute(
-          //     builder: (context) => Grade12Page(), // Replace with the actual target page for Grade 12
-          //   ),
-          // );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const StrandSelection(), // Navigate to StrandSelection() screen
+            ),
+          );
         } else if (_selectedGradeLevel == 'Fourth-year College') {
           // Navigator.of(context).pushReplacement(
           //   MaterialPageRoute(
@@ -395,6 +396,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
       }
     }
   }
+
 
 
   bool _validateInput() {
