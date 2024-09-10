@@ -2,15 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Assessment/assess1g10.dart';
-import 'package:myapp/Home/Info/Abm.dart';
-import 'package:myapp/Home/Info/Gas.dart';
-import 'package:myapp/Home/Info/Humss.dart';
-import 'package:myapp/Home/Info/Stem.dart';
-import 'package:myapp/Home/Info/automotive.dart';
-import 'package:myapp/Home/UserG10/UserG10.dart';
+import 'package:myapp/Home/Info/programsSelection.dart';
+import 'package:myapp/Home/UserG10/UserG12.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 
 class HomeG12 extends StatefulWidget {
   const HomeG12({super.key,});
@@ -20,44 +19,42 @@ class HomeG12 extends StatefulWidget {
 }
 
 class _HomeG12State extends State<HomeG12> {
+  int _currentSlideIndex = 0;
   bool _isDrawerOpen = false;
   String? userStrand;
   List<String> courses = [];
   String relatedProgramsText = 'GAS-RELATED PROGRAMS';
-  String? firstName; // Variable to store the first name
+  String? firstName;
 
   @override
   void initState() {
     super.initState();
     _fetchUserStrand();
-    _fetchUserFirstName(); // Fetch the first name on init
+    _fetchUserFirstName();
   }
 
-  // Function to fetch user's strand
   void _fetchUserStrand() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       setState(() {
         userStrand = userDoc['strand'];
-        _updateCoursesBasedOnStrand(userStrand!); // Update courses based on the strand
-        _updateRelatedProgramsText(userStrand!);  // Update dynamic text based on the strand
+        _updateCoursesBasedOnStrand(userStrand!);
+        _updateRelatedProgramsText(userStrand!);
       });
     }
   }
 
-  // Function to fetch user's first name
   void _fetchUserFirstName() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       setState(() {
-        firstName = userDoc['firstName']; // Assuming 'firstName' is the field in the 'users' collection
+        firstName = userDoc['firstName'];
       });
     }
   }
 
-  // Function to update the related programs text
   void _updateRelatedProgramsText(String strand) {
     if (strand == 'Science, Technology, Engineering, and Mathematics') {
       relatedProgramsText = 'STEM-Related Programs';
@@ -70,7 +67,6 @@ class _HomeG12State extends State<HomeG12> {
     }
   }
 
-  // Function to update the course list based on the user's strand
   void _updateCoursesBasedOnStrand(String strand) {
     if (strand == 'Science, Technology, Engineering, and Mathematics') {
       courses = [
@@ -122,73 +118,64 @@ class _HomeG12State extends State<HomeG12> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtain screen dimensions
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Define responsive sizes based on screen dimensions
-    final appBarHeight = screenHeight * 0.15;
-    final appBarInnerHeight = screenHeight * 0.05;
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
-    final paddingVertical = screenHeight * 0.01;
-    final cardHeight = screenHeight * 0.68;
-    final double bottomNavHeight = MediaQuery.of(context).size.height * 0.10;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,  // Remove shadow
-                  automaticallyImplyLeading: false, // Remove default back button
-                  flexibleSpace: Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top, // Add padding on top (status bar)
-                      left: paddingHorizontal,
-                      right: paddingHorizontal,
-                    ), // Removed bottom padding
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: _toggleDrawer,
-                          child: Image.asset(
-                            'assets/menu.png',
-                            width: iconSize,
-                            height: iconSize,
-                          ),
+              SliverAppBar(
+                pinned: true,
+                elevation: 0,
+                backgroundColor: Colors.white,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top,
+                    left: screenWidth * 0.03,
+                    right: paddingHorizontal,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: _toggleDrawer,
+                        child: Image.asset(
+                          'assets/menu2.png',
+                          width: iconSize,
+                          height: iconSize,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => UserG10()),
-                            );
-                          },
-                          child: Image.asset(
-                            'assets/profile.png',
-                            width: iconSize,
-                            height: iconSize,
-                          ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => UserG12()),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/profile.png',
+                          width: iconSize,
+                          height: iconSize,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    // Container for greeting text
                     Container(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 0, 0, screenHeight * 0.02),  // Adjust padding as needed
+                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 0, 0, screenHeight * 0.02),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,  // Align text to the left
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             firstName != null ? 'Hi, $firstName!' : 'Hi!',
@@ -200,65 +187,61 @@ class _HomeG12State extends State<HomeG12> {
                       ),
                     ),
 
-                    // Container with background image and button
                     Container(
-                      height: screenHeight * 0.19,  // Adjusted height
-                      margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),  // Horizontal margin
+                      height: screenHeight * 0.19,
+                      margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),
                       decoration: BoxDecoration(
                         image: const DecorationImage(
-                          image: AssetImage('assets/1.png'),  // Background image
+                          image: AssetImage('assets/1.png'),
                           fit: BoxFit.cover,
                         ),
-                        borderRadius: BorderRadius.circular(17),  // Rounded corners
+                        borderRadius: BorderRadius.circular(17),
                       ),
                       child: Stack(
                         children: [
-                          // Add text on the right side in 2 rows
                           Align(
-                            alignment: Alignment.centerRight,  // Align text to the right
+                            alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 150.0, left: 20),  // Adjust padding to position text on the right
+                              padding: const EdgeInsets.only(right: 150.0, left: 20),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,  // Center vertically
-                                crossAxisAlignment: CrossAxisAlignment.start,  // Align text to the right
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
                                   Text(
                                     '15 MINUTES!',
                                     style: TextStyle(
-                                      fontSize: 25,  // Larger font size for the first row
-                                      fontWeight: FontWeight.bold,  // Bold text
-                                      color: Colors.white,  // White color
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                  SizedBox(height: 7),  // Spacing between the rows
+                                  SizedBox(height: 7),
                                   Text(
                                     'Take the IQ Test to See Which Program Fits You Best.',
                                     style: TextStyle(
-                                      fontSize: 15,  // Smaller font size for the second row
-                                      fontWeight: FontWeight.normal,  // Normal (non-bold) text
-                                      color: Colors.white,  // White color
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          // Align the button on the right side
                           Align(
-                            alignment: Alignment.centerRight,  // Aligns the button to the right
+                            alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 16.0),  // Adjust padding for positioning
+                              padding: const EdgeInsets.only(right: 16.0),
                               child: SizedBox(
-                                width: 120,  // Adjusted width to reduce button size
+                                width: 120,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    // Add your action here for the button press
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,  // White background for the button
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 9.0),  // Minimized padding
+                                    backgroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 9.0),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(9),  // 9 radius for rounded corners
+                                      borderRadius: BorderRadius.circular(9),
                                     ),
                                   ),
                                   child: const Text(
@@ -266,7 +249,7 @@ class _HomeG12State extends State<HomeG12> {
                                     style: TextStyle(
                                       color: Colors.blue,
                                       fontSize: 15,
-                                      fontFamily: 'Roboto',  // Set the font to Roboto
+                                      fontFamily: 'Roboto',
                                     ),
                                   ),
                                 ),
@@ -291,7 +274,7 @@ class _HomeG12State extends State<HomeG12> {
                     screenWidth * 0.05,
                     screenHeight * 0.01,
                   ),
-                  height: cardHeight,
+                  height: screenHeight * .35,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(20.0),
@@ -299,8 +282,8 @@ class _HomeG12State extends State<HomeG12> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row( // Use Row to align both texts horizontally
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between text and View All
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             relatedProgramsText,
@@ -311,59 +294,61 @@ class _HomeG12State extends State<HomeG12> {
                             textAlign: TextAlign.start,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(right: 10.0), // Add right padding here
+                            padding: EdgeInsets.only(right: 10.0),
                             child: GestureDetector(
                               onTap: () {
-                                // Handle the tap here (e.g., navigate to another screen or show more content)
-                                print('View All tapped');
-                              },
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const programs()),
+                                );
+                                },
                               child: Text(
                                 "View All",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue, // Make the text blue to indicate it's clickable
+                                  color: Colors.blue,
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0), // Add minimal spacing between the Text and GridView
+                      SizedBox(height: 8.0),
                       SizedBox(
-                        height: 200.0, // Adjust the height of the GridView area
+                        height: 150.0,
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // Two columns
-                            crossAxisSpacing: 8.0, // Space between columns
-                            mainAxisSpacing: 8.0, // Space between rows
-                            childAspectRatio: 2.5, // Adjust based on the reduced card height
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                            childAspectRatio: 2.5,
                           ),
-                          itemCount: courses.length > 4 ? 4 : courses.length, // Limit to the first 4 items
+                          itemCount: courses.length > 4 ? 4 : courses.length,
                           itemBuilder: (context, index) {
-                            // Define different gradients for each card
+
                             List<Gradient> gradients = [
                               LinearGradient(
-                                colors: [Colors.blueAccent, Colors.purpleAccent.shade100], // Bold blue to soft purple
+                                colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
 
                               LinearGradient(
-                                colors: [Colors.teal.shade300, Colors.cyan.shade100], // Calm teal to light cyan
+                                colors: [Colors.teal.shade300, Colors.cyan.shade100],
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
                               ),
 
                               LinearGradient(
-                                colors: [Colors.pink.shade600, Colors.orange.shade300], // Vibrant pink to warm orange
+                                colors: [Colors.pink.shade600, Colors.orange.shade300],
                                 begin: Alignment.bottomLeft,
                                 end: Alignment.topRight,
                               ),
 
                               LinearGradient(
-                                colors: [Colors.indigo.shade500, Colors.blueGrey.shade200], // Deep indigo to soft blue-grey
+                                colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                               ),
@@ -374,25 +359,25 @@ class _HomeG12State extends State<HomeG12> {
 
                             return Card(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0), // Rounded corners
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  gradient: gradients[index], // Apply different gradient based on index
-                                  borderRadius: BorderRadius.circular(16.0), // Ensure the gradient applies to the rounded corners
+                                  gradient: gradients[index],
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0), // Reduce padding for a shorter card
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        courses[index], // Course name
+                                        courses[index],
                                         style: TextStyle(
-                                          fontSize: 14.0, // Adjust font size if needed
+                                          fontSize: 14.0,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black, // Adjust text color if needed for better contrast
+                                          color: Colors.black,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -407,9 +392,97 @@ class _HomeG12State extends State<HomeG12> {
                     ],
                   ),
                 ),
-              )
+              ),
 
 
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, screenHeight * 0.01, 0, 0),
+                      child: Text(
+                        'Explore BatStateU-IS',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+
+                    CarouselSlider(
+                      items: [
+                        GestureDetector(
+                          onTap: () {
+                          },
+                          child: Image.asset(
+                            'assets/ISSTUD.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                          },
+                          child: Image.asset(
+                            'assets/IS.jpg',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                          },
+                          child: Image.asset(
+                            'assets/ISCHART.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                      ],
+                      options: CarouselOptions(
+                        height: screenHeight * 0.3,
+                        autoPlay: true,
+                        enlargeCenterPage: false,
+                        viewportFraction: 1.0,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentSlideIndex = index;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+
+                    SizedBox(
+                      height: 20.0,
+                      child: Center(
+                        child: AnimatedSmoothIndicator(
+                          activeIndex: _currentSlideIndex,
+                          count: 3,
+                          effect: CustomizableEffect(
+                            activeDotDecoration: DotDecoration(
+                              width: 30.0,
+                              height: 7.0,
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            dotDecoration: DotDecoration(
+                              width: 7.0,
+                              height: 7.0,
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            spacing: 6.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 50.0),
+                  ],
+                ),
+              ),
 
 
             ],
@@ -424,41 +497,77 @@ class _HomeG12State extends State<HomeG12> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: FractionallySizedBox(
-                      widthFactor: 0.5,
+                      widthFactor: 0.5,  // Drawer covers half the screen width
                       child: Container(
                         color: Colors.white,
-                        child: ListView(
+                        child: Column(
                           children: [
-                            ListTile(
-                              leading: Icon(Icons.info),
-                              title: Text('About Us'),
-                              onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) => AboutUs()),
-                                // );
-                              },
+                            DrawerHeader(
+                              decoration: const BoxDecoration(
+                                color: Colors.transparent,
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/logo.png',  // Ensure this asset exists in your project
+                                  width: 150,  // Adjust size as needed
+                                  height: 150,
+                                ),
+                              ),
                             ),
-                            ListTile(
-                              leading: Icon(Icons.search),
-                              title: Text('Search'),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SearchG10()),
-                                );
-                              },
-                            ),
-                            ListTile(
-                              leading: Icon(Icons.exit_to_app),
-                              title: Text('Log Out'),
-                              onTap: () async {
-                                await FirebaseAuth.instance.signOut();
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => LoginPage()),
-                                );
-                              },
+                            Expanded(
+                              child: ListView(
+                                padding: EdgeInsets.all(paddingHorizontal),
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(Icons.settings, color: Colors.black),
+                                    title: const Text('Settings', style: TextStyle(
+                                      fontSize: 18,
+                                    ),),
+                                    onTap: () {
+
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.history, color: Colors.black),
+                                    title: const Text('History', style: TextStyle(
+                                      fontSize: 18,
+                                    ),),
+                                    onTap: () {
+                                      // Handle menu item tap
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.info, color: Colors.black),
+                                    title: const Text('About', style: TextStyle(
+                                      fontSize: 18,
+                                    ),),
+                                    onTap: () {
+                                      // Handle menu item tap
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.feedback, color: Colors.black),
+                                    title: const Text('Feedback', style: TextStyle(
+                                      fontSize: 18,
+                                    ),),
+                                    onTap: () {
+                                      // Handle menu item tap
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.logout, color: Colors.black),
+                                    title: const Text('Logout', style: TextStyle(
+                                      fontSize: 18,
+                                    ),),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -468,6 +577,7 @@ class _HomeG12State extends State<HomeG12> {
                 ),
               ),
             ),
+
         ],
       ),
       bottomNavigationBar: Container(
@@ -483,13 +593,13 @@ class _HomeG12State extends State<HomeG12> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0, -2), // Shadow above the bar
-              blurRadius: 0, // Soft shadow
+              offset: const Offset(0, -2),
+              blurRadius: 0,
             ),
           ],
         ),
         child: Stack(
-          clipBehavior: Clip.none, // Allows the circle to go outside the bar
+          clipBehavior: Clip.none,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -520,10 +630,9 @@ class _HomeG12State extends State<HomeG12> {
                     height: iconSize,
                   ),
                 ),
-                SizedBox(width: iconSize), // Space for the middle icon (to center the others)
+                SizedBox(width: iconSize),
                 IconButton(
                   onPressed: () {
-                    // Add navigation logic
                   },
                   icon: Image.asset(
                     'assets/notif.png',
@@ -546,20 +655,18 @@ class _HomeG12State extends State<HomeG12> {
                 ),
               ],
             ),
-            // Circle in the middle that overlaps the BottomNavigationBar
             Positioned(
-              top: -iconSize * 0.75, // Adjust this value to position the circle higher or lower
-              left: MediaQuery.of(context).size.width / 2 - iconSize, // Center the circle
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
-                width: iconSize * 2, // Double the iconSize for a larger circle
+                width: iconSize * 2,
                 height: iconSize * 2,
                 decoration: BoxDecoration(
-                  color: Color(0xFFF08080), // Color of the circle
-                   // Color of the circle
+                  color: Color(0xFFF08080),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.8), // Color of the border
-                    width: 10, // Thickness of the border
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
                   ),
 
                 ),
@@ -572,7 +679,7 @@ class _HomeG12State extends State<HomeG12> {
                   },
                   icon: Image.asset(
                     'assets/main.png',
-                    width: iconSize * 1.3, // Adjust size of the icon inside the circle
+                    width: iconSize * 1.3,
                     height: iconSize * 1.3,
                   ),
                 ),

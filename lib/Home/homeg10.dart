@@ -184,8 +184,7 @@ class _HomeG10State extends State<HomeG10> {
               ),
             ],
           ),
-          // Drawer Implementation
-          // Drawer Implementation
+
           if (_isDrawerOpen)
             Positioned.fill(
               child: GestureDetector(
