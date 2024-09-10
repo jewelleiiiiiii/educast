@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Assessment/assess1g10.dart';
 import 'package:myapp/Home/Info/Abm.dart';
@@ -5,8 +7,11 @@ import 'package:myapp/Home/Info/Gas.dart';
 import 'package:myapp/Home/Info/Humss.dart';
 import 'package:myapp/Home/Info/Stem.dart';
 import 'package:myapp/Home/UserG10/UserG10.dart';
+import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
+
+import '../Assessment/assess4g10.dart';
 
 class HomeG10 extends StatefulWidget {
   const HomeG10({super.key,});
@@ -253,7 +258,10 @@ class _HomeG10State extends State<HomeG10> {
                                       fontSize: 18,
                                     ),),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                                      );
                                     },
                                   ),
                                 ],
@@ -318,11 +326,29 @@ class _HomeG10State extends State<HomeG10> {
               ),
             ),
             IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
-                );
+              onPressed: () async {
+                final currentUser = FirebaseAuth.instance.currentUser;
+                if (currentUser != null) {
+                  final userResultRef = FirebaseFirestore.instance
+                      .collection('userResultG10')
+                      .doc(currentUser.uid);
+
+                  final docSnapshot = await userResultRef.get();
+
+                  if (docSnapshot.exists) {
+                    // Navigate to SubmissionConfirmation if data exists
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                    );
+                  } else {
+                    // Navigate to Questionnaire1G10 if no data exists
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
+                    );
+                  }
+                }
               },
               icon: Image.asset(
                 'assets/main.png',
