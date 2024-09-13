@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_collection_literals
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Search/filterg10.dart';
 import '../Home/Info/Abm.dart';
-import '../Home/Info/Gas.dart';
-import '../Home/Info/Humss.dart';
-import '../Home/Info/Stem.dart';
+import '../Home/Info/GAS.dart';
+import '../Home/Info/HUMSS.dart';
+import '../Home/Info/STEM.dart';
 import '../Home/homeg10.dart';
 
 class SearchG10 extends StatefulWidget {
@@ -116,16 +114,16 @@ class _SearchG10 extends State<SearchG10> {
 
     switch (normalizedTitle) {
       case 'STEM':
-        screen = const AcademicStemScreen();
+        screen = StemInfo();
         break;
       case 'ABM':
-        screen = const AcademicAbmScreen();
+        screen = AbmInfo();
         break;
       case 'HUMSS':
-        screen = const AcademicHumssScreen();
+        screen = HumssInfo();
         break;
       case 'GAS':
-        screen = const AcademicGasScreen();
+        screen = GasInfo();
         break;
       default:
         screen = const HomeG10(); // Default screen

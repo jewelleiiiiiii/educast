@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Home/homeg12.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/assess4g10.dart';
+import 'package:myapp/Home/homeg10.dart';
+import 'package:myapp/Result/resultg10.dart';
+import 'package:myapp/Search/searchg10.dart';
 
-class Programs extends StatefulWidget {
-  const Programs({super.key});
+class G10Rules extends StatefulWidget {
+  const G10Rules({Key? key}) : super(key: key);
 
   @override
-  _ProgramsState createState() => _ProgramsState();
+  _G10Rules createState() => _G10Rules();
 }
 
-class _ProgramsState extends State<Programs> {
+class _G10Rules extends State<G10Rules> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 158, 39, 39),
           elevation: 0,
           leading: IconButton(
             icon: Image.asset(
@@ -29,57 +33,50 @@ class _ProgramsState extends State<Programs> {
               height: 24.0,
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeG12()),
-              );
+              Navigator.pop(context);
             },
           ),
         ),
       ),
       body: Stack(
         children: [
+          // Background image
           Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/bg6.png'), // Background image
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          // Overlapping cards
-          Positioned(
-            top: screenHeight * 0.17,
-            left: 0,
-            right: 20,
-            bottom: 20,
-            child: Column(
-              children: [
-                overlappingCard("College of Arts and Science (CAS)", Colors.blueAccent),
-              ],
-            ),
-          ),
-          Positioned(
-            top: screenHeight * 0.35,
-            left: -50,
-            right: 70,
-            bottom: 20,
-            child: Column(
-              children: [
-                overlappingCard("College of Engineering \nTechnology (CET)", Colors.red),
-              ],
-            ),
-          ),
-
-          Positioned(
-            top: screenHeight * 0.53,
-            left: 0,
-            right: 130,
-            bottom: 40,
-            child: Column(
-              children: [
-                overlappingCard("College of Informatics and \nComputing Sciences (CICS)", Colors.green),
-              ],
-            ),
+          // Empty body with only header and footer remaining
+          Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 158, 39, 39),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.zero,
+                    topRight: Radius.zero,
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    'Interest Assessment',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -111,7 +108,7 @@ class _ProgramsState extends State<Programs> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(builder: (context) => const HomeG10()),
                     );
                   },
                   icon: Image.asset(
@@ -121,7 +118,12 @@ class _ProgramsState extends State<Programs> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                    );
+                  },
                   icon: Image.asset(
                     'assets/search.png',
                     width: iconSize,
@@ -138,7 +140,12 @@ class _ProgramsState extends State<Programs> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
                   icon: Image.asset(
                     'assets/stats.png',
                     width: iconSize,
@@ -162,7 +169,28 @@ class _ProgramsState extends State<Programs> {
                   ),
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const G10Intro()),
+                        );
+                      }
+                    }
+                  },
                   icon: Image.asset(
                     'assets/main.png',
                     width: iconSize * 1.3,
@@ -172,41 +200,6 @@ class _ProgramsState extends State<Programs> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  // Overlapping card widget
-  Widget overlappingCard(String title, Color color) {
-    return Container(
-      height: 150,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(0),
-          topRight: Radius.circular(20),
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(20),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2), // Shadow color
-            offset: Offset(4, 4),  // Horizontal and vertical offset
-            blurRadius: 10,        // Amount of blur
-            spreadRadius: 2,       // Spread of the shadow
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
         ),
       ),
     );

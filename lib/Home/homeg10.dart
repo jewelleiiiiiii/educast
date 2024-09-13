@@ -1,27 +1,51 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Assessment/G10Intro.dart';
 import 'package:myapp/Assessment/assess1g10.dart';
+import 'package:myapp/Assessment/assess4g10.dart';
 import 'package:myapp/Home/Info/Abm.dart';
-import 'package:myapp/Home/Info/Gas.dart';
-import 'package:myapp/Home/Info/Humss.dart';
-import 'package:myapp/Home/Info/Stem.dart';
+import 'package:myapp/Home/Info/GAS.dart';
+import 'package:myapp/Home/Info/HUMSS.dart';
+import 'package:myapp/Home/Info/STEM.dart';
 import 'package:myapp/Home/UserG10/UserG10.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../Assessment/assess4g10.dart';
 
 class HomeG10 extends StatefulWidget {
   const HomeG10({super.key,});
 
   @override
-  _HomeG10State createState() => _HomeG10State();
+  _HomeG10 createState() => _HomeG10();
 }
 
-class _HomeG10State extends State<HomeG10> {
+class _HomeG10 extends State<HomeG10> {
+  int _currentSlideIndex = 0;
   bool _isDrawerOpen = false;
+  String titlee = 'Strands';
+  String? firstName;
+  List<String> strands = ['ABM', 'GAS', 'HUMSS', 'STEM'];
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserFirstName();
+  }
+
+  void _fetchUserFirstName() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        firstName = userDoc['firstName'];
+      });
+    }
+  }
 
   void _toggleDrawer() {
     setState(() {
@@ -37,151 +61,422 @@ class _HomeG10State extends State<HomeG10> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtain screen dimensions
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
-    // Define responsive sizes based on screen dimensions
-    final appBarHeight = screenHeight * 0.15;
-    final appBarInnerHeight = screenHeight * 0.05;
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
-    final paddingVertical = screenHeight * 0.01;
-    final cardHeight = screenHeight * 0.68;
-    // ignore: unused_local_variable
-    final double bottomNavHeight = MediaQuery.of(context).size.height * 0.10;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           CustomScrollView(
             slivers: [
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                  minHeight: appBarHeight,
-                  maxHeight: appBarHeight,
-                  child: Container(
-                    width: double.infinity,
-                    height: appBarInnerHeight,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 158, 39, 39),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.zero,
-                        topRight: Radius.zero,
-                        bottomLeft: Radius.circular(40.0),
-                        bottomRight: Radius.circular(40.0),
+              SliverAppBar(
+                pinned: true,
+                elevation: 0,
+                backgroundColor: Colors.white,
+                automaticallyImplyLeading: false,
+                flexibleSpace: Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top,
+                    left: screenWidth * 0.03,
+                    right: paddingHorizontal,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: _toggleDrawer,
+                        child: Image.asset(
+                          'assets/menu2.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
                       ),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: paddingHorizontal,vertical: paddingVertical),
-                    child: Center(  // Center widget to vertically center the Row
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => UserG10()),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/profile.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 0, 0, screenHeight * 0.02),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          GestureDetector(
-                            onTap: _toggleDrawer,
-                            child: Image.asset(
-                              'assets/menu.png',
-                              width: iconSize,
-                              height: iconSize,
-                            ),
-                          ),
-                          const Text(
-                            'HOME',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => UserG10()),
-                              );
-                            },
-                            child: Image.asset(
-                              'assets/profile.png',
-                              width: iconSize,
-                              height: iconSize,
+                          Text(
+                            firstName != null ? 'Hi, $firstName!' : 'Hi!',
+                            style: const TextStyle(
+                              fontSize: 24,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ),
-                pinned: true,
-              ),
 
-              SliverToBoxAdapter(
-                child: SizedBox(height: screenHeight * 0.05), // Add space between header and content
-              ),
-              SliverToBoxAdapter(
-                child:
-                Container(
-                  padding: EdgeInsets.zero,
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin:
-                        EdgeInsets.symmetric(horizontal: paddingHorizontal),
-                        padding: EdgeInsets.fromLTRB(
-                            0, screenHeight * 0.02, 0.2, 0.2),
-                        height: cardHeight,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(36, 30, 30, 30),
-                          borderRadius: BorderRadius.circular(20.0),
+                    Container(
+                      height: screenHeight * 0.19,
+                      margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage('assets/1.png'),
+                          fit: BoxFit.cover,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                              EdgeInsets.symmetric(vertical: screenHeight * 0.02),
-                              child: const Text(
-                                'STRANDS OVERVIEW',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),Expanded(
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 158, 39, 39),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      spreadRadius: 1,
-                                      blurRadius: 5,
+                        borderRadius: BorderRadius.circular(17),
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 150.0, left: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'MATCH UP!',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(screenWidth * 0.04), // Add padding here
-                                  child: ListView(
-                                    children: const [
-                                      StrandCard(strandName: 'ABM'),
-                                      StrandCard(strandName: 'GAS'),
-                                      StrandCard(strandName: 'HUMSS'),
-                                      StrandCard(strandName: 'STEM'),
-                                    ],
+                                  ),
+                                  SizedBox(height: 7),
+                                  Text(
+                                    'Discover the strand that fits your interests and talents.',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: SizedBox(
+                                width: 120,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    final user = FirebaseAuth.instance.currentUser;
+                                    if (user != null) {
+                                      final userResultDoc = FirebaseFirestore.instance
+                                          .collection('userResultG10')
+                                          .doc(user.uid);
+
+                                      final docSnapshot = await userResultDoc.get();
+
+                                      if (docSnapshot.exists) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => G10Intro()),
+                                        );
+                                      }
+                                    } else {
+                                      // Handle the case when the user is not logged in
+                                      // You might want to show an error or redirect to a login page
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 9.0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(9),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Take test now',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 15,
+                                      fontFamily: 'Roboto',
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  padding: EdgeInsets.fromLTRB(
+                    screenWidth * 0.05,
+                    screenHeight * 0.05,
+                    screenWidth * 0.05,
+                    screenHeight * 0.01,
+                  ),
+                  height: screenHeight * .35,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            titlee,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.0),
+                      SizedBox(
+                        height: 150.0,
+                        child: GridView.builder(
+                          padding: EdgeInsets.zero,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                            childAspectRatio: 2.5,
+                          ),
+                          itemCount: strands.length,
+                          itemBuilder: (context, index) {
+                            List<Gradient> gradients = [
+                              LinearGradient(
+                                colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              LinearGradient(
+                                colors: [Colors.teal.shade300, Colors.cyan.shade100],
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                              ),
+                              LinearGradient(
+                                colors: [Colors.pink.shade600, Colors.orange.shade300],
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                              ),
+                              LinearGradient(
+                                colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                            ];
 
-                          ],
+                            return GestureDetector(
+                              onTap: () {
+                                switch (strands[index]) {
+                                  case 'ABM':
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => AbmInfo()),
+                                    );
+                                    break;
+                                  case 'STEM':
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => StemInfo()),
+                                    );
+                                    break;
+                                  case 'HUMSS':
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => HumssInfo()),
+                                    );
+                                    break;
+                                  case 'GAS':
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => GasInfo()),
+                                    );
+                                    break;
+                                  default:
+                                    break;
+                                }
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: gradients[index],
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            // Card content
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    strands[index],
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // Like icon positioned at the top-right corner
+                                      if (strands[index] == 'STEM')
+                                        Positioned(
+                                          top: 5.0,  // Adjust based on the padding or spacing you want
+                                          left: 8.0, // Adjust based on the padding or spacing you want
+                                          child: Icon(
+                                            Icons.bookmark,
+                                            color: Colors.yellow,
+                                            size: 30.0,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+
+                          },
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.02),
                     ],
                   ),
                 ),
               ),
+
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, screenHeight * 0.01, 0, 0),
+                      child: Text(
+                        'Explore BatStateU-IS',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+
+                    CarouselSlider(
+                      items: [
+                        GestureDetector(
+                          onTap: () {
+                          },
+                          child: Image.asset(
+                            'assets/ISSTUD.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                          },
+                          child: Image.asset(
+                            'assets/IS.jpg',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                          },
+                          child: Image.asset(
+                            'assets/ISCHART.png',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                        ),
+                      ],
+                      options: CarouselOptions(
+                        height: screenHeight * 0.3,
+                        autoPlay: true,
+                        enlargeCenterPage: false,
+                        viewportFraction: 1.0,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentSlideIndex = index;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+
+                    SizedBox(
+                      height: 20.0,
+                      child: Center(
+                        child: AnimatedSmoothIndicator(
+                          activeIndex: _currentSlideIndex,
+                          count: 3,
+                          effect: CustomizableEffect(
+                            activeDotDecoration: DotDecoration(
+                              width: 30.0,
+                              height: 7.0,
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            dotDecoration: DotDecoration(
+                              width: 7.0,
+                              height: 7.0,
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            spacing: 6.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 50.0),
+                  ],
+                ),
+              ),
+
+
             ],
           ),
 
@@ -289,206 +584,118 @@ class _HomeG10State extends State<HomeG10> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(0, -2), // Shadow above the bar
-              blurRadius: 6, // Soft shadow
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, -2),
+              blurRadius: 0,
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/home.png',
-                width: iconSize,
-                height: iconSize,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/search.png',
-                width: iconSize,
-                height: iconSize,
-              ),
-            ),
-            IconButton(
-              onPressed: () async {
-                final currentUser = FirebaseAuth.instance.currentUser;
-                if (currentUser != null) {
-                  final userResultRef = FirebaseFirestore.instance
-                      .collection('userResultG10')
-                      .doc(currentUser.uid);
-
-                  final docSnapshot = await userResultRef.get();
-
-                  if (docSnapshot.exists) {
-                    // Navigate to SubmissionConfirmation if data exists
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
-                    );
-                  } else {
-                    // Navigate to Questionnaire1G10 if no data exists
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
-                    );
-                  }
-                }
-              },
-              icon: Image.asset(
-                'assets/main.png',
-                width: iconSize,
-                height: iconSize,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Add navigation logic
-              },
-              icon: Image.asset(
-                'assets/notif.png',
-                width: iconSize,
-                height: iconSize,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ResultG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/stats.png',
-                width: iconSize,
-                height: iconSize,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight;
-  final double maxHeight;
-  final Widget child;
-
-  _SliverAppBarDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight > minHeight ? maxHeight : minHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
-  }
-
-  @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
-        minHeight != oldDelegate.minHeight ||
-        child != oldDelegate.child;
-  }
-}
-
-class StrandCard extends StatelessWidget {
-  final String strandName;
-
-  const StrandCard({super.key, required this.strandName});
-
-  @override
-  Widget build(BuildContext context) {
-    // Obtain screen width for responsive design
-    final screenWidth = MediaQuery.of(context).size.width;
-    final double iconSize = MediaQuery.of(context).size.width * 0.10;
-
-    return InkWell(
-      onTap: () {
-        // Navigate to different pages based on strandName
-        if (strandName == 'STEM') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AcademicStemScreen()),
-          );
-        } else if (strandName == 'HUMSS') {
-           Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => const AcademicHumssScreen()),
-           );
-         } else if (strandName == 'ABM') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AcademicAbmScreen()),
-          );
-        }else if (strandName == 'GAS') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AcademicGasScreen()),
-          );
-        }
-        // Add other conditions for ABM, ICT, TOURISM...
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: const Color(0xFFF8F8F8),
-        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: screenWidth * 0.04),
         child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            SizedBox(
-              height: screenWidth * 0.20,  // Adjust the height here
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/search.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                SizedBox(width: iconSize),
+                IconButton(
+                  onPressed: () {
+                  },
+                  icon: Image.asset(
+                    'assets/notif.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/stats.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
-                padding: EdgeInsets.all(screenWidth * 0.04),
-                child: Center(
-                  child: Text(
-                    strandName,
-                    style: const TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                    ),
+                width: iconSize * 2,
+                height: iconSize * 2,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF08080),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G10Intro()),
+                        );
+                      }
+                    } else {
+                    }
+                  },
+                  icon: Image.asset(
+                    'assets/main.png',
+                    width: iconSize * 1.3,
+                    height: iconSize * 1.3,
                   ),
                 ),
               ),
             ),
-            Positioned(
-              top: screenWidth * 0.02,  // Adjust top padding
-              right: screenWidth * 0.02,  // Adjust right padding
-              child: Image.asset(
-                'assets/manual.png', // Ensure this asset exists
-                width: iconSize,
-                height: iconSize,
-              ),
-            ),
           ],
         ),
       ),
     );
   }
 }
-

@@ -33,7 +33,7 @@ class _SignupPageState extends State<SignupPage> {
         password.contains(RegExp(r'[A-Z]')) &&
         password.contains(RegExp(r'[a-z]')) &&
         password.contains(RegExp(r'[0-9]')) &&
-        password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+        password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>_]'));
   }
 
   bool _isEmailValid(String email) {
@@ -67,7 +67,6 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
-    // Check if the password meets the validation criteria
     if (!_isPasswordValid(_passwordController.text)) {
       setState(() {
         isLoading = false;

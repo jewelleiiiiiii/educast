@@ -299,7 +299,7 @@ class _HomeG12State extends State<HomeG12> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const programs()),
+                                  MaterialPageRoute(builder: (context) => const Programs()),
                                 );
                                 },
                               child: Text(
