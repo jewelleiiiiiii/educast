@@ -83,7 +83,7 @@ class _G10Intro extends State<G10Intro> {
               children: [
                 // Quest image
                 Image.asset(
-                  'assets/quest.png',
+                  'assets/why.png',
                   width: 200,
                   height: 200,
                 ),
@@ -94,7 +94,7 @@ class _G10Intro extends State<G10Intro> {
                   child: LinearProgressIndicator(
                     value: _progressValue,
                     backgroundColor: Colors.grey[300],
-                    color: Colors.blue,
+                    color: Colors.red,
                     minHeight: 10.0, // Adjust height of the loading bar
                   ),
                 ),

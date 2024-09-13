@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/assess4g10.dart';
+import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/filterg10.dart';
 import '../Home/Info/Abm.dart';
 import '../Home/Info/GAS.dart';
@@ -23,14 +27,12 @@ class _SearchG10 extends State<SearchG10> {
   @override
   void initState() {
     super.initState();
-    // Initialize visibleResults with the first two items from searchResults
     visibleResults.addAll(searchResults.take(2));
   }
 
   void removeSearchResult(int index) {
     setState(() {
       searchResults.removeAt(index);
-      // Remove from visibleResults as well, if necessary
       if (index < visibleResults.length) {
         visibleResults.removeAt(index);
       }
@@ -39,7 +41,6 @@ class _SearchG10 extends State<SearchG10> {
 
   void toggleSeeMore() {
     setState(() {
-      // Toggle between showing visibleResults and all searchResults
       if (visibleResults.length < searchResults.length) {
         visibleResults.clear();
         visibleResults.addAll(searchResults);
@@ -49,7 +50,6 @@ class _SearchG10 extends State<SearchG10> {
       }
     });
   }
-
   Future<void> performSearch() async {
     String query = searchController.text.trim().toLowerCase();
     setState(() {
@@ -64,31 +64,36 @@ class _SearchG10 extends State<SearchG10> {
       return;
     }
 
-    // Query Firestore to get matching documents
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('strandcontent')
-          .get();
+      // Only search within specific documents
+      List<String> documentIds = ['abm', 'stem', 'humss', 'gas'];
+      Set<String> uniqueResults = Set<String>();
 
-      Set<String> uniqueResults = Set<String>(); // Use a Set to track unique results
+      for (String docId in documentIds) {
+        DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+            .collection('strandcontent')
+            .doc(docId)
+            .get();
 
-      for (var doc in snapshot.docs) {
-        if (doc.id.toLowerCase().contains(query)) {
-          uniqueResults.add(doc.id);
-        } else {
-          // Safely check if data is not null before calling forEach
-          final Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
-          if (data != null) {
-            data.forEach((key, value) {
-              if (value.toString().toLowerCase().contains(query)) {
-                uniqueResults.add(doc.id);
-              }
-            });
+        if (docSnapshot.exists) {
+          // Search in document ID
+          if (docSnapshot.id.toLowerCase().contains(query)) {
+            uniqueResults.add(docSnapshot.id);
+          } else {
+            // Search within document fields if data is not null
+            final Map<String, dynamic>? data = docSnapshot.data() as Map<String, dynamic>?;
+            if (data != null) {
+              data.forEach((key, value) {
+                if (value.toString().toLowerCase().contains(query)) {
+                  uniqueResults.add(docSnapshot.id);
+                }
+              });
+            }
           }
         }
       }
 
-      // Convert Set to List and limit the number of results
+      // Convert Set to List and limit to 4 results
       List<String> matchingDocs = uniqueResults.toList();
       if (matchingDocs.length > 4) {
         matchingDocs = matchingDocs.take(4).toList();
@@ -99,17 +104,26 @@ class _SearchG10 extends State<SearchG10> {
         visibleResults.clear();
         visibleResults.addAll(searchResults.take(2));
       });
+
+      // Show snackbar if no results found
+      if (searchResults.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('No results found'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
       print('Error performing search: $e');
     }
   }
 
+
   void navigateToScreen(String title) {
-    print('Navigating to screen with title: $title'); // Debug print
+    print('Navigating to screen with title: $title');
 
     Widget screen;
-
-    // Normalize title case for matching
     String normalizedTitle = title.toUpperCase();
 
     switch (normalizedTitle) {
@@ -126,7 +140,7 @@ class _SearchG10 extends State<SearchG10> {
         screen = GasInfo();
         break;
       default:
-        screen = const HomeG10(); // Default screen
+        screen = const HomeG10();
     }
 
     Navigator.push(
@@ -137,67 +151,93 @@ class _SearchG10 extends State<SearchG10> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth * 0.10;
     return Scaffold(
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.12,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 158, 39, 39), // Red color matching the status bar
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40.0),
-                    bottomRight: Radius.circular(40.0),
-                  ),
-                ),
+      resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true, // Extend body behind the AppBar
+      appBar: AppBar(
+        backgroundColor: Colors.transparent, // Make AppBar transparent
+        elevation: 0,
+        automaticallyImplyLeading: false,
+      ),
+      body: Stack(
+          children: [
+            // Background image
+            Positioned.fill(
+              child: Image.asset(
+                'assets/bg7.png', // Replace with your image path
+                fit: BoxFit.cover,
               ),
-              Positioned(
-                top: 30.0,
-                right: 16.0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const FilterG10()),
-                    );
-                  },
-                  child: Image.asset(
-                    'assets/filter.png', // Replace with your image path
-                    width: 30.0,
-                    height: 30.0,
-                  ),
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    height: 150.0,
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: searchController,
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                prefixIcon: const Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
+            ),
+            Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 90, 0, 0),
+                  height: 150.0,
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 10, 16, 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search',
+                              prefixIcon: const Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
                               ),
-                              onChanged: (value) {
-                                performSearch();
+                            ),
+                            onChanged: (value) {
+                              performSearch();
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10.0),
+
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (showSearchResults) ...[
+                          for (int i = 0; i < visibleResults.length; i++)
+                            SearchResultTile(
+                              text: visibleResults[i],
+                              onTap: () {
+                                navigateToScreen(visibleResults[i]);
                               },
                             ),
-                          ),
-                          const SizedBox(width: 10.0),
-                          TextButton(
-                            onPressed: performSearch,
-                            child: const Text(
-                              'Search',
+                          if (searchResults.length > 3) ...[
+                            const SizedBox(height: 10.0),
+                            TextButton(
+                              onPressed: toggleSeeMore,
+                              child: Text(
+                                visibleResults.length < searchResults.length
+                                    ? 'See More'
+                                    : 'See Less',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const Icon(Icons.keyboard_arrow_down),
+                          ],
+                        ],
+                        const SizedBox(height: 20.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'You may like',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16.0,
@@ -205,153 +245,146 @@ class _SearchG10 extends State<SearchG10> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          if (showSearchResults) ...[
-                            for (int i = 0; i < visibleResults.length; i++)
-                              SearchResultTile(
-                                text: visibleResults[i],
-                                onTap: () {
-                                  navigateToScreen(visibleResults[i]);
-                                },
-
-                              ),
-                            if (searchResults.length > 3) ...[
-                              const SizedBox(height: 10.0),
-                              TextButton(
-                                onPressed: toggleSeeMore,
-                                child: Text(
-                                  visibleResults.length < searchResults.length
-                                      ? 'See More'
-                                      : 'See Less',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const Icon(Icons.keyboard_arrow_down),
-                            ],
-                          ],
-                          const SizedBox(height: 20.0),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'You may like',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                        ),
+                        for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
+                          YouMayLikeTile(
+                            title: title,
+                            onTap: () {
+                              navigateToScreen(title);
+                            },
                           ),
-                          // List of titles for the "You may like" section
-                          for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
-                            YouMayLikeTile(
-                              title: title,
-                              onTap: () {
-                                navigateToScreen(title);
-                              },
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
-        bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
-    decoration: BoxDecoration(
-    color: Colors.white,
-    border: const Border(
-    top: BorderSide(
-    color: Colors.grey,
-    width: 0.2,
-    ),
-    ),
-    boxShadow: [
-    BoxShadow(
-    color: Colors.black.withOpacity(0.2),
-    offset: const Offset(0, -2), // Shadow above the bar
-    blurRadius: 6, // Soft shadow
-    ),
-    ],
-    ),
-    child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-    IconButton(
-    onPressed: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const HomeG10()),
-    );
-    },
-      icon: Image.asset(
-        'assets/home.png',
-        width: MediaQuery.of(context).size.width * 0.10,
-        height: MediaQuery.of(context).size.width * 0.10,
-      ),
-    ),
-      IconButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SearchG10()),
-          );
-        },
-        icon: Image.asset(
-          'assets/search.png',
-          width: MediaQuery.of(context).size.width * 0.10,
-          height: MediaQuery.of(context).size.width * 0.10,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 0.2,
+            ),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, -2),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/search.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                SizedBox(width: iconSize),
+                IconButton(
+                  onPressed: () {
+                  },
+                  icon: Image.asset(
+                    'assets/notif.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/stats.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              child: Container(
+                width: iconSize * 2,
+                height: iconSize * 2,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF08080),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G10Intro()),
+                        );
+                      }
+                    } else {
+                    }
+                  },
+                  icon: Image.asset(
+                    'assets/main.png',
+                    width: iconSize * 1.3,
+                    height: iconSize * 1.3,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-      IconButton(
-        onPressed: () {
-          // Add navigation logic
-        },
-        icon: Image.asset(
-          'assets/main.png',
-          width: MediaQuery.of(context).size.width * 0.10,
-          height: MediaQuery.of(context).size.width * 0.10,
-        ),
-      ),
-      IconButton(
-        onPressed: () {
-          // Add navigation logic
-        },
-        icon: Image.asset(
-          'assets/notif.png',
-          width: MediaQuery.of(context).size.width * 0.10,
-          height: MediaQuery.of(context).size.width * 0.10,
-        ),
-      ),
-      IconButton(
-        onPressed: () {
-          // Add navigation logic
-        },
-        icon: Image.asset(
-          'assets/stats.png',
-          width: MediaQuery.of(context).size.width * 0.10,
-          height: MediaQuery.of(context).size.width * 0.10,
-        ),
-      ),
-    ],
-    ),
-        ),
     );
   }
 }
@@ -368,7 +401,7 @@ class SearchResultTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.timer),
+      leading: const Icon(Icons.search),
       title: Text(text),
       onTap: onTap,
     );
@@ -394,4 +427,3 @@ class YouMayLikeTile extends StatelessWidget {
     );
   }
 }
-

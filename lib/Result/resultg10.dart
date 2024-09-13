@@ -21,14 +21,12 @@ class _ResultG10State extends State<ResultG10> {
     super.initState();
     _userResult = _getUserResult();
   }
-
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color.fromARGB(255, 158, 39, 39),
-      statusBarIconBrightness: Brightness.light,
+      statusBarColor: const Color.fromARGB(255, 158, 39, 39), // Header color
+      statusBarBrightness: Brightness.light, // Ensure the status bar text is readable (white)
     ));
     return Scaffold(
       body: SafeArea(
@@ -62,12 +60,14 @@ class _ResultG10State extends State<ResultG10> {
               double stemScore = ((data['Realistic'] as num).toDouble() + (data['Investigative'] as num).toDouble()) / 2;
               double gasScore = (data['Artistic'] as num).toDouble();
 
-              // Determine the highest score(s)
               List<double> scores = [humssScore, abmScore, stemScore, gasScore];
-              List<String> strands = ["Humanities, and Social Sciences",
+              List<String> strands = [
+                "Humanities, and Social Sciences",
                 "Accountancy, Business, and Management",
                 "Science, Technology, Engineering, and Mathematics",
-                "General Academic Strand"];
+                "General Academic Strand"
+              ];
+
               double maxScore = scores.reduce((a, b) => a > b ? a : b);
               List<String> topStrands = [];
 
@@ -242,11 +242,16 @@ class _ResultG10State extends State<ResultG10> {
 
   Future<DocumentSnapshot> _getUserResult() async {
     User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception("No user is currently signed in.");
+    }
     return FirebaseFirestore.instance
         .collection('userResultG10')
-        .doc(user!.uid)
+        .doc(user.uid)
         .get();
   }
+
+
 
   Widget _buildResultPage(
       BuildContext context, {
@@ -259,7 +264,7 @@ class _ResultG10State extends State<ResultG10> {
         required bool isBold,
         required int progressPercentage,
       }) {
-    // Create a list of maps to store strand data
+
     List<Map<String, dynamic>> strands = [
       {"label": "HUMSS", "score": humssScore},
       {"label": "ABM", "score": abmScore},
@@ -267,60 +272,48 @@ class _ResultG10State extends State<ResultG10> {
       {"label": "GAS", "score": gasScore},
     ];
 
-    // Sort the strands by score in descending order
     strands.sort((a, b) => b['score'].compareTo(a['score']));
 
-    // Calculate the total max score
     double totalMaxScore = humssScore + abmScore + stemScore + gasScore;
-    print('Total Max Score: $totalMaxScore');
+    double calculatedProgressPercentage = 0;
 
-    // Print calculations and percentages for each strand
-    for (var strand in strands) {
-      double score = strand['score'];
-      double percentage = totalMaxScore > 0 ? (score / totalMaxScore) * 100 : 0;
-      print('${strand['label']}: $score / $totalMaxScore = ${score / totalMaxScore}');
-      print('Percent: ${percentage.toStringAsFixed(2)}%');
-    }
+    // Set default progress to 0 if there is no data
+    if (totalMaxScore > 0) {
+      for (var strand in strands) {
+        double score = strand['score'];
+        double percentage = (score / totalMaxScore) * 100;
+        print('${strand['label']}: $score / $totalMaxScore = ${score / totalMaxScore}');
+        print('Percent: ${percentage.toStringAsFixed(2)}%');
+      }
 
-    // Calculate the score percentage based on the tied scenarios
-    double calculatedProgressPercentage;
+      // Determine the top strands and calculate the progress
+      List<double> scores = [humssScore, abmScore, stemScore, gasScore];
+      double maxScore = scores.reduce((a, b) => a > b ? a : b);
+      List<String> topStrands = [];
 
-    List<double> scores = [humssScore, abmScore, stemScore, gasScore];
-    double maxScore = scores.reduce((a, b) => a > b ? a : b);
-    List<String> topStrands = [];
+      for (int i = 0; i < scores.length; i++) {
+        if (scores[i] == maxScore) {
+          topStrands.add(strands[i]['label']);
+        }
+      }
 
-    for (int i = 0; i < scores.length; i++) {
-      if (scores[i] == maxScore) {
-        topStrands.add(strands[i]['label']);
+      if (topStrands.isNotEmpty) {
+        if (topStrands.length == 1) {
+          calculatedProgressPercentage = maxScore / totalMaxScore * 100;
+        } else if (topStrands.length == 2) {
+          calculatedProgressPercentage = (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
+              scores[strands.indexWhere((s) => s['label'] == topStrands[1])]) / (2 * totalMaxScore) * 100;
+        } else if (topStrands.length == 3) {
+          calculatedProgressPercentage = (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
+              scores[strands.indexWhere((s) => s['label'] == topStrands[1])] +
+              scores[strands.indexWhere((s) => s['label'] == topStrands[2])]) / (3 * totalMaxScore) * 100;
+        } else {
+          calculatedProgressPercentage = (scores[0] + scores[1] + scores[2] + scores[3]) / (4 * totalMaxScore) * 100;
+        }
       }
     }
 
-    // Ensure that there are no out-of-bound errors
-    if (topStrands.isNotEmpty) {
-      if (topStrands.length == 1) {
-        // Single highest strand
-        calculatedProgressPercentage = maxScore / totalMaxScore * 100;
-      } else if (topStrands.length == 2) {
-        // Two strands tied
-        calculatedProgressPercentage = (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
-            scores[strands.indexWhere((s) => s['label'] == topStrands[1])]) /
-            (2 * totalMaxScore) * 100;
-      } else if (topStrands.length == 3) {
-        // Three strands tied
-        calculatedProgressPercentage = (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
-            scores[strands.indexWhere((s) => s['label'] == topStrands[1])] +
-            scores[strands.indexWhere((s) => s['label'] == topStrands[2])]) /
-            (3 * totalMaxScore) * 100;
-      } else {
-        // All four strands tied
-        calculatedProgressPercentage = (scores[0] + scores[1] + scores[2] + scores[3]) /
-            (4 * totalMaxScore) * 100;
-      }
-    } else {
-      calculatedProgressPercentage = 0; // Fallback value
-    }
-
-
+    // If there's no data, the calculatedProgressPercentage will remain 0
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -386,7 +379,7 @@ class _ResultG10State extends State<ResultG10> {
                           ),
                           child: Center(
                             child: Text(
-                              '${calculatedProgressPercentage.toStringAsFixed(2)}%', // Updated to 2 decimal points
+                              '${calculatedProgressPercentage.toStringAsFixed(2)}%',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -453,7 +446,7 @@ class _ResultG10State extends State<ResultG10> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AssessmentHistoryG10(), // Replace with the screen you want to navigate to
+                                      builder: (context) => AssessmentHistoryG10(),
                                     ),
                                   );
                                 },
@@ -468,7 +461,6 @@ class _ResultG10State extends State<ResultG10> {
                             ],
                           ),
                           SizedBox(height: 10),
-                          // Display the sorted strands with updated percentages
                           for (var strand in strands)
                             AssessmentContainer(
                               label: strand['label'],
@@ -488,85 +480,6 @@ class _ResultG10State extends State<ResultG10> {
       ],
     );
   }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return Container(
-      height: 60.0,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey,
-            width: .2,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeG10()),
-              );
-            },
-            icon: Image.asset(
-              'assets/home.png',
-              width: MediaQuery.of(context).size.width * 0.10,
-              height: MediaQuery.of(context).size.height * 0.10,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SearchG10()),
-              );
-            },
-            icon: Image.asset(
-              'assets/search.png',
-              width: MediaQuery.of(context).size.width * 0.10,
-              height: MediaQuery.of(context).size.height * 0.10,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
-              );
-            },
-            icon: Image.asset(
-              'assets/main.png',
-              width: MediaQuery.of(context).size.width * 0.10,
-              height: MediaQuery.of(context).size.height * 0.10,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // Handle action
-            },
-            icon: Image.asset(
-              'assets/notif.png',
-              width: MediaQuery.of(context).size.width * 0.10,
-              height: MediaQuery.of(context).size.height * 0.10,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // Handle action
-            },
-            icon: Image.asset(
-              'assets/stats.png',
-              width: MediaQuery.of(context).size.width * 0.10,
-              height: MediaQuery.of(context).size.height * 0.10,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class AssessmentContainer extends StatelessWidget {
@@ -582,11 +495,10 @@ class AssessmentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the percentage based on score and totalScore
     double percentage = totalMaxScore > 0 ? (score / totalMaxScore) * 100 : 0;
 
     return Container(
-      margin: EdgeInsets.only(bottom: 20), // Increased bottom margin for spacing
+      margin: EdgeInsets.only(bottom: 20),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -613,7 +525,7 @@ class AssessmentContainer extends StatelessWidget {
                 ),
               ),
               Text(
-                '${percentage.toStringAsFixed(2)}%', // Show percentage with two decimal points
+                '${percentage.toStringAsFixed(2)}%',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -625,7 +537,7 @@ class AssessmentContainer extends StatelessWidget {
           LinearProgressIndicator(
             value: totalMaxScore > 0 ? (score / totalMaxScore) : 0,
             backgroundColor: Colors.grey.shade200,
-            color: Colors.red, // Adjust as needed
+            color: Colors.red,
           ),
         ],
       ),
