@@ -23,7 +23,7 @@ class _HomeG12State extends State<HomeG12> {
   bool _isDrawerOpen = false;
   String? userStrand;
   List<String> courses = [];
-  String relatedProgramsText = 'GAS-RELATED PROGRAMS';
+  String relatedProgramsText = '';
   String? firstName;
 
   @override

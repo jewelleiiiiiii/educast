@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/assess4g10.dart';
 import 'package:myapp/Home/homeg10.dart';
 import 'package:myapp/Home/homeg12.dart';
+import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 
 class UserG12 extends StatefulWidget {
@@ -13,13 +16,13 @@ class UserG12 extends StatefulWidget {
 }
 
 class _UserG12 extends State<UserG12> {
-  // Controllers for the text fields
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _strandController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _gradeLevelController = TextEditingController();
-  final TextEditingController _campusController = TextEditingController();
+  String firstName = '';
+  String lastName = '';
+  String email = '';
+  String password = '********'; // Placeholder for the password, as it's not retrievable.
+  String gradeLevel = '';
+  String strand = '';
+  String campus = '';
 
   @override
   void initState() {
@@ -29,10 +32,8 @@ class _UserG12 extends State<UserG12> {
 
   Future<void> _fetchUserData() async {
     try {
-      // Get the current user's UID
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // Fetch the user's data from Firestore
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
@@ -40,35 +41,65 @@ class _UserG12 extends State<UserG12> {
 
         if (userDoc.exists) {
           var data = userDoc.data() as Map<String, dynamic>;
-          // Update the text fields with the retrieved data
           setState(() {
-            _firstNameController.text = data['firstName'] ?? '';
-            _lastNameController.text = data['lastName'] ?? '';
-            _emailController.text = data['email'] ?? '';
-            _gradeLevelController.text = data['gradeLevel'] ?? '';
-            _campusController.text = data['campus'] ?? '';
-            _strandController.text = data['strand'] ?? ''; // Fetch strand
+            firstName = data['firstName'] ?? '';
+            lastName = data['lastName'] ?? '';
+            email = data['email'] ?? '';
+            gradeLevel = data['gradeLevel'] ?? '';
+            campus = data['campus'] ?? '';
+            strand = _mapStrand(data['strand'] ?? '');
           });
         }
       }
     } catch (e) {
       print('Error fetching user data: $e');
-      // Handle errors if necessary
+    }
+  }
+
+  String _mapStrand(String strand) {
+    switch (strand) {
+      case 'Science, Technology, Engineering, and Mathematics':
+        return 'STEM';
+      case 'Accountancy, Business, and Management':
+        return 'ABM';
+      case 'Humanities and Social Sciences':
+        return 'HUMSS';
+      case 'General Academic Strand':
+        return 'GAS';
+      default:
+        return strand;
+    }
+  }
+
+  void _resetPassword() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await user.sendEmailVerification();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Password reset email sent!')),
+        );
+      } catch (e) {
+        print('Error sending password reset email: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send password reset email.')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Fetch screen size
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth * 0.10;
 
     return Scaffold(
-      extendBodyBehindAppBar: true, // Extend the body behind the AppBar
+      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
-          backgroundColor: Colors.transparent, // Make AppBar transparent to show background
+          backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             icon: Image.asset(
@@ -92,173 +123,71 @@ class _UserG12 extends State<UserG12> {
             height: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/BG.png'), // Path to your background image
+                image: AssetImage('assets/bg8.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: kToolbarHeight), // Adjust the padding to avoid overlapping with the AppBar
+            padding: EdgeInsets.only(top: 100),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: 40),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent, // Adjust opacity if needed
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.08),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Stack(
                           children: [
                             Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(right: screenWidth * 0.04),
-                                child: CircleAvatar(
-                                  radius: screenHeight * 0.07,
-                                  backgroundColor: Colors.black,
-                                  child: Icon(
-                                    Icons.person,
-                                    size: screenHeight * 0.07,
-                                    color: Colors.white,
-                                  ),
+                              child: CircleAvatar(
+                                radius: screenHeight * 0.07,
+                                backgroundColor: Colors.black,
+                                child: Icon(
+                                  Icons.person,
+                                  size: screenHeight * 0.07,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.02),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'First Name',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              _buildTextFieldWithShadowUserG10(
-                                controller: _firstNameController,
-                                labelText: ' ',
-                                height: screenHeight * 0.06,
-                              ),
-                            ],
+                        buildUserInfo('First Name', firstName),
+                        SizedBox(height: 15),
+                        buildUserInfo('Last Name', lastName),
+                        SizedBox(height: 15),
+                        buildUserInfo('Email', email),
+                        SizedBox(height: 15),
+                        buildUserInfo('Password', password),
+                        SizedBox(height: 15),
+                        buildUserInfo('Grade Level', gradeLevel),
+                        SizedBox(height: 15),
+                        buildUserInfo('Strand', strand), // Updated to show mapped strand
+                        SizedBox(height: 15),
+                        buildUserInfo('Campus', campus),
+                        SizedBox(height: 25),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: _resetPassword,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color.fromARGB(255, 158, 39, 39),
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 10),
+                            ),
+                            child: Text('Reset Password'),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Last Name',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              _buildTextFieldWithShadowUserG10(
-                                controller: _lastNameController,
-                                labelText: ' ',
-                                height: screenHeight * 0.06,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Email',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              _buildTextFieldWithShadowUserG10(
-                                controller: _emailController,
-                                labelText: ' ',
-                                height: screenHeight * 0.06,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Grade Level',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              _buildTextFieldWithShadowUserG10(
-                                controller: _gradeLevelController,
-                                labelText: ' ',
-                                height: screenHeight * 0.06,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Campus',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              _buildTextFieldWithShadowUserG10(
-                                controller: _campusController,
-                                labelText: ' ',
-                                height: screenHeight * 0.06,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Strand',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              _buildTextFieldWithShadowUserG10(
-                                controller: _strandController,
-                                labelText: ' ',
-                                height: screenHeight * 0.06,
-                              ),
-                            ],
-                          ),
-                        ),
 
-                        SizedBox(height: screenHeight * 0.02),
+                        ),
+                        SizedBox(height: 40),
                       ],
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
                 ],
               ),
             ),
@@ -266,76 +195,123 @@ class _UserG12 extends State<UserG12> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: 60.0,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(
+          border: const Border(
             top: BorderSide(
               color: Colors.grey,
-              width: .2,
+              width: 0.2,
             ),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, -2),
+              blurRadius: 0,
+            ),
+          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/home.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/search.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                SizedBox(width: iconSize),
+                IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    'assets/notif.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/stats.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/search.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/main.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Handle action
-              },
-              icon: Image.asset(
-                'assets/notif.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Handle action
-              },
-              icon: Image.asset(
-                'assets/stats.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
+            Positioned(
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              child: Container(
+                width: iconSize * 2,
+                height: iconSize * 2,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF08080),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              SubmissionConfirmation()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G10Intro()),
+                        );
+                      }
+                    } else {}
+                  },
+                  icon: Image.asset(
+                    'assets/main.png',
+                    width: iconSize * 1.3,
+                    height: iconSize * 1.3,
+                  ),
+                ),
               ),
             ),
           ],
@@ -344,31 +320,27 @@ class _UserG12 extends State<UserG12> {
     );
   }
 
-  Widget _buildTextFieldWithShadowUserG10({
-    required TextEditingController controller,
-    required String labelText,
-    required double height,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            offset: Offset(0, 4),
-            blurRadius: 10.0,
+  Widget buildUserInfo(String label, String info) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: Colors.black,
+            ),
+          ),
+          Text(
+            info,
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: Colors.grey,
+            ),
           ),
         ],
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: labelText,
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-        ),
-        enabled: false, // Makes the field non-editable
       ),
     );
   }

@@ -94,7 +94,8 @@ class _StemInfo extends State<StemInfo> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Image.asset('assets/back.png'),
+          icon: Image.asset('assets/back.png', width: 24.0,
+            height: 24.0,),
           onPressed: () {
             Navigator.pushReplacement(
               context,

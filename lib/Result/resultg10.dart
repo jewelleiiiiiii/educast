@@ -21,97 +21,111 @@ class _ResultG10State extends State<ResultG10> {
     super.initState();
     _userResult = _getUserResult();
   }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: const Color.fromARGB(255, 158, 39, 39), // Header color
+      statusBarColor: Colors.transparent, // Make the status bar transparent
       statusBarBrightness: Brightness.light, // Ensure the status bar text is readable (white)
     ));
+
     return Scaffold(
-      body: SafeArea(
-        child: FutureBuilder<DocumentSnapshot>(
-          future: _getUserResult(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.hasError) {
-              return Center(child: Text("Something went wrong"));
-            }
-
-            if (!snapshot.hasData || !snapshot.data!.exists) {
-              return _buildResultPage(
-                context,
-                humssScore: 0,
-                abmScore: 0,
-                stemScore: 0,
-                gasScore: 0,
-                progressPercentage: 0,
-                likelyToChooseText: "Take the assessment",
-                likelyToChooseStrand: "to know the suitable strand for you",
-                isBold: false,
-              );
-            } else {
-              var data = snapshot.data!.data() as Map<String, dynamic>;
-              double humssScore = (data['Social'] as num).toDouble();
-              double abmScore = ((data['Enterprising'] as num).toDouble() + (data['Conventional'] as num).toDouble()) / 2;
-              double stemScore = ((data['Realistic'] as num).toDouble() + (data['Investigative'] as num).toDouble()) / 2;
-              double gasScore = (data['Artistic'] as num).toDouble();
-
-              List<double> scores = [humssScore, abmScore, stemScore, gasScore];
-              List<String> strands = [
-                "Humanities, and Social Sciences",
-                "Accountancy, Business, and Management",
-                "Science, Technology, Engineering, and Mathematics",
-                "General Academic Strand"
-              ];
-
-              double maxScore = scores.reduce((a, b) => a > b ? a : b);
-              List<String> topStrands = [];
-
-              for (int i = 0; i < scores.length; i++) {
-                if (scores[i] == maxScore) {
-                  topStrands.add(strands[i]);
+      body: Stack(
+        children: [
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/bg8.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          SafeArea(
+            child: FutureBuilder<DocumentSnapshot>(
+              future: _getUserResult(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
                 }
-              }
 
-              String likelyToChooseText;
-              String likelyToChooseStrand;
-              bool isBold = true;
+                if (snapshot.hasError) {
+                  return Center(child: Text("Something went wrong"));
+                }
 
-              if (topStrands.length == 1) {
-                likelyToChooseText = "More likely to choose";
-                likelyToChooseStrand = topStrands[0];
-              } else if (topStrands.length == 2) {
-                likelyToChooseText = "You excelled in two strands!";
-                likelyToChooseStrand = "Check the details below.";
-                isBold = false;
-              } else if (topStrands.length == 3) {
-                likelyToChooseText = "You excelled in three strands!";
-                likelyToChooseStrand = "Check the details below.";
-                isBold = false;
-              } else {
-                likelyToChooseText = "You are a good fit in all strands!";
-                likelyToChooseStrand = "Check the details below.";
-                isBold = false;
-              }
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return _buildResultPage(
+                    context,
+                    humssScore: 0,
+                    abmScore: 0,
+                    stemScore: 0,
+                    gasScore: 0,
+                    progressPercentage: 0,
+                    likelyToChooseText: "Take the assessment",
+                    likelyToChooseStrand: "to know the suitable strand for you",
+                    isBold: false,
+                  );
+                } else {
+                  var data = snapshot.data!.data() as Map<String, dynamic>;
+                  double humssScore = (data['Social'] as num).toDouble();
+                  double abmScore = ((data['Enterprising'] as num).toDouble() + (data['Conventional'] as num).toDouble()) / 2;
+                  double stemScore = ((data['Realistic'] as num).toDouble() + (data['Investigative'] as num).toDouble()) / 2;
+                  double gasScore = (data['Artistic'] as num).toDouble();
 
-              return _buildResultPage(
-                context,
-                humssScore: humssScore,
-                abmScore: abmScore,
-                stemScore: stemScore,
-                gasScore: gasScore,
-                progressPercentage: 80,
-                likelyToChooseText: likelyToChooseText,
-                likelyToChooseStrand: likelyToChooseStrand,
-                isBold: isBold,
-              );
-            }
-          },
-        ),
+                  List<double> scores = [humssScore, abmScore, stemScore, gasScore];
+                  List<String> strands = [
+                    "Humanities, and Social Sciences",
+                    "Accountancy, Business, and Management",
+                    "Science, Technology, Engineering, and Mathematics",
+                    "General Academic Strand"
+                  ];
+
+                  double maxScore = scores.reduce((a, b) => a > b ? a : b);
+                  List<String> topStrands = [];
+
+                  for (int i = 0; i < scores.length; i++) {
+                    if (scores[i] == maxScore) {
+                      topStrands.add(strands[i]);
+                    }
+                  }
+
+                  String likelyToChooseText;
+                  String likelyToChooseStrand;
+                  bool isBold = true;
+
+                  if (topStrands.length == 1) {
+                    likelyToChooseText = "More likely to choose";
+                    likelyToChooseStrand = topStrands[0];
+                  } else if (topStrands.length == 2) {
+                    likelyToChooseText = "You excelled in two strands!";
+                    likelyToChooseStrand = "Check the details below.";
+                    isBold = false;
+                  } else if (topStrands.length == 3) {
+                    likelyToChooseText = "You excelled in three strands!";
+                    likelyToChooseStrand = "Check the details below.";
+                    isBold = false;
+                  } else {
+                    likelyToChooseText = "You are a good fit in all strands!";
+                    likelyToChooseStrand = "Check the details below.";
+                    isBold = false;
+                  }
+
+                  return _buildResultPage(
+                    context,
+                    humssScore: humssScore,
+                    abmScore: abmScore,
+                    stemScore: stemScore,
+                    gasScore: gasScore,
+                    progressPercentage: 80,
+                    likelyToChooseText: likelyToChooseText,
+                    likelyToChooseStrand: likelyToChooseStrand,
+                    isBold: isBold,
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
@@ -312,166 +326,138 @@ class _ResultG10State extends State<ResultG10> {
         }
       }
     }
-
-    // If there's no data, the calculatedProgressPercentage will remain 0
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.12,
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 158, 39, 39),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(40.0),
-              bottomRight: Radius.circular(40.0),
-            ),
-          ),
-          child: Stack(
-            children: const [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'My Results',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Center(
-              child: SizedBox(
-                width: 400,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 40),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: CircularProgressIndicator(
-                            value: calculatedProgressPercentage / 100,
-                            strokeWidth: 10,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                            backgroundColor: Colors.red.shade100,
-                          ),
-                        ),
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 143, 29, 21),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${calculatedProgressPercentage.toStringAsFixed(2)}%',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 110), // Ensures the scroll starts 110 pixels from the top
+            child: SingleChildScrollView(
+              child: Center(
+                child: SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      // Padding for the progress indicator to fine-tune its top space
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5), // Adjust to control the space above the progress indicator
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 120,
+                              height: 120,
+                              child: CircularProgressIndicator(
+                                value: calculatedProgressPercentage / 100,
+                                strokeWidth: 10,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                                backgroundColor: Colors.red.shade100,
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      likelyToChooseText,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      likelyToChooseStrand,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      margin: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 158, 39, 39),
-                            Colors.pink.shade100,
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 4,
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Results',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 143, 29, 21),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${calculatedProgressPercentage.toStringAsFixed(2)}%',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AssessmentHistoryG10(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'View details',
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        likelyToChooseText,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        likelyToChooseStrand,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        margin: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 158, 39, 39),
+                              Colors.pink.shade100,
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 4,
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Results',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          for (var strand in strands)
-                            AssessmentContainer(
-                              label: strand['label'],
-                              score: strand['score'],
-                              totalMaxScore: totalMaxScore,
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AssessmentHistoryG10(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'View details',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                        ],
+                            SizedBox(height: 10),
+                            for (var strand in strands)
+                              AssessmentContainer(
+                                label: strand['label'],
+                                score: strand['score'],
+                                totalMaxScore: totalMaxScore,
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
+                      SizedBox(height: 30),
+                    ],
+                  ),
                 ),
               ),
             ),

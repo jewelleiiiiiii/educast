@@ -9,6 +9,7 @@ import 'package:myapp/Home/Info/GAS.dart';
 import 'package:myapp/Home/Info/HUMSS.dart';
 import 'package:myapp/Home/Info/STEM.dart';
 import 'package:myapp/Home/UserG10/UserG10.dart';
+import 'package:myapp/Home/tryy.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
@@ -613,7 +614,7 @@ class _HomeG10 extends State<HomeG10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                      MaterialPageRoute(builder: (context) => SearchG10()),
                     );
                   },
                   icon: Image.asset(
