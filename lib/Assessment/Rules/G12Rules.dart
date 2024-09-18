@@ -2,21 +2,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G10Intro.dart';
-import 'package:myapp/Assessment/assess1g10.dart';
+import 'package:myapp/Assessment/Rules/G12Intro.dart';
 import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:myapp/Home/homeg12.dart';
+import 'package:myapp/Search/searchg12.dart';
 
-class G10Rules extends StatefulWidget {
-  const G10Rules({super.key});
+class G12Rules extends StatefulWidget {
+  const G12Rules({super.key});
 
   @override
-  _G10Rules createState() => _G10Rules();
+  _G12Rules createState() => _G12Rules();
 }
 
-class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
+class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
   double _progressValue = 0.0;
   String animatedText = '';
   int _currentIndex = 0;
@@ -33,9 +31,9 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
   void _startLoading() {
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
-        _progressValue += 0.01;
+        _progressValue += 0.01; // Increment the progress
         if (_progressValue >= 1.0) {
-          timer.cancel();
+          timer.cancel(); // Stop the timer when loading is complete
         }
       });
     });
@@ -48,7 +46,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
           animatedText += _message[_currentIndex];
           _currentIndex++;
         } else {
-          timer.cancel();
+          timer.cancel(); // Stop the text animation when the full message is printed
         }
       });
     });
@@ -144,7 +142,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const G10Rules2()),
+                  MaterialPageRoute(builder: (context) => const G12Rules2()),
                 );
               },
               child: const Text(
@@ -193,7 +191,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeG10()),
+                    MaterialPageRoute(builder: (context) => const HomeG12()),
                   );
                 },
                 icon: Image.asset(
@@ -206,7 +204,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchG10()),
+                    MaterialPageRoute(builder: (context) => const SearchG12()),
                   );
                 },
                 icon: Image.asset(
@@ -226,10 +224,10 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ResultG10()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => ResultG10()),
+                  // );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -258,7 +256,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     final userResultDoc = FirebaseFirestore.instance
-                        .collection('userResultG10')
+                        .collection('userResultG12')
                         .doc(user.uid);
 
                     final docSnapshot = await userResultDoc.get();
@@ -271,7 +269,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G10Intro()),
+                        MaterialPageRoute(builder: (context) => const G12Intro()),
                       );
                     }
                   }
@@ -291,14 +289,14 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
 }
 
 
-class G10Rules2 extends StatefulWidget {
-  const G10Rules2({super.key});
+class G12Rules2 extends StatefulWidget {
+  const G12Rules2({super.key});
 
   @override
-  _G10Rules2 createState() => _G10Rules2();
+  _G12Rules2 createState() => _G12Rules2();
 }
 
-class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
+class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
   double _progressValue2 = 0.0;
   String animatedText2 = '';
   int _currentIndex2 = 0;
@@ -426,7 +424,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => G10Rules3()),
+                  MaterialPageRoute(builder: (context) => G12Rules3()),
                 );
               },
               child: const Text(
@@ -475,7 +473,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeG10()),
+                    MaterialPageRoute(builder: (context) => const HomeG12()),
                   );
                 },
                 icon: Image.asset(
@@ -488,7 +486,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchG10()),
+                    MaterialPageRoute(builder: (context) => const SearchG12()),
                   );
                 },
                 icon: Image.asset(
@@ -508,10 +506,10 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ResultG10()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => ResultG10()),
+                  // );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -540,7 +538,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     final userResultDoc = FirebaseFirestore.instance
-                        .collection('userResultG10')
+                        .collection('userResultG12')
                         .doc(user.uid);
 
                     final docSnapshot = await userResultDoc.get();
@@ -553,7 +551,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G10Intro()),
+                        MaterialPageRoute(builder: (context) => const G12Intro()),
                       );
                     }
                   }
@@ -571,14 +569,14 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
     );
   }
 }
-class G10Rules3 extends StatefulWidget {
-  const G10Rules3({super.key});
+class G12Rules3 extends StatefulWidget {
+  const G12Rules3({super.key});
 
   @override
-  _G10Rules3 createState() => _G10Rules3();
+  _G12Rules3 createState() => _G12Rules3();
 }
 
-class _G10Rules3 extends State<G10Rules3> {
+class _G12Rules3 extends State<G12Rules3> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -616,79 +614,50 @@ class _G10Rules3 extends State<G10Rules3> {
               ),
             ),
           ),
-
-      Center(
-        child: Container(
-          width: screenWidth * 0.80,
-          height: 380,
-          padding: const EdgeInsets.all(20),
-          margin: EdgeInsets.only(top: 100), // Adjust margin for overlap effect
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildRuleText('1. ', 'Read Carefully', 'Read each statement. If you agree with the statement, select the \'Agree\' button. Choose \'Disagree\' if otherwise. There are no wrong answers!'),
-              SizedBox(height: 10),
-              _buildRuleText('2. ', 'Result', 'Each statement corresponds to a category. The system will tally scores automatically.'),
-              SizedBox(height: 50),
-              Center(child:
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CareerG10()),
-                  );
-                  },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  backgroundColor: const Color.fromARGB(255, 159, 41, 33), // Customize the background color if needed
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+          // Centered 3D white container
+          Center(
+            child: Container(
+              width: screenWidth * 0.80,
+              height: 380,
+              padding: const EdgeInsets.all(20),
+              margin: EdgeInsets.only(top: 100), // Adjust margin for overlap effect
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min, // Keeps the button as small as needed
-                  children: const [
-                    Text(
-                      'View career pathways',
-                      style: TextStyle(
-                        color: Colors.white, // Customize text color if needed
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(width: 10), // Space between text and the arrow icon
-                    Icon(
-                      Icons.arrow_forward, // Arrow icon pointing to the right
-                      color: Colors.white,  // Customize icon color if needed
-                    ),
-                  ],
-                ),
+                ],
               ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildRuleText('1. ', 'One Attempt Only', 'You can take the test only once, so be prepared before starting.'),
+                  SizedBox(height: 10),
+                  _buildRuleText('2. ', 'Time-Limited', 'This is a speed test, so each question will have a strict time limit. Pay attention to the timer and answer as quickly and accurately as possible.'),
+                  SizedBox(height: 10),
+                  _buildRuleText('3. ', 'No Pausing', "Since it is a speed test, pauses aren't allowed."),
+                  SizedBox(height: 10),
+                  _buildRuleText('4. ', 'No Help Allowed', 'Complete the assessment independently, without external resources.'),
+                  SizedBox(height: 10),
+                  _buildRuleText('5. ', 'Result', 'Your results are final once submitted.'),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-      Positioned(
+          Positioned(
             right: 60.0,
             bottom: 30.0,
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const Questionnaire1G12()),
+                // );
               },
               child: const Text(
                 "Start",
@@ -775,7 +744,7 @@ class _G10Rules3 extends State<G10Rules3> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeG10()),
+                    MaterialPageRoute(builder: (context) => const HomeG12()),
                   );
                 },
                 icon: Image.asset(
@@ -788,7 +757,7 @@ class _G10Rules3 extends State<G10Rules3> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchG10()),
+                    MaterialPageRoute(builder: (context) => const SearchG12()),
                   );
                 },
                 icon: Image.asset(
@@ -808,10 +777,10 @@ class _G10Rules3 extends State<G10Rules3> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ResultG10()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => ResultG10()),
+                  // );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -840,7 +809,7 @@ class _G10Rules3 extends State<G10Rules3> {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     final userResultDoc = FirebaseFirestore.instance
-                        .collection('userResultG10')
+                        .collection('userResultG12')
                         .doc(user.uid);
 
                     final docSnapshot = await userResultDoc.get();
@@ -853,7 +822,7 @@ class _G10Rules3 extends State<G10Rules3> {
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G10Intro()),
+                        MaterialPageRoute(builder: (context) => const G12Intro()),
                       );
                     }
                   }
@@ -867,208 +836,6 @@ class _G10Rules3 extends State<G10Rules3> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CareerG10 extends StatelessWidget {
-  const CareerG10({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/back.png',  // Path to the image
-            width: 24,          // Set the width
-            height: 24,         // Set the height
-          ),
-          onPressed: () {
-            // Add back button functionality here
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-
-
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Which Career Pathway is right for you?', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
-            Divider(thickness: 1),
-            SizedBox(height: 15.0),
-            Center (child:
-            Text('Holland\'s Theory of Career Choice - RIASEC', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.left,),
-            ),
-            SizedBox(height: 15.0),
-            RichText(
-              text: TextSpan(
-                children: const [
-                  TextSpan(
-                    text: 'R = Realistic (STEM) \n',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    '- These people are often good at mechanical or athletic jobs. Good college majors for Realistic people are:\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '   • Agriculture\n   • Health Assistant\n   • Computers\n   • Construction\n   • Mechanic/Machinist\n   • Engineering\n   • Food\n',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                children: const [
-                  TextSpan(
-                    text: 'I = Investigate (STEM)\n',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    '- These people like to watch, learn, analyze and solve problems. Good college majors for Investigative people are:\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '   • Marine Biology\n   • Engineering\n   • Chemistry\n   • Zoology\n   • Medicine/Surgery\n   • Consumer Economics\n   • Psychology\n',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                children: const [
-                  TextSpan(
-                    text: 'A = Artistic (GAS)\n',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    '- These people like to work in unstructured situations where they can use their creativity. Good majors for Artistic people are:\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '   • Communications\n   • Cosmetology\n   • Fine and Performing Arts\n   • Photography\n   • Radio and TV\n   • Interior Design\n   • Architecture\n',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                children: const [
-                  TextSpan(
-                    text: 'S = Social (HUMSS)\n',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    '- These people like to work with other people, rather than things. Good college majors for Social people are:\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '   • Counseling\n   • Nursing\n   • Physical Theraphy\n   • Travel\n   • Advertising\n   • Public Relations\n   • Education',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                children: const [
-                  TextSpan(
-                    text: 'E = Enterprising (ABM)\n',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    '-These people like to work with others and enjoy persuading and and performing. Good college majors for Enterprising people are:\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '   • Fashion Merchandising\n   • Real Estate\n   • Marketing/Sales\n   • Law\n   • Political Science\n   • International Trade\n',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: const [
-                  TextSpan(
-                    text: 'C = Convenional (ABM)\n',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    'These people are very detail oriented,organized and like to work with data. Good college majors for Conventional people are\n',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                    ),
-                  ),
-                  TextSpan(
-                    text: '   • Accounting\n   • Court Reporting\n   • Insurance\n   • Administration\n   • Medical Records\n   • Banking\n   • Data Processing\n',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

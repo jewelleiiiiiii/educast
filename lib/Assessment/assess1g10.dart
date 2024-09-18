@@ -8,7 +8,7 @@ import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 
 class Questionnaire1G10 extends StatefulWidget {
-  const Questionnaire1G10({Key? key}) : super(key: key);
+  const Questionnaire1G10({super.key});
 
   @override
   _Questionnaire1G10 createState() => _Questionnaire1G10();
@@ -126,7 +126,6 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     return Scaffold(
@@ -290,7 +289,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                       ],
                                     ),
                                   );
-                                }).toList(),
+                                }),
                               ],
                             ),
                           ],

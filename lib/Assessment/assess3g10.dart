@@ -16,7 +16,7 @@ class Questionnaire3G10 extends StatefulWidget {
 
 class _Questionnaire3G10 extends State<Questionnaire3G10> {
   List<String> _questions = List.generate(10, (index) => '');
-  List<int?> _selectedOptions = List.generate(10, (index) => null);
+  final List<int?> _selectedOptions = List.generate(10, (index) => null);
 
   @override
   void initState() {

@@ -9,7 +9,7 @@ import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 
 class G10Intro extends StatefulWidget {
-  const G10Intro({Key? key}) : super(key: key);
+  const G10Intro({super.key});
 
   @override
   _G10Intro createState() => _G10Intro();
@@ -33,7 +33,7 @@ class _G10Intro extends State<G10Intro> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => G10Rules()),
-          ); // Navigate to G10Rules page
+          ); // Navigate to G10Rules.dart page
         }
       });
     });
@@ -228,3 +228,5 @@ class _G10Intro extends State<G10Intro> {
     );
   }
 }
+
+

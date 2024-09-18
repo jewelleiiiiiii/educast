@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/Rules/G10Intro.dart';
 import 'package:myapp/Assessment/assess4g10.dart';
 import 'package:myapp/Home/homeg10.dart';
 import 'package:myapp/Result/resultg10.dart';

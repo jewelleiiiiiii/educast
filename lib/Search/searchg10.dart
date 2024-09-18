@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/Rules/G10Intro.dart';
 import 'package:myapp/Assessment/assess4g10.dart';
 import 'package:myapp/Result/resultg10.dart';
 import '../Home/Info/Abm.dart';
@@ -326,7 +326,6 @@ class _SearchG10 extends State<SearchG10> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final iconSize = screenWidth * 0.10;
 
     return Scaffold(
@@ -450,25 +449,29 @@ class _SearchG10 extends State<SearchG10> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0,16, 0),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                     child: Align(
-                      alignment: Alignment.centerRight,
-                      child: DropdownButton<String>(
-                        dropdownColor: Colors.white,
-                        value: selectedFilter,
-                        items: <String>['All', 'STEM', 'ABM', 'GAS', 'HUMSS']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedFilter = newValue ?? 'All';
-                            _fetchTopCourses(); // Fetch new data when filter changes
-                          });
-                        },
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 80,
+                        child: DropdownButton<String>(
+                          dropdownColor: Colors.white,
+                          value: selectedFilter,
+                          isExpanded: true, // Ensures the dropdown button takes the full width
+                          items: <String>['All', 'STEM', 'ABM', 'GAS', 'HUMSS']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedFilter = newValue ?? 'All';
+                              _fetchTopCourses(); // Fetch new data when filter changes
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ),

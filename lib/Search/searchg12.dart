@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/Rules/G12Intro.dart';
 import 'package:myapp/Assessment/assess4g10.dart';
+import 'package:myapp/Home/homeg12.dart';
 import 'package:myapp/Result/resultg10.dart';
 import '../Home/Info/Abm.dart';
 import '../Home/Info/GAS.dart';
@@ -21,186 +22,16 @@ class SearchG12 extends StatefulWidget {
 class _SearchG12 extends State<SearchG12> {
   List<String> searchResults = [];
   List<String> visibleResults = [];
-  List<Map<String, dynamic>> topCourses = [];
   bool showSearchResults = false;
   TextEditingController searchController = TextEditingController();
-  String selectedFilter = 'All'; // Default value for the dropdown
-
+  String selectedStrand = '';
+  String selectedOption = 'All';
 
   @override
   void initState() {
     super.initState();
     visibleResults.addAll(searchResults.take(2));
-    _fetchTopCourses();
   }
-
-  Future<void> _fetchTopCourses() async {
-    try {
-      final collectionRef = FirebaseFirestore.instance.collection('TopCoursesInBatStateU');
-
-      final Map<String, List<String>> filterCourses = {
-        'STEM': [
-          'Bachelor of Automotive Engineering Technology',
-          'Bachelor of Civil Engineering Technology',
-          'Bachelor of Computer Engineering Technology',
-          'Bachelor of Drafting Engineering Technology',
-          'Bachelor of Electrical Engineering Technology',
-          'Bachelor of Food Engineering Technology',
-          'Bachelor of Mechanical Engineering Technology',
-          'Bachelor of Mechatronics Engineering Technology',
-          'Bachelor of Science in Criminology',
-          'Bachelor of Science in Psychology',
-          'Bachelor of Science in Information Technology',
-        ],
-        'ABM': [
-          'Bachelor of Science in Criminology',
-        ],
-        'HUMSS': [
-          'Bachelor of Science in Criminology',
-          'Bachelor of Science in Psychology',
-        ],
-        'GAS': [
-          'Bachelor of Automotive Engineering Technology',
-          'Bachelor of Civil Engineering Technology',
-          'Bachelor of Computer Engineering Technology',
-          'Bachelor of Drafting Engineering Technology',
-          'Bachelor of Electrical Engineering Technology',
-          'Bachelor of Food Engineering Technology',
-          'Bachelor of Mechanical Engineering Technology',
-          'Bachelor of Mechatronics Engineering Technology',
-          'Bachelor of Science in Criminology',
-          'Bachelor of Science in Psychology',
-        ],
-      };
-
-
-      final List<String> coursesToRetrieve = selectedFilter == 'All'
-          ? []  // Empty list to get all fields
-          : filterCourses[selectedFilter] ?? [];
-
-      List<Map<String, dynamic>> courses = [];
-
-      // Query the collection
-      final querySnapshot = await collectionRef.get();
-
-      // Loop through documents in the collection
-      for (var docSnapshot in querySnapshot.docs) {
-        final data = docSnapshot.data() as Map<String, dynamic>;
-
-        if (selectedFilter == 'All') {
-          // For 'All' filter, iterate over all fields in the document
-          data.forEach((fieldName, value) {
-            String label;
-            switch (fieldName) {
-              case "Bachelor of Science in Information Technology":
-                label = "BSIT";
-                break;
-              case "Bachelor of Automotive Engineering Technology":
-                label = "BAET";
-                break;
-              case "Bachelor of Civil Engineering Technology":
-                label = "BCET";
-                break;
-              case "Bachelor of Computer Engineering Technology":
-                label = "BCompET";
-                break;
-              case "Bachelor of Drafting Engineering Technology":
-                label = "BDT";
-                break;
-              case "Bachelor of Electrical Engineering Technology":
-                label = "BEET";
-                break;
-              case "Bachelor of Electronics Engineering Technology":
-                label = "BElET";
-                break;
-              case "Bachelor of Food Engineering Technology":
-                label = "BFET";
-                break;
-              case "Bachelor of Mechanical Engineering Technology":
-                label = "BMET";
-                break;
-              case "Bachelor of Mechatronics Engineering Technology":
-                label = "BMTET";
-                break;
-              case "Bachelor of Science in Criminology":
-                label = "BSCrim";
-                break;
-              case "Bachelor of Science in Psychology":
-                label = "BSPsych";
-                break;
-              default:
-                label = "Other";
-                break;
-            }
-            // Add the course to the list
-            courses.add({'label': label, 'value': value});
-          });
-        } else {
-          // For other filters, use the provided course list
-          for (String fieldName in coursesToRetrieve) {
-            final value = data[fieldName];
-            if (value != null) {
-              String label;
-              switch (fieldName) {
-                case "Bachelor of Science in Information Technology":
-                  label = "BSIT";
-                  break;
-                case "Bachelor of Automotive Engineering Technology":
-                  label = "BAET";
-                  break;
-                case "Bachelor of Civil Engineering Technology":
-                  label = "BCET";
-                  break;
-                case "Bachelor of Computer Engineering Technology":
-                  label = "BCompET";
-                  break;
-                case "Bachelor of Drafting Engineering Technology":
-                  label = "BDT";
-                  break;
-                case "Bachelor of Electrical Engineering Technology":
-                  label = "BEET";
-                  break;
-                case "Bachelor of Electronics Engineering Technology":
-                  label = "BElET";
-                  break;
-                case "Bachelor of Food Engineering Technology":
-                  label = "BFET";
-                  break;
-                case "Bachelor of Mechanical Engineering Technology":
-                  label = "BMET";
-                  break;
-                case "Bachelor of Mechatronics Engineering Technology":
-                  label = "BMTET";
-                  break;
-                case "Bachelor of Science in Criminology":
-                  label = "BSCrim";
-                  break;
-                case "Bachelor of Science in Psychology":
-                  label = "BSPsych";
-                  break;
-                default:
-                  label = "Other";
-                  break;
-              }
-              courses.add({'label': label, 'value': value});
-            }
-          }
-        }
-      }
-
-      // Sort the courses by value in descending order
-      courses.sort((a, b) => b['value'].compareTo(a['value']));
-
-      // Update the state with the fetched courses
-      setState(() {
-        topCourses = courses;
-      });
-    } catch (e) {
-      print('Error fetching top courses: $e');
-    }
-  }
-
-
 
   void removeSearchResult(int index) {
     setState(() {
@@ -325,8 +156,10 @@ class _SearchG12 extends State<SearchG12> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     final iconSize = screenWidth * 0.10;
 
     return Scaffold(
@@ -347,22 +180,25 @@ class _SearchG12 extends State<SearchG12> {
         ),
       ),
       body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/bg7.png',
-              fit: BoxFit.cover,
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/bg7.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 160), // Keep the top scroll cut at 150
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 10), // Adjust bottom padding for spacing
+            Padding(
+              padding: const EdgeInsets.only(top: 170),
+              child: SingleChildScrollView(
+                child: Container( // Wrap Column in Container
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height - 160, // Adjust based on top padding
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 10),
                       child: Row(
                         children: [
                           Expanded(
@@ -384,109 +220,100 @@ class _SearchG12 extends State<SearchG12> {
                         ],
                       ),
                     ),
-                  ),
-                  // Rest of your widgets go here
-                  if (showSearchResults) ...[
-                    for (int i = 0; i < visibleResults.length; i++)
-                      SearchResultTile(
-                        text: visibleResults[i],
-                        onTap: () {
-                          navigateToScreen(visibleResults[i]);
-                        },
-                      ),
-                    if (searchResults.length > 3) ...[
-                      const SizedBox(height: 10.0),
-                      TextButton(
-                        onPressed: toggleSeeMore,
-                        child: Text(
-                          visibleResults.length < searchResults.length
-                              ? 'See More'
-                              : 'See Less',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
+
+                    if (showSearchResults) ...[
+                      for (int i = 0; i < visibleResults.length; i++)
+                        SearchResultTile(
+                          text: visibleResults[i],
+                          onTap: () {
+                            navigateToScreen(visibleResults[i]);
+                          },
+                        ),
+                      if (searchResults.length > 3) ...[
+                        const SizedBox(height: 10.0),
+                        Center(child:
+                        TextButton(
+                          onPressed: toggleSeeMore,
+                          child: Text(
+                            visibleResults.length < searchResults.length
+                                ? 'See More'
+                                : 'See Less',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                          ),
+                        Center(child: const Icon(Icons.keyboard_arrow_down),
+                        ),
+                      ],
+                    ],
+
+                      const SizedBox(height: 20.0),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'You may like',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                      const Icon(Icons.keyboard_arrow_down),
-                    ],
-                  ],
-                  const SizedBox(height: 20.0),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'You may like',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: YouMayLikeTile(),
                       ),
-                    ),
-                  ),
-                  for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
-                    YouMayLikeTile(
-                      title: title,
-                      onTap: () {
-                        navigateToScreen(title);
-                      },
-                    ),
-                  const SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16,16,0),
-                    child: Align(
-                      alignment: Alignment.center,
+                    const SizedBox(height: 30.0),
+                    Center(
                       child: Text(
                         'Top Courses in BatStateU-TNEU',
                         style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      ),
+                    ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0,16,0),
+                        child: DynamicDropdownWidget(
+                          onDropdownChanged: (strand, option) {
+                            setState(() {
+                              selectedStrand = strand;
+                              selectedOption = option;
+                            });
+                          },
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0,16, 0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: DropdownButton<String>(
-                        dropdownColor: Colors.white,
-                        value: selectedFilter,
-                        items: <String>['All', 'STEM', 'ABM', 'GAS', 'HUMSS']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedFilter = newValue ?? 'All';
-                            _fetchTopCourses(); // Fetch new data when filter changes
-                          });
-                        },
+                      const SizedBox(height: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: TopCoursesBarChart(
+                          strand: selectedStrand,
+                          selectedOption: selectedOption,
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding (
-                    padding: EdgeInsets.all(20),
-                    child:
-                    TopCoursesBarChart(topCourses: topCourses),
-                  ),
-                  const SizedBox(height: 30.0),
-                  // Add the chart here
-                ],
+                      const SizedBox(height: 50.0),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+
+    ),
+          ],
+        ),
       bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -513,7 +340,7 @@ class _SearchG12 extends State<SearchG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                      MaterialPageRoute(builder: (context) => const HomeG12()),
                     );
                   },
                   icon: Image.asset(
@@ -526,7 +353,8 @@ class _SearchG12 extends State<SearchG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG12()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchG12()),
                     );
                   },
                   icon: Image.asset(
@@ -561,7 +389,10 @@ class _SearchG12 extends State<SearchG12> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -587,15 +418,16 @@ class _SearchG12 extends State<SearchG12> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) =>
+                                  SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => G10Intro()),
+                          MaterialPageRoute(builder: (context) => G12Intro()),
                         );
                       }
-                    } else {}
+                    }
                   },
                   icon: Image.asset(
                     'assets/main.png',
@@ -612,7 +444,7 @@ class _SearchG12 extends State<SearchG12> {
   }
 }
 
-class SearchResultTile extends StatelessWidget {
+  class SearchResultTile extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
@@ -632,123 +464,594 @@ class SearchResultTile extends StatelessWidget {
 }
 
 class YouMayLikeTile extends StatelessWidget {
-  final String title;
-  final VoidCallback onTap;
+  const YouMayLikeTile({super.key});
 
-  const YouMayLikeTile({super.key,
-    required this.title,
-    required this.onTap,
-  });
+  Future<List<String>> getTopTitles() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return []; // User is not authenticated
+
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(
+        user.uid).get();
+    if (!userDoc.exists) return []; // User document doesn't exist
+
+    final strand = userDoc.data()?['strand'] ?? '';
+
+    // Define fields based on the strand
+    final fields = <String>[
+      'Bachelor of Automotive Engineering Technology',
+      'Bachelor of Civil Engineering Technology',
+      'Bachelor of Computer Engineering Technology',
+      'Bachelor of Drafting Engineering Technology',
+      'Bachelor of Electrical Engineering Technology',
+      'Bachelor of Food Engineering Technology',
+      'Bachelor of Mechanical Engineering Technology',
+      'Bachelor of Mechatronics Engineering Technology',
+      'Bachelor of Science in Criminology',
+      'Bachelor of Science in Psychology',
+      'Bachelor of Science in Information Technology',
+    ];
+
+    List<String> specificFields;
+    switch (strand) {
+      case "Science, Technology, Engineering, and Mathematics":
+        specificFields = fields;
+        break;
+      case "Accountancy, Business, and Management":
+        specificFields = ['Bachelor of Science in Criminology'];
+        break;
+      case "Humanities and Social Sciences":
+        specificFields = [
+          'Bachelor of Science in Criminology',
+          'Bachelor of Science in Psychology'
+        ];
+        break;
+      case "General Academic Strand":
+        specificFields = fields.sublist(0, fields.length -
+            1); // Exclude 'Bachelor of Science in Information Technology'
+        break;
+      default:
+        return [];
+    }
+
+    // Fetch all documents from the collection
+    final querySnapshot = await FirebaseFirestore.instance.collection(
+        'TopCoursesInBatStateU').get();
+
+    // Create a map to aggregate the values
+    final courseMap = <String, num>{};
+    for (final doc in querySnapshot.docs) {
+      final courseData = doc.data();
+      for (var field in specificFields) {
+        final value = courseData[field] as num? ??
+            0; // Assuming value is numeric
+        if (courseMap.containsKey(field)) {
+          courseMap[field] =
+              (courseMap[field] ?? 0) + value; // Aggregate values if necessary
+        } else {
+          courseMap[field] = value;
+        }
+      }
+    }
+
+    // Create a list of course names and their values
+    final courseList = <Map<String, dynamic>>[];
+    for (var field in specificFields) {
+      final value = courseMap[field] ?? 0; // Default to 0 if not found
+      courseList.add({'name': field, 'value': value});
+    }
+
+    // Sort by value and get the top 4
+    courseList.sort((a, b) => b['value'].compareTo(a['value']));
+    final topTitles = courseList.take(4)
+        .map((e) => e['name'] as String)
+        .toList();
+
+    return topTitles;
+  }
+
+
+  void _navigateToPage(String title, BuildContext context) {
+    Widget page;
+    switch (title) {
+      case 'Bachelor of Automotive Engineering Technology':
+      case 'Bachelor of Civil Engineering Technology':
+      case 'Bachelor of Computer Engineering Technology':
+      case 'Bachelor of Drafting Engineering Technology':
+      case 'Bachelor of Electrical Engineering Technology':
+      case 'Bachelor of Food Engineering Technology':
+      case 'Bachelor of Mechanical Engineering Technology':
+      case 'Bachelor of Mechatronics Engineering Technology':
+        page = StemInfo(); // Adjust as needed
+        break;
+      case 'Bachelor of Science in Criminology':
+        page = AbmInfo();
+        break;
+      case 'Bachelor of Science in Psychology':
+        page = HumssInfo();
+        break;
+      case 'Bachelor of Science in Information Technology':
+        page = GasInfo();
+        break;
+      default:
+        page = Scaffold(
+          body: Center(child: Text('No page available for $title')),
+        );
+        break;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.local_fire_department),
-      title: Text(title),
-      onTap: onTap,
+    return FutureBuilder<List<String>>(
+      future: getTopTitles(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return ListTile(
+            leading: const Icon(Icons.local_fire_department),
+            title: Text('Loading...'),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return ListTile(
+            leading: const Icon(Icons.local_fire_department),
+            title: Text('Error: ${snapshot.error}'),
+          );
+        }
+
+        final topTitles = snapshot.data ?? [];
+
+        // Limit to 4 titles, or show all if fewer than 4
+        final displayTitles = topTitles.length > 4
+            ? topTitles.take(4).toList()
+            : topTitles;
+
+        return Column(
+          children: displayTitles
+              .map((title) =>
+              Column(
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(vertical: -10.0, horizontal: 10),
+                    // Adjust vertical padding as needed
+                    leading: const Icon(Icons.local_fire_department),
+                    title: Text(title),
+                    onTap: () {
+                      _navigateToPage(title, context);
+                    },
+                  ), // Adjust spacing between ListTiles
+                ],
+              ))
+              .toList(),
+        );
+      },
     );
   }
 }
 
-class TopCoursesBarChart extends StatelessWidget {
-  final List<Map<String, dynamic>> topCourses;
 
-  const TopCoursesBarChart({Key? key, required this.topCourses}) : super(key: key);
+  class DynamicDropdownWidget extends StatefulWidget {
+  final Function(String strand, String selectedOption) onDropdownChanged;
+
+  const DynamicDropdownWidget({Key? key, required this.onDropdownChanged}) : super(key: key);
+
+  @override
+  _DynamicDropdownWidgetState createState() => _DynamicDropdownWidgetState();
+}
+
+class _DynamicDropdownWidgetState extends State<DynamicDropdownWidget> {
+  String? selectedOption;
+  String userStrand = '';
+  List<String> dropdownOptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserStrandAndOptions();
+  }
+
+  Future<void> _fetchUserStrandAndOptions() async {
+    try {
+      // Fetch the current user's UID
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+      // Fetch the user's strand from Firestore
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (userDoc.exists) {
+        setState(() {
+          userStrand = userDoc['strand'] ?? 'Unknown Strand';
+          dropdownOptions = _getDropdownOptionsForStrand(userStrand);
+          selectedOption = dropdownOptions.first;
+          // Notify the parent widget with the initial values
+          widget.onDropdownChanged(userStrand, selectedOption!);
+        });
+      }
+    } catch (e) {
+      print('Error fetching user strand: $e');
+    }
+  }
+
+  // Return dropdown options based on the user's strand
+  List<String> _getDropdownOptionsForStrand(String strand) {
+    switch (strand) {
+      case 'Science, Technology, Engineering, and Mathematics':
+        return ['All', 'CAS', 'CET', 'CICS'];
+      case 'Accountancy, Business, and Management':
+        return ['All', 'CAS'];
+      case 'Humanities and Social Sciences':
+        return ['All', 'CAS'];
+      case 'General Academic Strand':
+        return ['All', 'CAS', 'CET'];
+      default:
+        return ['All']; // Default case for other strands
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Get screen height
-    double screenHeight = MediaQuery.of(context).size.height;
+    return dropdownOptions.isEmpty
+        ? Center(child: CircularProgressIndicator()) // Show loader while fetching data
+        : Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButton<String>(
+              value: selectedOption,
+              items: dropdownOptions.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedOption = newValue;
+                  widget.onDropdownChanged(userStrand, selectedOption!);
+                });
+              },
+            ),
+          ),
+        ],
+      )
+    );
+  }
+}
+class TopCoursesBarChart extends StatefulWidget {
+  final String strand;
+  final String selectedOption;
 
-    // Define the minimum width for the chart
-    double minWidth = 300.0; // Adjust this value as needed
+  const TopCoursesBarChart({
+    Key? key,
+    required this.strand,
+    required this.selectedOption,
+  }) : super(key: key);
 
-    // Calculate dynamic width
-    double dynamicWidth = topCourses.length * 100.0;
+  @override
+  _TopCoursesBarChartState createState() => _TopCoursesBarChartState();
+}
 
+class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
+  List<Map<String, dynamic>> topCourses = [];
+
+  Future<void> _fetchTopCourses() async {
+    try {
+      CollectionReference coursesCollection =
+      FirebaseFirestore.instance.collection('TopCoursesInBatStateU');
+
+      QuerySnapshot querySnapshot = await coursesCollection.get();
+
+      // Extract fields from each document
+      setState(() {
+        topCourses = querySnapshot.docs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+          // Filter the data based on the fields relevant to the selected strand and option
+          Map<String, dynamic> filteredCourses = {};
+          data.forEach((key, value) {
+            if (_isRelevantCourse(key)) {
+              filteredCourses[key] = value;
+            }
+          });
+
+          // Convert the filtered data into a list of course info
+          return filteredCourses.entries.map((entry) {
+            return {
+              'label': entry.key,
+              'value': entry.value ?? 0,
+            };
+          }).toList();
+        }).expand((element) => element).toList(); // Flatten the list
+      });
+    } catch (e) {
+      print('Error fetching top courses: $e');
+    }
+  }
+
+  bool _isRelevantCourse(String courseName) {
+    List<String> relevantCourses = [];
+
+    if (widget.strand == 'Science, Technology, Engineering, and Mathematics') {
+      switch (widget.selectedOption) {
+        case 'All':
+          relevantCourses = [
+            'Bachelor of Automotive Engineering Technology',
+            'Bachelor of Civil Engineering Technology',
+            'Bachelor of Computer Engineering Technology',
+            'Bachelor of Drafting Engineering Technology',
+            'Bachelor of Electrical Engineering Technology',
+            'Bachelor of Food Engineering Technology',
+            'Bachelor of Mechanical Engineering Technology',
+            'Bachelor of Mechatronics Engineering Technology',
+            'Bachelor of Science in Criminology',
+            'Bachelor of Science in Psychology',
+            'Bachelor of Science in Information Technology'
+          ];
+          break;
+        case 'CAS':
+          relevantCourses = [
+            'Bachelor of Science in Criminology',
+            'Bachelor of Science in Psychology'
+          ];
+          break;
+        case 'CET':
+          relevantCourses = [
+            'Bachelor of Automotive Engineering Technology',
+            'Bachelor of Civil Engineering Technology',
+            'Bachelor of Computer Engineering Technology',
+            'Bachelor of Drafting Engineering Technology',
+            'Bachelor of Electrical Engineering Technology',
+            'Bachelor of Food Engineering Technology',
+            'Bachelor of Mechanical Engineering Technology',
+            'Bachelor of Mechatronics Engineering Technology'
+          ];
+          break;
+        case 'CICS':
+          relevantCourses = [
+            'Bachelor of Science in Information Technology'
+          ];
+          break;
+      }
+    } else if (widget.strand == 'Accountancy, Business, and Management') {
+      switch (widget.selectedOption) {
+        case 'All':
+          relevantCourses = [
+            'Bachelor of Science in Criminology',
+          ];
+          break;
+        case 'CAS':
+          relevantCourses = [
+            'Bachelor of Science in Criminology',
+          ];
+          break;
+      }
+    } else if (widget.strand == 'Humanities and Social Sciences') {
+      switch (widget.selectedOption) {
+        case 'All':
+          relevantCourses = [
+            'Bachelor of Science in Criminology',
+            'Bachelor of Science in Psychology',
+          ];
+          break;
+        case 'CAS':
+          relevantCourses = [
+            'Bachelor of Science in Criminology',
+            'Bachelor of Science in Psychology',
+          ];
+          break;
+      }
+    } else if (widget.strand == 'General Academic Strand') {
+      switch (widget.selectedOption) {
+        case 'All':
+          relevantCourses = [
+            'Bachelor of Automotive Engineering Technology',
+            'Bachelor of Civil Engineering Technology',
+            'Bachelor of Computer Engineering Technology',
+            'Bachelor of Drafting Engineering Technology',
+            'Bachelor of Electrical Engineering Technology',
+            'Bachelor of Food Engineering Technology',
+            'Bachelor of Mechanical Engineering Technology',
+            'Bachelor of Mechatronics Engineering Technology',
+            'Bachelor of Science in Criminology',
+            'Bachelor of Science in Psychology',
+          ];
+          break;
+        case 'CAS':
+          relevantCourses = [
+            'Bachelor of Science in Criminology',
+            'Bachelor of Science in Psychology'
+          ];
+          break;
+        case 'CET':
+          relevantCourses = [
+            'Bachelor of Automotive Engineering Technology',
+            'Bachelor of Civil Engineering Technology',
+            'Bachelor of Computer Engineering Technology',
+            'Bachelor of Drafting Engineering Technology',
+            'Bachelor of Electrical Engineering Technology',
+            'Bachelor of Food Engineering Technology',
+            'Bachelor of Mechanical Engineering Technology',
+            'Bachelor of Mechatronics Engineering Technology'
+          ];
+          break;
+      }
+    }
+
+
+    return relevantCourses.contains(courseName);
+  }
+
+  @override
+  void didUpdateWidget(TopCoursesBarChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.strand != widget.strand || oldWidget.selectedOption != widget.selectedOption) {
+      _fetchTopCourses();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTopCourses(); // Fetch courses initially
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
-      height: screenHeight / 2, // Half of the screen height
-      child: topCourses.isEmpty
-          ? Center(child: Text('No data available'))
-          : SingleChildScrollView(
-        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-        child: SizedBox(
-          width: dynamicWidth > minWidth ? dynamicWidth : minWidth, // Use max of dynamic and min width
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceEvenly,
-              maxY: 1000, // Set the max Y-axis value
-              barTouchData: BarTouchData(enabled: false),
-              titlesData: FlTitlesData(
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 60, // Increase reserved space for Y-axis labels
-                    interval: 200, // Set interval to display 0, 200, 400, 600, 800
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 60, // Same reserved size as the left
-                    interval: 200, // Same interval for right Y-axis
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      int index = value.toInt();
-                      if (index >= 0 && index < topCourses.length) {
-                        return Text(topCourses[index]['label']);
-                      } else {
-                        return const Text(''); // Return empty if out of bounds
-                      }
-                    },
-                  ),
+      height: 300, // Fixed height for the chart
+      child: TopCoursesChart(topCourses: topCourses),
+    );
+  }
+}
+
+class TopCoursesChart extends StatelessWidget {
+  final List<Map<String, dynamic>> topCourses;
+
+  const TopCoursesChart({Key? key, required this.topCourses}) : super(key: key);
+
+  // Define the interval for Y-axis
+  final double interval = 200.0;
+
+  // Method to get the maximum Y value from the data
+  double _getMaxYValue() {
+    return topCourses.isNotEmpty
+        ? topCourses.map((course) => course['value'].toDouble()).reduce((a, b) => a > b ? a : b)
+        : 0.0;
+  }
+
+  // Method to round up to the nearest multiple of the interval
+  double _roundUpToNearestInterval(double value, double interval) {
+    if (value <= 0) return interval;
+    return (value / interval).ceil() * interval;
+  }
+
+  // Method to get a short course name
+  String _getShortCourseName(String longName) {
+    Map<String, String> courseNameMap = {
+      "Bachelor of Science in Information Technology": "BSIT",
+      "Bachelor of Automotive Engineering Technology": "BAET",
+      "Bachelor of Civil Engineering Technology": "BCET",
+      "Bachelor of Computer Engineering Technology": "BCompET",
+      "Bachelor of Drafting Engineering Technology": "BDT",
+      "Bachelor of Electrical Engineering Technology": "BEET",
+      "Bachelor of Electronics Engineering Technology": "BElET",
+      "Bachelor of Food Engineering Technology": "BFET",
+      "Bachelor of Mechanical Engineering Technology": "BMET",
+      "Bachelor of Mechatronics Engineering Technology": "BMTET",
+      "Bachelor of Science in Criminology": "BSCrim",
+      "Bachelor of Science in Psychology": "BSPsych",
+    };
+
+    return courseNameMap[longName] ?? longName;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Sort courses by value in descending order
+    List<Map<String, dynamic>> sortedCourses = List.from(topCourses)
+      ..sort((a, b) => b['value'].compareTo(a['value']));
+
+    // Get the screen width
+    double screenWidth = MediaQuery.of(context).size.width - 10;
+
+    // Calculate dynamic width based on the number of courses
+    double dynamicWidth = sortedCourses.length * 100.0;
+
+    // Use the maximum of dynamic width and screen width
+    double chartWidth = dynamicWidth > screenWidth ? dynamicWidth : screenWidth;
+
+    // Get the maximum Y value for the chart and round up
+    double maxYValue = _getMaxYValue();
+    double roundedMaxY = _roundUpToNearestInterval(maxYValue, interval);
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SizedBox(
+        width: chartWidth, // Set the width to the calculated chart width
+        child: BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.spaceEvenly,
+            maxY: roundedMaxY, // Set the max Y-axis value dynamically
+            barTouchData: BarTouchData(enabled: false),
+            titlesData: FlTitlesData(
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 60, // Increase reserved space for Y-axis labels
+                  interval: interval, // Set interval based on defined value
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    return Text(
+                      value.toInt().toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
                 ),
               ),
-              borderData: FlBorderData(show: false),
-              barGroups: topCourses
-                  .asMap()
-                  .map((index, course) {
-                return MapEntry(
-                  index,
-                  BarChartGroupData(
-                    x: index,
-                    barRods: [
-                      BarChartRodData(
-                        toY: course['value'].toDouble(), // Use the actual value from the database
-                        color: Color.fromARGB(255, 158, 39, 39),
-                        width: 20,
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 60, // Same reserved space for right axis
+                  interval: interval, // Same interval as left axis
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    return Text(
+                      value.toInt().toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                );
-              })
-                  .values
-                  .toList(),
+                    );
+                  },
+                ),
+              ),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    int index = value.toInt();
+                    if (index >= 0 && index < sortedCourses.length) {
+                      String shortName = _getShortCourseName(sortedCourses[index]['label']);
+                      return Text(shortName);
+                    } else {
+                      return const Text(''); // Return empty if out of bounds
+                    }
+                  },
+                ),
+              ),
             ),
+            borderData: FlBorderData(show: false),
+            barGroups: sortedCourses
+                .asMap()
+                .map((index, course) {
+              return MapEntry(
+                index,
+                BarChartGroupData(
+                  x: index,
+                  barRods: [
+                    BarChartRodData(
+                      toY: course['value'].toDouble(), // Use the actual value from the database
+                      color: Color.fromARGB(255, 158, 39, 39),
+                      width: 20,
+                    ),
+                  ],
+                ),
+              );
+            })
+                .values
+                .toList(),
           ),
         ),
       ),

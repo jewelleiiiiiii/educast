@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/G10Intro.dart';
+import 'package:myapp/Assessment/Rules/G12Intro.dart';
 import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg10.dart';
 import 'package:myapp/Home/homeg12.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
@@ -301,7 +300,7 @@ class _UserG12 extends State<UserG12> {
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => G10Intro()),
+                          MaterialPageRoute(builder: (context) => G12Intro()),
                         );
                       }
                     } else {}

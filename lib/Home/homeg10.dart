@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/G10Intro.dart';
-import 'package:myapp/Assessment/assess1g10.dart';
+import 'package:myapp/Assessment/Rules/G10Intro.dart';
 import 'package:myapp/Assessment/assess4g10.dart';
 import 'package:myapp/Home/Info/Abm.dart';
 import 'package:myapp/Home/Info/GAS.dart';
 import 'package:myapp/Home/Info/HUMSS.dart';
 import 'package:myapp/Home/Info/STEM.dart';
-import 'package:myapp/Home/UserG10/UserG10.dart';
-import 'package:myapp/Home/tryy.dart';
+import 'package:myapp/Home/User/UserG10.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';

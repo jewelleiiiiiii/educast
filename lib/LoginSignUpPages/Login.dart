@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/Home/Home4th.dart';
 import 'package:myapp/Home/homeg12.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:myapp/LoginSignUpPages/Signup.dart';
@@ -66,12 +67,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             } else if (gradeLevel == 'Fourth-year College') {
-              // Navigator.pushReplacement(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => home4th(),
-              //   ),
-              // );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Home4th(),
+                ),
+              );
             } else {
               // If no valid grade level is found
               showSnackBar(context, 'Grade level not recognized.');

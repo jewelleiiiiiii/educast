@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/Home/homeg10.dart';
 import 'package:myapp/Home/homeg12.dart';
-import 'package:myapp/Search/searchg10.dart';
 
 class AcademicAutomotiveScreen extends StatelessWidget {
   const AcademicAutomotiveScreen({super.key});

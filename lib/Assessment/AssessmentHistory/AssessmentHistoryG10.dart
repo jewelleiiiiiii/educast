@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/assess2g10.dart';
 import 'package:myapp/Home/homeg10.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:myapp/Search/searchg10.dart';
 
 class AssessmentHistoryG10 extends StatefulWidget {
-  const AssessmentHistoryG10({Key? key}) : super(key: key);
+  const AssessmentHistoryG10({super.key});
 
   @override
   _AssessmentHistoryG10 createState() => _AssessmentHistoryG10();

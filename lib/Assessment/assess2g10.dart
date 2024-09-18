@@ -8,7 +8,7 @@ import 'package:myapp/Search/searchg10.dart';
 class Questionnaire2G10 extends StatefulWidget {
   final Map<String, int>? previousAnswers;
 
-  const Questionnaire2G10({Key? key, this.previousAnswers}) : super(key: key);
+  const Questionnaire2G10({super.key, this.previousAnswers});
 
   @override
   _Questionnaire2G10 createState() => _Questionnaire2G10();

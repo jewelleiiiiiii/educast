@@ -1,106 +1,73 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/Rules/G12Intro.dart';
+import 'package:myapp/Assessment/Rules/4thIntro.dart';
+import 'package:myapp/Assessment/assess4g10.dart';
 import 'package:myapp/Home/Info/programsSelection.dart';
-import 'package:myapp/Home/User/UserG12.dart';
+import 'package:myapp/Home/User/User4th.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/Result/resultg10.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:myapp/Search/searchg12.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
-class HomeG12 extends StatefulWidget {
-  const HomeG12({super.key,});
+class Home4th extends StatefulWidget {
+  const Home4th({super.key,});
 
   @override
-  _HomeG12State createState() => _HomeG12State();
+  _Home4thState createState() => _Home4thState();
 }
 
-class _HomeG12State extends State<HomeG12> {
+class _Home4thState extends State<Home4th> {
   int _currentSlideIndex = 0;
   bool _isDrawerOpen = false;
-  String? userStrand;
-  List<String> courses = [];
-  String relatedProgramsText = '';
   String? firstName;
+  String? userCourse;
+  String relatedJobsText = "Related Jobs";
+  List<String> jobs = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchUserStrand();
-    _fetchUserFirstName();
+    _fetchUserData();
   }
 
-  void _fetchUserStrand() async {
+  void _fetchUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-      setState(() {
-        userStrand = userDoc['strand'];
-        _updateCoursesBasedOnStrand(userStrand!);
-        _updateRelatedProgramsText(userStrand!);
-      });
-    }
-  }
-
-  void _fetchUserFirstName() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(
+          user.uid).get();
       setState(() {
         firstName = userDoc['firstName'];
+        userCourse = userDoc['course'];
+        _updateContentBasedOnCourse(userCourse);
       });
     }
   }
 
-  void _updateRelatedProgramsText(String strand) {
-    if (strand == 'Science, Technology, Engineering, and Mathematics') {
-      relatedProgramsText = 'STEM-Related Programs';
-    } else if (strand == 'Accountancy, Business, and Management') {
-      relatedProgramsText = 'ABM-Related Programs';
-    } else if (strand == 'Humanities and Social Sciences') {
-      relatedProgramsText = 'HUMSS-Related Programs';
-    } else if (strand == 'General Academic Strand') {
-      relatedProgramsText = 'GAS-Related Programs';
+  void _updateContentBasedOnCourse(String? course) {
+    if (course == "Bachelor of Science in Information Technology") {
+      setState(() {
+        relatedJobsText = "BSIT-related Jobs";
+        jobs = [
+          "Software Developer/Engineer",
+          "Network Administrator",
+          "Database Administrator",
+          "IT Support Specialist",
+          "Web Developer",
+        ];
+      });
     }
-  }
 
-  void _updateCoursesBasedOnStrand(String strand) {
-    if (strand == 'Science, Technology, Engineering, and Mathematics') {
-      courses = [
-        'BAET',
-        'BCET',
-        'BSCrim',
-        'BCET',
-        'BDT',
-        'BEET',
-        'BEET',
-        'BFET',
-        'BSIT',
-        'BMET',
-        'BMET',
-        'BSPsych',
-      ];
-    } else if (strand == 'Accountancy, Business, and Management') {
-      courses = ['Criminology'];
-    } else if (strand == 'Humanities and Social Sciences') {
-      courses = ['Criminology', 'Psychology'];
-    } else if (strand == 'General Academic Strand') {
-      courses = [
-        'BAET',
-        'BCET',
-        'BSCrim',
-        'BCET',
-        'BDT',
-        'BEET',
-        'BEET',
-        'BFET',
-        'BMET',
-        'BMET',
-        'BSPsych',
-      ];
+
+
+
+    else {
+      // Handle other courses or default case if needed
+      setState(() {
+        relatedJobsText = "Related Jobs";
+        jobs = [];
+      });
     }
   }
 
@@ -118,8 +85,14 @@ class _HomeG12State extends State<HomeG12> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
@@ -137,7 +110,10 @@ class _HomeG12State extends State<HomeG12> {
                 automaticallyImplyLeading: false,
                 flexibleSpace: Padding(
                   padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top,
+                    top: MediaQuery
+                        .of(context)
+                        .padding
+                        .top,
                     left: screenWidth * 0.03,
                     right: paddingHorizontal,
                   ),
@@ -156,7 +132,7 @@ class _HomeG12State extends State<HomeG12> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => UserG12()),
+                            MaterialPageRoute(builder: (context) => User4th()),
                           );
                         },
                         child: Image.asset(
@@ -173,7 +149,12 @@ class _HomeG12State extends State<HomeG12> {
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 0, 0, screenHeight * 0.02),
+                      padding: EdgeInsets.fromLTRB(
+                        screenWidth * 0.05,
+                        0,
+                        0,
+                        screenHeight * 0.02,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -186,10 +167,10 @@ class _HomeG12State extends State<HomeG12> {
                         ],
                       ),
                     ),
-
                     Container(
                       height: screenHeight * 0.19,
-                      margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: paddingHorizontal),
                       decoration: BoxDecoration(
                         image: const DecorationImage(
                           image: AssetImage('assets/1.png'),
@@ -202,13 +183,14 @@ class _HomeG12State extends State<HomeG12> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 150.0, left: 20),
+                              padding: const EdgeInsets.only(
+                                  right: 150.0, left: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
                                   Text(
-                                    '15 MINUTES!',
+                                    'Skill Exploration!',
                                     style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
@@ -217,7 +199,7 @@ class _HomeG12State extends State<HomeG12> {
                                   ),
                                   SizedBox(height: 7),
                                   Text(
-                                    'Take the IQ Test to See Which Program Fits You Best.',
+                                    'Discover your strengths and align with top career paths.',
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.normal,
@@ -235,11 +217,11 @@ class _HomeG12State extends State<HomeG12> {
                               child: SizedBox(
                                 width: 120,
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                  },
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 9.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 9.0),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(9),
                                     ),
@@ -259,12 +241,9 @@ class _HomeG12State extends State<HomeG12> {
                         ],
                       ),
                     ),
-
-
                   ],
                 ),
               ),
-
               SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.zero,
@@ -286,7 +265,7 @@ class _HomeG12State extends State<HomeG12> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            relatedProgramsText,
+                            relatedJobsText,
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.normal,
@@ -299,9 +278,10 @@ class _HomeG12State extends State<HomeG12> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const Programs()),
+                                  MaterialPageRoute(
+                                      builder: (context) => const Programs()),
                                 );
-                                },
+                              },
                               child: Text(
                                 "View All",
                                 style: TextStyle(
@@ -325,36 +305,41 @@ class _HomeG12State extends State<HomeG12> {
                             mainAxisSpacing: 8.0,
                             childAspectRatio: 2.5,
                           ),
-                          itemCount: courses.length > 4 ? 4 : courses.length,
+                          itemCount: jobs.length > 4 ? 4 : jobs.length,
                           itemBuilder: (context, index) {
-
                             List<Gradient> gradients = [
                               LinearGradient(
-                                colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
+                                colors: [
+                                  Colors.blueAccent,
+                                  Colors.purpleAccent.shade100
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-
                               LinearGradient(
-                                colors: [Colors.teal.shade300, Colors.cyan.shade100],
+                                colors: [
+                                  Colors.teal.shade300,
+                                  Colors.cyan.shade100
+                                ],
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
                               ),
-
                               LinearGradient(
-                                colors: [Colors.pink.shade600, Colors.orange.shade300],
+                                colors: [
+                                  Colors.pink.shade600,
+                                  Colors.orange.shade300
+                                ],
                                 begin: Alignment.bottomLeft,
                                 end: Alignment.topRight,
                               ),
-
                               LinearGradient(
-                                colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
+                                colors: [
+                                  Colors.indigo.shade500,
+                                  Colors.blueGrey.shade200
+                                ],
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                               ),
-
-
-
                             ];
 
                             return Card(
@@ -370,14 +355,15 @@ class _HomeG12State extends State<HomeG12> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center,
                                     children: [
                                       Text(
-                                        courses[index],
+                                        jobs[index],
                                         style: TextStyle(
                                           fontSize: 14.0,
+                                          color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -393,14 +379,17 @@ class _HomeG12State extends State<HomeG12> {
                   ),
                 ),
               ),
-
-
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, screenHeight * 0.01, 0, 0),
+                      padding: EdgeInsets.fromLTRB(
+                        screenWidth * 0.05,
+                        screenHeight * 0.01,
+                        0,
+                        0,
+                      ),
                       child: Text(
                         'Explore BatStateU-IS',
                         style: const TextStyle(
@@ -410,12 +399,10 @@ class _HomeG12State extends State<HomeG12> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-
                     CarouselSlider(
                       items: [
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/ISSTUD.png',
                             fit: BoxFit.cover,
@@ -423,8 +410,7 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/IS.jpg',
                             fit: BoxFit.cover,
@@ -432,8 +418,7 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/ISCHART.png',
                             fit: BoxFit.cover,
@@ -454,7 +439,6 @@ class _HomeG12State extends State<HomeG12> {
                       ),
                     ),
                     SizedBox(height: 5.0),
-
                     SizedBox(
                       height: 20.0,
                       child: Center(
@@ -479,15 +463,12 @@ class _HomeG12State extends State<HomeG12> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 50.0),
+                    SizedBox(height: 50),
                   ],
                 ),
               ),
-
-
             ],
           ),
-
           if (_isDrawerOpen)
             Positioned.fill(
               child: GestureDetector(
@@ -577,8 +558,7 @@ class _HomeG12State extends State<HomeG12> {
                 ),
               ),
             ),
-
-        ],
+        ]
       ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
@@ -608,7 +588,7 @@ class _HomeG12State extends State<HomeG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(builder: (context) => const Home4th()),
                     );
                   },
                   icon: Image.asset(
@@ -619,10 +599,10 @@ class _HomeG12State extends State<HomeG12> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SearchG12()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SearchG10()),
+                    // );
                   },
                   icon: Image.asset(
                     'assets/search.png',
@@ -668,14 +648,30 @@ class _HomeG12State extends State<HomeG12> {
                     color: Colors.white.withOpacity(0.8),
                     width: 10,
                   ),
-
                 ),
                 child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const G12Intro()),
-                    );
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FourthIntro()),
+                        );
+                      }
+                    } else {
+                    }
                   },
                   icon: Image.asset(
                     'assets/main.png',
@@ -688,8 +684,6 @@ class _HomeG12State extends State<HomeG12> {
           ],
         ),
       ),
-
-
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Home/homeg10.dart';
+import 'package:myapp/LoginSignUpPages/CourseSelection.dart';
 import 'package:myapp/LoginSignUpPages/Login.dart';
 import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:myapp/LoginSignUpPages/StrandSelection.dart';
@@ -365,21 +367,21 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         if (_selectedGradeLevel == 'Grade 10') {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const BlankPage(), // Replace with the actual target page for Grade 10
+              builder: (context) => const HomeG10(),
             ),
           );
         } else if (_selectedGradeLevel == 'Grade 12') {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const StrandSelection(), // Navigate to StrandSelection() screen
+              builder: (context) => const StrandSelection(),
             ),
           );
         } else if (_selectedGradeLevel == 'Fourth-year College') {
-          // Navigator.of(context).pushReplacement(
-          //   MaterialPageRoute(
-          //     builder: (context) => FourthYearCollegePage(), // Replace with the actual target page for Fourth-year College
-          //   ),
-          // );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => CourseSelection(),
+            ),
+          );
         }
 
         showSnackBar(context, "Account Created Successfully");
