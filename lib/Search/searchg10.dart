@@ -352,7 +352,7 @@ class _SearchG10 extends State<SearchG10> {
           ),
           Padding(
             padding: const EdgeInsets.only(
-                top: 160), // Keep the top scroll cut at 150
+                top: 200), // Keep the top scroll cut at 150
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -590,7 +590,7 @@ class _SearchG10 extends State<SearchG10> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnswered()),
                         );
                       } else {
                         Navigator.push(

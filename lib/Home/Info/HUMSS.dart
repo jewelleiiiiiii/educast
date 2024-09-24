@@ -101,6 +101,8 @@ class _HumssInfo extends State<HumssInfo> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -120,14 +122,19 @@ class _HumssInfo extends State<HumssInfo> {
           },
         ),
       ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/bg4.png',
-              fit: BoxFit.cover,
-            ),
+      body: Container(
+        width: screenWidth, // Dynamically set width based on screen size
+        height: screenHeight, // Dynamically set height based on screen size
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg4.png'),
+            fit: BoxFit.cover,
           ),
+        ),
+      child:
+      Stack(
+        children: [
+
           Padding(
             padding: const EdgeInsets.only(top: 250),
             child: FutureBuilder<Map<String, String>>(
@@ -165,7 +172,7 @@ class _HumssInfo extends State<HumssInfo> {
                   String lesson6_5 = snapshot.data!['6.5']!;
 
                   return ListView.builder(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
                     itemCount: lessons.length,
                     itemBuilder: (context, index) {
                       final lessonNum = (index + 1).toString().padLeft(2, '0');
@@ -203,7 +210,7 @@ class _HumssInfo extends State<HumssInfo> {
                                       Image.asset(
                                           'assets/abmm.png'), // Image for the first tile
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -244,7 +251,7 @@ class _HumssInfo extends State<HumssInfo> {
                                       Image.asset(
                                           'assets/abmm.png'), // Image for the second tile
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -259,7 +266,7 @@ class _HumssInfo extends State<HumssInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_1",
+                                              child: Text("○ $lesson3_1",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -268,7 +275,7 @@ class _HumssInfo extends State<HumssInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_2",
+                                              child: Text("○ $lesson3_2",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -277,7 +284,7 @@ class _HumssInfo extends State<HumssInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_3",
+                                              child: Text("○ $lesson3_3",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -286,7 +293,7 @@ class _HumssInfo extends State<HumssInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_4",
+                                              child: Text("○ $lesson3_4",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -310,7 +317,7 @@ class _HumssInfo extends State<HumssInfo> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -327,25 +334,25 @@ class _HumssInfo extends State<HumssInfo> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text("• $career5_1",
+                                                Text("$career5_1",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_2",
+                                                Text("$career5_2",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_3",
+                                                Text("$career5_3",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_4",
+                                                Text("$career5_4",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_5",
+                                                Text("$career5_5",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                               ],
                                             ),
                                             const SizedBox(height: 50),
@@ -361,25 +368,25 @@ class _HumssInfo extends State<HumssInfo> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text("• $lesson5_6",
+                                                Text("$lesson5_6",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_7",
+                                                Text("$lesson5_7",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_8",
+                                                Text("$lesson5_8",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_9",
+                                                Text("$lesson5_9",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_10",
+                                                Text("$lesson5_10",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                               ],
                                             ),
                                           ],
@@ -389,7 +396,7 @@ class _HumssInfo extends State<HumssInfo> {
                                   ),
                                 if (index == 3)
                                   Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -406,27 +413,27 @@ class _HumssInfo extends State<HumssInfo> {
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_1,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_2,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_3,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_4,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_5,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                       ],
                                     ),
@@ -444,6 +451,7 @@ class _HumssInfo extends State<HumssInfo> {
           ),
         ],
       ),
+    ),
     );
   }
 }

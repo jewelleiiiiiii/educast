@@ -113,6 +113,8 @@ class _StemInfo extends State<StemInfo> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -132,16 +134,20 @@ class _StemInfo extends State<StemInfo> {
           },
         ),
       ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/bg5.png',
-              fit: BoxFit.cover,
-            ),
+      body: Container(
+        width: screenWidth, // Dynamically set width based on screen size
+        height: screenHeight, // Dynamically set height based on screen size
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/bg5.png'),
+            fit: BoxFit.cover,
           ),
+        ),
+
+      child: Stack(
+        children: [
           Padding(
-            padding: const EdgeInsets.only(top: 200),
+            padding: const EdgeInsets.only(top: 220),
             child: FutureBuilder<Map<String, String>>(
               future: _fetchLessonData(),
               builder: (context, snapshot) {
@@ -181,7 +187,7 @@ class _StemInfo extends State<StemInfo> {
                   String lesson10 = snapshot.data!['10']!;
                   String lesson11 = snapshot.data!['11']!;
                   return ListView.builder(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
                     itemCount: lessons.length,
                     itemBuilder: (context, index) {
                       final lessonNum = (index + 1).toString().padLeft(2, '0');
@@ -228,7 +234,7 @@ class _StemInfo extends State<StemInfo> {
                                       Image.asset(
                                           'assets/abmm.png'), // Image for the first tile
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -269,7 +275,7 @@ class _StemInfo extends State<StemInfo> {
                                       Image.asset(
                                           'assets/abmm.png'), // Image for the second tile
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -284,7 +290,7 @@ class _StemInfo extends State<StemInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_1",
+                                              child: Text("○ $lesson3_1",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -293,7 +299,7 @@ class _StemInfo extends State<StemInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_2",
+                                              child: Text("○ $lesson3_2",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -302,7 +308,7 @@ class _StemInfo extends State<StemInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_3",
+                                              child: Text("○ $lesson3_3",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -311,7 +317,7 @@ class _StemInfo extends State<StemInfo> {
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_4",
+                                              child: Text("○ $lesson3_4",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
                                                       fontSize: 16)),
@@ -335,7 +341,7 @@ class _StemInfo extends State<StemInfo> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(15.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -352,25 +358,25 @@ class _StemInfo extends State<StemInfo> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text("• $career5_1",
+                                                Text("$career5_1",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_2",
+                                                Text("$career5_2",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_3",
+                                                Text("$career5_3",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_4",
+                                                Text("$career5_4",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_5",
+                                                Text("$career5_5",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                               ],
                                             ),
                                             const SizedBox(height: 50),
@@ -386,25 +392,25 @@ class _StemInfo extends State<StemInfo> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text("• $lesson5_6",
+                                                Text("$lesson5_6",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_7",
+                                                Text("$lesson5_7",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_8",
+                                                Text("$lesson5_8",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_9",
+                                                Text("$lesson5_9",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_10",
+                                                Text("$lesson5_10",
                                                     style: const TextStyle(
-                                                        fontSize: 16)),
+                                                        fontSize: 16), textAlign: TextAlign.justify,),
                                               ],
                                             ),
                                           ],
@@ -414,7 +420,7 @@ class _StemInfo extends State<StemInfo> {
                                   ),
                                 if (index == 3)
                                   Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -431,27 +437,27 @@ class _StemInfo extends State<StemInfo> {
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_1,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_2,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_3,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_4,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
                                           lesson6_5,
-                                          style: const TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                       ],
                                     ),
@@ -465,7 +471,7 @@ class _StemInfo extends State<StemInfo> {
                                   Image.asset(
                                       'assets/abmm.png'), // Image for the second tile
                                   Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -477,8 +483,10 @@ class _StemInfo extends State<StemInfo> {
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                             ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
+                                        const SizedBox(height: 10),
                                         Text(
                                           lesson7,
                                           textAlign: TextAlign.justify,
@@ -519,6 +527,9 @@ class _StemInfo extends State<StemInfo> {
                                 ],
                               ),
                             if (index == 5)
+                              Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                              child:
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -570,6 +581,7 @@ class _StemInfo extends State<StemInfo> {
                                   G12Table2(),
                                 ],
                               ),
+                              ),
                             if (index == 6)
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -577,7 +589,7 @@ class _StemInfo extends State<StemInfo> {
                                   Image.asset(
                                       'assets/abmm.png'), // Image for the second tile
                                   Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(15.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -608,6 +620,7 @@ class _StemInfo extends State<StemInfo> {
           ),
         ],
       ),
+    ),
     );
   }
 }
@@ -1344,7 +1357,7 @@ class ISFacilitiesTable extends StatelessWidget {
           return Table(
             columnWidths: {
               0: FixedColumnWidth(100), // Width for Code column
-              1: FixedColumnWidth(120), // Width for Level/Floor column
+              1: FixedColumnWidth(70), // Width for Level/Floor column
               2: FlexColumnWidth(2), // Width for Facilities column (wider)
             },
             border: TableBorder.all(

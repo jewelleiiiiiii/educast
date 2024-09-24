@@ -206,7 +206,7 @@ class _G10Intro extends State<G10Intro> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnswered()),
                         );
                       } else {
                         Navigator.push(

@@ -117,7 +117,7 @@ class _UserG10 extends State<UserG10> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 40),
+                  SizedBox(height: 70),
                   Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
@@ -128,11 +128,11 @@ class _UserG10 extends State<UserG10> {
                           children: [
                             Center(
                               child: CircleAvatar(
-                                radius: screenHeight * 0.07,
+                                radius: screenHeight * 0.05,
                                 backgroundColor: Colors.black,
                                 child: Icon(
                                   Icons.person,
-                                  size: screenHeight * 0.07,
+                                  size: screenHeight * 0.05,
                                   color: Colors.white,
                                 ),
                               ),

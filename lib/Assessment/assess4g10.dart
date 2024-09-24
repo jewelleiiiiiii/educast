@@ -1,3 +1,4 @@
+import 'package:educast/Assessment/Rules/G10Intro.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -567,6 +568,11 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth * 0.10;
+    final paddingHorizontal = screenWidth * 0.04;
+
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: PreferredSize(
@@ -673,76 +679,474 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 60.0,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(
+          border: const Border(
             top: BorderSide(
               color: Colors.grey,
-              width: .2,
+              width: 0.2,
             ),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, -2),
+              blurRadius: 0,
+            ),
+          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/home.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/search.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                SizedBox(width: iconSize),
+                IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    'assets/notif.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/stats.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              child: Container(
+                width: iconSize * 2,
+                height: iconSize * 2,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF08080),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlreadyAnswered()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G10Intro()),
+                        );
+                      }
+                    } else {}
+                  },
+                  icon: Image.asset(
+                    'assets/main.png',
+                    width: iconSize * 1.3,
+                    height: iconSize * 1.3,
+                  ),
+                ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/search.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class AlreadyAnswered extends StatefulWidget {
+  @override
+  _AlreadyAnswered createState() => _AlreadyAnswered();
+}
+
+class _AlreadyAnswered extends State<AlreadyAnswered> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/check.mp4')
+      ..initialize().then((_) {
+        setState(() {}); // Update the state when the video is initialized.
+        _controller.play(); // Automatically play the video.
+        _controller.setLooping(true); // Loop the video.
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Dispose the controller when the widget is removed.
+    super.dispose();
+  }
+
+  void _viewResults() async {
+    // Get the current user's UID
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    // Fetch the user's answers from the userAnswerG10 collection
+    DocumentSnapshot userAnswersSnapshot = await FirebaseFirestore.instance
+        .collection('userAnswerG10')
+        .doc(uid)
+        .get();
+
+    if (!userAnswersSnapshot.exists) {
+      print('No answers found for the user');
+      return;
+    }
+
+    // Initialize fields for Realistic, Investigative, etc.
+    Map<String, int> results = {
+      'Realistic': 0,
+      'Investigative': 0,
+      'Artistic': 0,
+      'Social': 0,
+      'Enterprising': 0,
+      'Conventional': 0,
+    };
+
+    // Mapping of fields to the corresponding categories
+    Map<int, String> fieldMapping = {
+      1: 'Realistic',
+      2: 'Investigative',
+      3: 'Artistic',
+      4: 'Social',
+      5: 'Enterprising',
+      6: 'Conventional',
+      7: 'Realistic',
+      8: 'Artistic',
+      9: 'Conventional',
+      10: 'Enterprising',
+      11: 'Investigative',
+      12: 'Social',
+      13: 'Social',
+      14: 'Realistic',
+      15: 'Conventional',
+      16: 'Enterprising',
+      17: 'Artistic',
+      18: 'Investigative',
+      19: 'Enterprising',
+      20: 'Social',
+      21: 'Investigative',
+      22: 'Realistic',
+      23: 'Artistic',
+      24: 'Conventional',
+      25: 'Conventional',
+      26: 'Investigative',
+      27: 'Artistic',
+      28: 'Social',
+      29: 'Enterprising',
+      30: 'Realistic',
+      31: 'Artistic',
+      32: 'Realistic',
+      33: 'Investigative',
+      34: 'Social',
+      35: 'Conventional',
+      36: 'Enterprising',
+      37: 'Realistic',
+      38: 'Conventional',
+      39: 'Investigative',
+      40: 'Social',
+      41: 'Artistic',
+      42: 'Enterprising',
+    };
+
+    // Evaluate the answers
+    for (int i = 1; i <= 42; i++) {
+      if (userAnswersSnapshot.get('$i') == 0) {
+        // Updated to access field as "1", "2", etc.
+        results[fieldMapping[i]!] = results[fieldMapping[i]!]! + 1;
+      }
+    }
+
+    // Store the results in the userResultG10 collection
+    await FirebaseFirestore.instance
+        .collection('userResultG10')
+        .doc(uid)
+        .set(results);
+
+    // Navigate to the results page or perform further actions
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              ResultG10()), // Replace with your actual results page widget
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth * 0.10;
+    final paddingHorizontal = screenWidth * 0.04;
+
+    return Scaffold(
+      backgroundColor: Colors.white, // Set the background color to white
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(40.0),
+        child: AppBar(
+          backgroundColor: const Color.fromARGB(255, 158, 39, 39),
+          elevation: 0,
+          leading: IconButton(
+            icon: Image.asset(
+              'assets/back.png',
+              width: 24.0,
+              height: 24.0,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeG10()),
+              );
+            },
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 158, 39, 39),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.zero,
+                  topRight: Radius.zero,
+                  bottomLeft: Radius.circular(40.0),
+                  bottomRight: Radius.circular(40.0),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Interest Assessment',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/main.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
+            SizedBox(height: 20.0),
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_controller.value.isInitialized)
+                      SizedBox(
+                        height: 200.0, // Set the height to 200 pixels
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: VideoPlayer(_controller),
+                        ),
+                      )
+                    else
+                      CircularProgressIndicator(),
+                    SizedBox(height: 20.0),
+                    Text(
+                      'You have successfully completed the Interest Assessment.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    SizedBox(height: 30.0),
+                    ElevatedButton(
+                      onPressed: _viewResults,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 158, 39, 39),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: Text(
+                        'View Results',
+                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                // Handle action
-              },
-              icon: Image.asset(
-                'assets/notif.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: MediaQuery.of(context).size.height * 0.10,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(
+            top: BorderSide(
+              color: Colors.grey,
+              width: 0.2,
             ),
-            IconButton(
-              onPressed: () {
-                // Handle action
-              },
-              icon: Image.asset(
-                'assets/stats.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, -2),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/search.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                SizedBox(width: iconSize),
+                IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    'assets/notif.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/stats.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              child: Container(
+                width: iconSize * 2,
+                height: iconSize * 2,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF08080),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlreadyAnswered()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G10Intro()),
+                        );
+                      }
+                    } else {}
+                  },
+                  icon: Image.asset(
+                    'assets/main.png',
+                    width: iconSize * 1.3,
+                    height: iconSize * 1.3,
+                  ),
+                ),
               ),
             ),
           ],

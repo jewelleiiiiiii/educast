@@ -268,7 +268,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnswered()),
                       );
                     } else {
                       Navigator.push(
@@ -553,7 +553,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnswered()),
                       );
                     } else {
                       Navigator.push(
@@ -869,7 +869,7 @@ class _G10Rules3 extends State<G10Rules3> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnswered()),
                       );
                     } else {
                       Navigator.push(

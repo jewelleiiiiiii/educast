@@ -198,7 +198,7 @@ class _HomeG10 extends State<HomeG10> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  SubmissionConfirmation()),
+                                                  AlreadyAnswered()),
                                         );
                                       } else {
                                         Navigator.push(
@@ -542,7 +542,7 @@ class _HomeG10 extends State<HomeG10> {
                                     title: const Text(
                                       'Settings',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {},
@@ -553,7 +553,7 @@ class _HomeG10 extends State<HomeG10> {
                                     title: const Text(
                                       'History',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {
@@ -566,7 +566,7 @@ class _HomeG10 extends State<HomeG10> {
                                     title: const Text(
                                       'About',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {
@@ -579,7 +579,7 @@ class _HomeG10 extends State<HomeG10> {
                                     title: const Text(
                                       'Feedback',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 14,
                                       ),
                                     ),
                                     onTap: () {
@@ -592,7 +592,7 @@ class _HomeG10 extends State<HomeG10> {
                                     title: const Text(
                                       'Logout',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {
@@ -719,7 +719,7 @@ class _HomeG10 extends State<HomeG10> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnswered()),
                         );
                       } else {
                         Navigator.push(

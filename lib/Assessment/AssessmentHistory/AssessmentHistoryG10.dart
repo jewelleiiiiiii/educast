@@ -1,3 +1,5 @@
+import 'package:educast/Assessment/Rules/G10Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,7 +74,13 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth * 0.10;
+    final paddingHorizontal = screenWidth * 0.04;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
@@ -105,15 +113,15 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.zero,
                   topRight: Radius.zero,
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
+                  bottomLeft: Radius.circular(30.0),
+                  bottomRight: Radius.circular(30.0),
                 ),
               ),
               child: Center(
                 child: Text(
                   'Interest Assessment Details',
                   style: TextStyle(
-                    fontSize: 24.0,
+                    fontSize: 20.0,
                     color: Colors.white,
                   ),
                 ),
@@ -131,7 +139,7 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
                       child: Text(
                         'QUESTIONS',
                         style: TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.left,
@@ -149,7 +157,7 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
                               child: Text(
                                 label,
                                 style: TextStyle(
-                                  fontSize: 16.0,
+                                  fontSize: 14.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -183,76 +191,123 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 60.0,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border(
+          border: const Border(
             top: BorderSide(
               color: Colors.grey,
-              width: .2,
+              width: 0.2,
             ),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, -2),
+              blurRadius: 0,
+            ),
+          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/home.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/home.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/search.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                SizedBox(width: iconSize),
+                IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    'assets/notif.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG10()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/stats.png',
+                    width: iconSize,
+                    height: iconSize,
+                  ),
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/search.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchG10()),
-                );
-              },
-              icon: Image.asset(
-                'assets/main.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Handle action
-              },
-              icon: Image.asset(
-                'assets/notif.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // Handle action
-              },
-              icon: Image.asset(
-                'assets/stats.png',
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.height * 0.10,
+            Positioned(
+              top: -iconSize * 0.75,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              child: Container(
+                width: iconSize * 2,
+                height: iconSize * 2,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF08080),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.8),
+                    width: 10,
+                  ),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG10')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlreadyAnswered()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G10Intro()),
+                        );
+                      }
+                    } else {}
+                  },
+                  icon: Image.asset(
+                    'assets/main.png',
+                    width: iconSize * 1.3,
+                    height: iconSize * 1.3,
+                  ),
+                ),
               ),
             ),
           ],
