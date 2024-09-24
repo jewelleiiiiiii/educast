@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G12Intro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/Home4th.dart';
-import 'package:myapp/Home/homeg12.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Assessment/Rules/G12Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/Home4th.dart';
+import 'package:educast/Home/homeg12.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:educast/Search/searchg10.dart';
 
 class User4th extends StatefulWidget {
   const User4th({super.key});
@@ -19,7 +19,8 @@ class _User4th extends State<User4th> {
   String firstName = '';
   String lastName = '';
   String email = '';
-  String password = '********'; // Placeholder for the password, as it's not retrievable.
+  String password =
+      '********'; // Placeholder for the password, as it's not retrievable.
   String gradeLevel = '';
   String course = '';
   String campus = '';
@@ -152,8 +153,8 @@ class _User4th extends State<User4th> {
                 children: [
                   SizedBox(height: 40),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.08),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -183,7 +184,8 @@ class _User4th extends State<User4th> {
                         SizedBox(height: 15),
                         buildUserInfo('Grade Level', gradeLevel),
                         SizedBox(height: 15),
-                        buildUserInfo('Course', course), // Updated to show mapped strand
+                        buildUserInfo(
+                            'Course', course), // Updated to show mapped strand
                         SizedBox(height: 15),
                         buildUserInfo('Campus', campus),
                         SizedBox(height: 25),
@@ -198,7 +200,6 @@ class _User4th extends State<User4th> {
                             ),
                             child: Text('Reset Password'),
                           ),
-
                         ),
                         SizedBox(height: 40),
                       ],
@@ -311,8 +312,8 @@ class _User4th extends State<User4th> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>
-                              SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(

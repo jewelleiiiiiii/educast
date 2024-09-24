@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/Home/homeg10.dart';
+import 'package:educast/Home/homeg10.dart';
 
 class StemInfo extends StatefulWidget {
   @override
@@ -45,37 +45,62 @@ class _StemInfo extends State<StemInfo> {
       '11': '',
     };
     try {
-      final doc = await _firestore.collection('strandcontent').doc('stem').get();
+      final doc =
+          await _firestore.collection('strandcontent').doc('stem').get();
       if (doc.exists) {
-        lessonData['1'] = doc.data()?['1'] ?? 'No information available for Lesson 1';
-        lessonData['2'] = doc.data()?['2'] ?? 'No information available for Lesson 2';
-        lessonData['3'] = doc.data()?['3'] ?? 'No information available for Lesson 3';
-        lessonData['3.1'] = doc.data()?['3.1'] ?? 'No information available for 3.1';
-        lessonData['3.2'] = doc.data()?['3.2'] ?? 'No information available for 3.2';
-        lessonData['3.3'] = doc.data()?['3.3'] ?? 'No information available for 3.3';
-        lessonData['3.4'] = doc.data()?['3.4'] ?? 'No information available for 3.4';
-        lessonData['4'] = doc.data()?['4'] ?? 'No information available for Lesson 4';
-        lessonData['5.1'] = doc.data()?['5.1'] ?? 'No information available for 5.1';
-        lessonData['5.2'] = doc.data()?['5.2'] ?? 'No information available for 5.2';
-        lessonData['5.3'] = doc.data()?['5.3'] ?? 'No information available for 5.3';
-        lessonData['5.4'] = doc.data()?['5.4'] ?? 'No information available for 5.4';
-        lessonData['5.5'] = doc.data()?['5.5'] ?? 'No information available for 5.5';
-        lessonData['5.6'] = doc.data()?['5.6'] ?? 'No information available for 5.6';
-        lessonData['5.7'] = doc.data()?['5.7'] ?? 'No information available for 5.7';
-        lessonData['5.8'] = doc.data()?['5.8'] ?? 'No information available for 5.8';
-        lessonData['5.9'] = doc.data()?['5.9'] ?? 'No information available for 5.9';
-        lessonData['5.10'] = doc.data()?['5.10'] ?? 'No information available for 5.10';
-        lessonData['6.1'] = doc.data()?['6.1'] ?? 'No information available for 6.1';
-        lessonData['6.2'] = doc.data()?['6.2'] ?? 'No information available for 6.2';
-        lessonData['6.3'] = doc.data()?['6.3'] ?? 'No information available for 6.3';
-        lessonData['6.4'] = doc.data()?['6.4'] ?? 'No information available for 6.4';
-        lessonData['6.5'] = doc.data()?['6.5'] ?? 'No information available for 6.5';
+        lessonData['1'] =
+            doc.data()?['1'] ?? 'No information available for Lesson 1';
+        lessonData['2'] =
+            doc.data()?['2'] ?? 'No information available for Lesson 2';
+        lessonData['3'] =
+            doc.data()?['3'] ?? 'No information available for Lesson 3';
+        lessonData['3.1'] =
+            doc.data()?['3.1'] ?? 'No information available for 3.1';
+        lessonData['3.2'] =
+            doc.data()?['3.2'] ?? 'No information available for 3.2';
+        lessonData['3.3'] =
+            doc.data()?['3.3'] ?? 'No information available for 3.3';
+        lessonData['3.4'] =
+            doc.data()?['3.4'] ?? 'No information available for 3.4';
+        lessonData['4'] =
+            doc.data()?['4'] ?? 'No information available for Lesson 4';
+        lessonData['5.1'] =
+            doc.data()?['5.1'] ?? 'No information available for 5.1';
+        lessonData['5.2'] =
+            doc.data()?['5.2'] ?? 'No information available for 5.2';
+        lessonData['5.3'] =
+            doc.data()?['5.3'] ?? 'No information available for 5.3';
+        lessonData['5.4'] =
+            doc.data()?['5.4'] ?? 'No information available for 5.4';
+        lessonData['5.5'] =
+            doc.data()?['5.5'] ?? 'No information available for 5.5';
+        lessonData['5.6'] =
+            doc.data()?['5.6'] ?? 'No information available for 5.6';
+        lessonData['5.7'] =
+            doc.data()?['5.7'] ?? 'No information available for 5.7';
+        lessonData['5.8'] =
+            doc.data()?['5.8'] ?? 'No information available for 5.8';
+        lessonData['5.9'] =
+            doc.data()?['5.9'] ?? 'No information available for 5.9';
+        lessonData['5.10'] =
+            doc.data()?['5.10'] ?? 'No information available for 5.10';
+        lessonData['6.1'] =
+            doc.data()?['6.1'] ?? 'No information available for 6.1';
+        lessonData['6.2'] =
+            doc.data()?['6.2'] ?? 'No information available for 6.2';
+        lessonData['6.3'] =
+            doc.data()?['6.3'] ?? 'No information available for 6.3';
+        lessonData['6.4'] =
+            doc.data()?['6.4'] ?? 'No information available for 6.4';
+        lessonData['6.5'] =
+            doc.data()?['6.5'] ?? 'No information available for 6.5';
         lessonData['7'] = doc.data()?['7'] ?? 'No information available for 7';
         lessonData['8'] = doc.data()?['8'] ?? 'No information available for 8';
         lessonData['9'] = doc.data()?['9'] ?? 'No information available for 9';
-        lessonData['10'] = doc.data()?['10'] ?? 'No information available for 10';
-        lessonData['11'] = doc.data()?['11'] ?? 'No information available for 11';
-
+        lessonData['10'] =
+            doc.data()?['10'] ?? 'No information available for 10';
+        lessonData['11'] =
+            doc.data()?['11'] ?? 'No information available for 11';
       } else {
         lessonData.updateAll((key, value) => 'Document does not exist');
       }
@@ -94,8 +119,11 @@ class _StemInfo extends State<StemInfo> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Image.asset('assets/back.png', width: 24.0,
-            height: 24.0,),
+          icon: Image.asset(
+            'assets/back.png',
+            width: 24.0,
+            height: 24.0,
+          ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -171,36 +199,45 @@ class _StemInfo extends State<StemInfo> {
                           title: index == 0
                               ? const Text('Introduction to STEM')
                               : (index == 1
-                              ? const Text('Why Choose STEM?')
-                              : (index == 2
-                              ? const Text('Career Opportunities in STEM')
-                              : (index == 3
-                              ? const Text('Skills Developed in STEM')
-                              : (index == 4
-                              ? const Text("STEM at BatStateU-IS")
-                              : (index == 5
-                              ? const Text("BatStateU-IS STEM Curriculum")
-                              : (index == 6
-                              ? const Text("BatStateU-IS STEM-Focused Facilities and Organizations")
-                              : const Text(''))))))),
+                                  ? const Text('Why Choose STEM?')
+                                  : (index == 2
+                                      ? const Text(
+                                          'Career Opportunities in STEM')
+                                      : (index == 3
+                                          ? const Text(
+                                              'Skills Developed in STEM')
+                                          : (index == 4
+                                              ? const Text(
+                                                  "STEM at BatStateU-IS")
+                                              : (index == 5
+                                                  ? const Text(
+                                                      "BatStateU-IS STEM Curriculum")
+                                                  : (index == 6
+                                                      ? const Text(
+                                                          "BatStateU-IS STEM-Focused Facilities and Organizations")
+                                                      : const Text(''))))))),
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (index == 0)
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Image.asset('assets/abmm.png'), // Image for the first tile
+                                      Image.asset(
+                                          'assets/abmm.png'), // Image for the first tile
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               lesson1Data,
                                               textAlign: TextAlign.justify,
-                                              style: const TextStyle(fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                             const SizedBox(height: 30),
                                             const Center(
@@ -216,7 +253,8 @@ class _StemInfo extends State<StemInfo> {
                                             Text(
                                               lesson2Data,
                                               textAlign: TextAlign.justify,
-                                              style: const TextStyle(fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -225,45 +263,66 @@ class _StemInfo extends State<StemInfo> {
                                   ),
                                 if (index == 1)
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Image.asset('assets/abmm.png'), // Image for the second tile
+                                      Image.asset(
+                                          'assets/abmm.png'), // Image for the second tile
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               lesson3Data,
                                               textAlign: TextAlign.justify,
-                                              style: const TextStyle(fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                             const SizedBox(height: 30),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_1", textAlign: TextAlign.justify, style: const TextStyle(fontSize: 16)),
+                                              padding:
+                                                  EdgeInsets.only(left: 16),
+                                              child: Text("• $lesson3_1",
+                                                  textAlign: TextAlign.justify,
+                                                  style: const TextStyle(
+                                                      fontSize: 16)),
                                             ),
                                             const SizedBox(height: 15),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_2", textAlign: TextAlign.justify, style: const TextStyle(fontSize: 16)),
+                                              padding:
+                                                  EdgeInsets.only(left: 16),
+                                              child: Text("• $lesson3_2",
+                                                  textAlign: TextAlign.justify,
+                                                  style: const TextStyle(
+                                                      fontSize: 16)),
                                             ),
                                             const SizedBox(height: 15),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_3", textAlign: TextAlign.justify, style: const TextStyle(fontSize: 16)),
+                                              padding:
+                                                  EdgeInsets.only(left: 16),
+                                              child: Text("• $lesson3_3",
+                                                  textAlign: TextAlign.justify,
+                                                  style: const TextStyle(
+                                                      fontSize: 16)),
                                             ),
                                             const SizedBox(height: 15),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 16),
-                                              child: Text("• $lesson3_4", textAlign: TextAlign.justify, style: const TextStyle(fontSize: 16)),
+                                              padding:
+                                                  EdgeInsets.only(left: 16),
+                                              child: Text("• $lesson3_4",
+                                                  textAlign: TextAlign.justify,
+                                                  style: const TextStyle(
+                                                      fontSize: 16)),
                                             ),
                                             const SizedBox(height: 15),
                                             const SizedBox(height: 10),
                                             Text(
                                               lesson4Data,
                                               textAlign: TextAlign.justify,
-                                              style: const TextStyle(fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -272,12 +331,14 @@ class _StemInfo extends State<StemInfo> {
                                   ),
                                 if (index == 2)
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
                                             const Text(
                                               "Professions Under STEM:",
@@ -288,17 +349,28 @@ class _StemInfo extends State<StemInfo> {
                                             ),
                                             const SizedBox(height: 10),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text("• $career5_1", style: const TextStyle(fontSize: 16)),
+                                                Text("• $career5_1",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_2", style: const TextStyle(fontSize: 16)),
+                                                Text("• $career5_2",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_3", style: const TextStyle(fontSize: 16)),
+                                                Text("• $career5_3",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_4", style: const TextStyle(fontSize: 16)),
+                                                Text("• $career5_4",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $career5_5", style: const TextStyle(fontSize: 16)),
+                                                Text("• $career5_5",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                               ],
                                             ),
                                             const SizedBox(height: 50),
@@ -311,17 +383,28 @@ class _StemInfo extends State<StemInfo> {
                                             ),
                                             const SizedBox(height: 10),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text("• $lesson5_6", style: const TextStyle(fontSize: 16)),
+                                                Text("• $lesson5_6",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_7", style: const TextStyle(fontSize: 16)),
+                                                Text("• $lesson5_7",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_8", style: const TextStyle(fontSize: 16)),
+                                                Text("• $lesson5_8",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_9", style: const TextStyle(fontSize: 16)),
+                                                Text("• $lesson5_9",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                                 const SizedBox(height: 15),
-                                                Text("• $lesson5_10", style: const TextStyle(fontSize: 16)),
+                                                Text("• $lesson5_10",
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
                                               ],
                                             ),
                                           ],
@@ -333,7 +416,8 @@ class _StemInfo extends State<StemInfo> {
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Center(
                                           child: Text(
@@ -378,11 +462,13 @@ class _StemInfo extends State<StemInfo> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset('assets/abmm.png'), // Image for the second tile
+                                  Image.asset(
+                                      'assets/abmm.png'), // Image for the second tile
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Center(
                                           child: Text(
@@ -398,7 +484,7 @@ class _StemInfo extends State<StemInfo> {
                                           textAlign: TextAlign.justify,
                                           style: const TextStyle(fontSize: 16),
                                         ),
-                                         const SizedBox(height: 30),
+                                        const SizedBox(height: 30),
                                         Text(
                                           lesson8,
                                           textAlign: TextAlign.justify,
@@ -411,7 +497,6 @@ class _StemInfo extends State<StemInfo> {
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
-
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
@@ -437,26 +522,29 @@ class _StemInfo extends State<StemInfo> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          lesson11,
-                                          textAlign: TextAlign.justify,
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    lesson11,
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
                                   const SizedBox(height: 30),
                                   Text(
                                     'Grade 11 - First Sem',
                                     textAlign: TextAlign.justify,
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 15),
                                   G11Table1(),
-
                                   const SizedBox(height: 30),
                                   Text(
                                     'Grade 11 - Second Sem',
                                     textAlign: TextAlign.justify,
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 15),
                                   G11Table2(),
@@ -464,16 +552,19 @@ class _StemInfo extends State<StemInfo> {
                                   Text(
                                     'Grade 12 - First Sem',
                                     textAlign: TextAlign.justify,
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 15),
                                   G12Table1(),
-
                                   const SizedBox(height: 30),
                                   Text(
                                     'Grade 12 - Second Sem',
                                     textAlign: TextAlign.justify,
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 15),
                                   G12Table2(),
@@ -483,19 +574,21 @@ class _StemInfo extends State<StemInfo> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset('assets/abmm.png'), // Image for the second tile
+                                  Image.asset(
+                                      'assets/abmm.png'), // Image for the second tile
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Center(
-                                          child:
-                                          Text(
-                                            'STEM-Related Facilities in BatStateU-IS',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                                          ),
+                                          child: Text(
+                                              'STEM-Related Facilities in BatStateU-IS',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold)),
                                         ),
                                         const SizedBox(height: 30),
                                         ISFacilitiesTable(),
@@ -522,7 +615,9 @@ class _StemInfo extends State<StemInfo> {
 class G11Table1 extends StatelessWidget {
   Future<Map<String, dynamic>> fetchCurriculumData() async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('strandcontent').doc('ISStem11Curriculum');
+      final docRef = FirebaseFirestore.instance
+          .collection('strandcontent')
+          .doc('ISStem11Curriculum');
       final docSnapshot = await docRef.get();
       if (docSnapshot.exists) {
         return docSnapshot.data() as Map<String, dynamic>;
@@ -548,7 +643,7 @@ class G11Table1 extends StatelessWidget {
           return Center(child: Text('No Data Available'));
         } else {
           final data = snapshot.data!;
-          print('Fetched Data: $data');  // Debug print statement
+          print('Fetched Data: $data'); // Debug print statement
 
           final List<String> courseCodes = data.keys.toList();
           final List<String> courseTitles = [];
@@ -561,7 +656,8 @@ class G11Table1 extends StatelessWidget {
               final parts = courseDetails.split(',');
 
               if (parts.length > 1) {
-                final title = parts.sublist(0, parts.length - 1).join(', ').trim();
+                final title =
+                    parts.sublist(0, parts.length - 1).join(', ').trim();
                 courseTitles.add(title);
                 contactHours.add(parts.last.trim());
               } else {
@@ -585,8 +681,9 @@ class G11Table1 extends StatelessWidget {
           return Table(
             columnWidths: {
               0: FixedColumnWidth(100), // Width for Course Code column
-              1: FlexColumnWidth(2),    // Width for Course Title column (wider)
-              2: FixedColumnWidth(80),  // Width for Contact Hours column (smaller)
+              1: FlexColumnWidth(2), // Width for Course Title column (wider)
+              2: FixedColumnWidth(
+                  80), // Width for Contact Hours column (smaller)
             },
             border: TableBorder.all(
               color: Colors.black,
@@ -599,19 +696,25 @@ class G11Table1 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Code', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Code',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Title', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Title',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Contact Hours', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Contact Hours',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -636,7 +739,8 @@ class G11Table1 extends StatelessWidget {
                     TableCell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(contactHours[index], textAlign: TextAlign.center),
+                        child: Text(contactHours[index],
+                            textAlign: TextAlign.center),
                       ),
                     ),
                   ],
@@ -653,13 +757,16 @@ class G11Table1 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('TOTAL', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.end),
+                      child: Text('TOTAL',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(totalContactHours.toStringAsFixed(0), textAlign: TextAlign.center),
+                      child: Text(totalContactHours.toStringAsFixed(0),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -675,7 +782,9 @@ class G11Table1 extends StatelessWidget {
 class G11Table2 extends StatelessWidget {
   Future<Map<String, dynamic>> fetchCurriculumData() async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('strandcontent').doc('ISStem11Curriculum2');
+      final docRef = FirebaseFirestore.instance
+          .collection('strandcontent')
+          .doc('ISStem11Curriculum2');
       final docSnapshot = await docRef.get();
       if (docSnapshot.exists) {
         return docSnapshot.data() as Map<String, dynamic>;
@@ -701,7 +810,7 @@ class G11Table2 extends StatelessWidget {
           return Center(child: Text('No Data Available'));
         } else {
           final data = snapshot.data!;
-          print('Fetched Data: $data');  // Debug print statement
+          print('Fetched Data: $data'); // Debug print statement
 
           final List<String> courseCodes = data.keys.toList();
           final List<String> courseTitles = [];
@@ -714,7 +823,8 @@ class G11Table2 extends StatelessWidget {
               final parts = courseDetails.split(',');
 
               if (parts.length > 1) {
-                final title = parts.sublist(0, parts.length - 1).join(', ').trim();
+                final title =
+                    parts.sublist(0, parts.length - 1).join(', ').trim();
                 courseTitles.add(title);
                 contactHours.add(parts.last.trim());
               } else {
@@ -739,8 +849,9 @@ class G11Table2 extends StatelessWidget {
           return Table(
             columnWidths: {
               0: FixedColumnWidth(100), // Width for Course Code column
-              1: FlexColumnWidth(2),    // Width for Course Title column (wider)
-              2: FixedColumnWidth(80),  // Width for Contact Hours column (smaller)
+              1: FlexColumnWidth(2), // Width for Course Title column (wider)
+              2: FixedColumnWidth(
+                  80), // Width for Contact Hours column (smaller)
             },
             border: TableBorder.all(
               color: Colors.black,
@@ -753,19 +864,25 @@ class G11Table2 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Code', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Code',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Title', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Title',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Contact Hours', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Contact Hours',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -790,7 +907,8 @@ class G11Table2 extends StatelessWidget {
                     TableCell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(contactHours[index], textAlign: TextAlign.center),
+                        child: Text(contactHours[index],
+                            textAlign: TextAlign.center),
                       ),
                     ),
                   ],
@@ -807,13 +925,16 @@ class G11Table2 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('TOTAL', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.end),
+                      child: Text('TOTAL',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(totalContactHours.toStringAsFixed(0), textAlign: TextAlign.center),
+                      child: Text(totalContactHours.toStringAsFixed(0),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -829,7 +950,9 @@ class G11Table2 extends StatelessWidget {
 class G12Table1 extends StatelessWidget {
   Future<Map<String, dynamic>> fetchCurriculumData() async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('strandcontent').doc('ISStem12Curriculum');
+      final docRef = FirebaseFirestore.instance
+          .collection('strandcontent')
+          .doc('ISStem12Curriculum');
       final docSnapshot = await docRef.get();
       if (docSnapshot.exists) {
         return docSnapshot.data() as Map<String, dynamic>;
@@ -855,7 +978,7 @@ class G12Table1 extends StatelessWidget {
           return Center(child: Text('No Data Available'));
         } else {
           final data = snapshot.data!;
-          print('Fetched Data: $data');  // Debug print statement
+          print('Fetched Data: $data'); // Debug print statement
 
           final List<String> courseCodes = data.keys.toList();
           final List<String> courseTitles = [];
@@ -868,7 +991,8 @@ class G12Table1 extends StatelessWidget {
               final parts = courseDetails.split(',');
 
               if (parts.length > 1) {
-                final title = parts.sublist(0, parts.length - 1).join(', ').trim();
+                final title =
+                    parts.sublist(0, parts.length - 1).join(', ').trim();
                 courseTitles.add(title);
                 contactHours.add(parts.last.trim());
               } else {
@@ -893,8 +1017,9 @@ class G12Table1 extends StatelessWidget {
           return Table(
             columnWidths: {
               0: FixedColumnWidth(100), // Width for Course Code column
-              1: FlexColumnWidth(2),    // Width for Course Title column (wider)
-              2: FixedColumnWidth(80),  // Width for Contact Hours column (smaller)
+              1: FlexColumnWidth(2), // Width for Course Title column (wider)
+              2: FixedColumnWidth(
+                  80), // Width for Contact Hours column (smaller)
             },
             border: TableBorder.all(
               color: Colors.black,
@@ -907,19 +1032,25 @@ class G12Table1 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Code', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Code',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Title', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Title',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Contact Hours', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Contact Hours',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -944,7 +1075,8 @@ class G12Table1 extends StatelessWidget {
                     TableCell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(contactHours[index], textAlign: TextAlign.center),
+                        child: Text(contactHours[index],
+                            textAlign: TextAlign.center),
                       ),
                     ),
                   ],
@@ -961,13 +1093,16 @@ class G12Table1 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('TOTAL', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.end),
+                      child: Text('TOTAL',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(totalContactHours.toStringAsFixed(0), textAlign: TextAlign.center),
+                      child: Text(totalContactHours.toStringAsFixed(0),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -983,7 +1118,9 @@ class G12Table1 extends StatelessWidget {
 class G12Table2 extends StatelessWidget {
   Future<Map<String, dynamic>> fetchCurriculumData() async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('strandcontent').doc('ISStem12Curriculum2');
+      final docRef = FirebaseFirestore.instance
+          .collection('strandcontent')
+          .doc('ISStem12Curriculum2');
       final docSnapshot = await docRef.get();
       if (docSnapshot.exists) {
         return docSnapshot.data() as Map<String, dynamic>;
@@ -1009,7 +1146,7 @@ class G12Table2 extends StatelessWidget {
           return Center(child: Text('No Data Available'));
         } else {
           final data = snapshot.data!;
-          print('Fetched Data: $data');  // Debug print statement
+          print('Fetched Data: $data'); // Debug print statement
 
           final List<String> courseCodes = data.keys.toList();
           final List<String> courseTitles = [];
@@ -1022,7 +1159,8 @@ class G12Table2 extends StatelessWidget {
               final parts = courseDetails.split(',');
 
               if (parts.length > 1) {
-                final title = parts.sublist(0, parts.length - 1).join(', ').trim();
+                final title =
+                    parts.sublist(0, parts.length - 1).join(', ').trim();
                 courseTitles.add(title);
                 contactHours.add(parts.last.trim());
               } else {
@@ -1047,8 +1185,9 @@ class G12Table2 extends StatelessWidget {
           return Table(
             columnWidths: {
               0: FixedColumnWidth(100), // Width for Course Code column
-              1: FlexColumnWidth(2),    // Width for Course Title column (wider)
-              2: FixedColumnWidth(80),  // Width for Contact Hours column (smaller)
+              1: FlexColumnWidth(2), // Width for Course Title column (wider)
+              2: FixedColumnWidth(
+                  80), // Width for Contact Hours column (smaller)
             },
             border: TableBorder.all(
               color: Colors.black,
@@ -1061,19 +1200,25 @@ class G12Table2 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Code', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Code',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Course Title', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Course Title',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Contact Hours', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Contact Hours',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -1098,7 +1243,8 @@ class G12Table2 extends StatelessWidget {
                     TableCell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(contactHours[index], textAlign: TextAlign.center),
+                        child: Text(contactHours[index],
+                            textAlign: TextAlign.center),
                       ),
                     ),
                   ],
@@ -1115,13 +1261,16 @@ class G12Table2 extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('TOTAL', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.end),
+                      child: Text('TOTAL',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(totalContactHours.toStringAsFixed(0), textAlign: TextAlign.center),
+                      child: Text(totalContactHours.toStringAsFixed(0),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],
@@ -1137,7 +1286,9 @@ class G12Table2 extends StatelessWidget {
 class ISFacilitiesTable extends StatelessWidget {
   Future<Map<String, dynamic>> fetchFacilitiesData() async {
     try {
-      final docRef = FirebaseFirestore.instance.collection('strandcontent').doc('ISSTEMFacilities');
+      final docRef = FirebaseFirestore.instance
+          .collection('strandcontent')
+          .doc('ISSTEMFacilities');
       final docSnapshot = await docRef.get();
       if (docSnapshot.exists) {
         return docSnapshot.data() as Map<String, dynamic>;
@@ -1163,7 +1314,7 @@ class ISFacilitiesTable extends StatelessWidget {
           return Center(child: Text('No Data Available'));
         } else {
           final data = snapshot.data!;
-          print('Fetched Data: $data');  // Debug print statement
+          print('Fetched Data: $data'); // Debug print statement
 
           final List<String> codes = data.keys.toList();
           final List<String> levels = [];
@@ -1176,7 +1327,8 @@ class ISFacilitiesTable extends StatelessWidget {
               final parts = details.split(',');
               if (parts.length > 1) {
                 final level = parts.first.trim();
-                final remainingFacilities = parts.sublist(1).map((f) => f.trim()).join('\n\n');
+                final remainingFacilities =
+                    parts.sublist(1).map((f) => f.trim()).join('\n\n');
                 levels.add(level);
                 facilities.add(remainingFacilities);
               } else {
@@ -1193,7 +1345,7 @@ class ISFacilitiesTable extends StatelessWidget {
             columnWidths: {
               0: FixedColumnWidth(100), // Width for Code column
               1: FixedColumnWidth(120), // Width for Level/Floor column
-              2: FlexColumnWidth(2),    // Width for Facilities column (wider)
+              2: FlexColumnWidth(2), // Width for Facilities column (wider)
             },
             border: TableBorder.all(
               color: Colors.black,
@@ -1206,19 +1358,25 @@ class ISFacilitiesTable extends StatelessWidget {
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Code', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Code',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Level/Floor', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Level/Floor',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                   TableCell(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Facilities', style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                      child: Text('Facilities',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ],

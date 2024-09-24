@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/LoginSignUpPages/CourseSelection.dart';
-import 'package:myapp/LoginSignUpPages/Login.dart';
-import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
-import 'package:myapp/LoginSignUpPages/StrandSelection.dart';
-import 'package:myapp/services/snackbar.dart'; // Ensure this import is correct
+import 'package:educast/Home/homeg10.dart';
+import 'package:educast/LoginSignUpPages/CourseSelection.dart';
+import 'package:educast/LoginSignUpPages/Login.dart';
+import 'package:educast/LoginSignUpPages/LoginSignupPage.dart';
+import 'package:educast/LoginSignUpPages/StrandSelection.dart';
+import 'package:educast/services/snackbar.dart';
+import 'package:google_sign_in/google_sign_in.dart'; // Ensure this import is correct\
+// import 'package:logger/logger.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -18,7 +20,9 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
   bool isLoading = false;
 
   @override
@@ -90,6 +94,38 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
+  Future<void> _handledGoogleSignIn() async {
+    try {
+      GoogleSignIn _googleSignIn = GoogleSignIn();
+      var googleData = await GoogleSignIn().signIn();
+      GoogleSignInAuthentication? googleSignInAuthentication =
+          await googleData?.authentication;
+
+      if (googleData != null) {
+        AuthCredential authCredential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication?.accessToken,
+          idToken: googleSignInAuthentication?.idToken,
+        );
+
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(authCredential);
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => CreateAccountPage(
+              email: googleData.email,
+              password: "",
+              userCredential: userCredential,
+            ),
+          ),
+        );
+      }
+    } on Exception catch (e) {
+      print(e);
+      // throw Exception("Failed to sign in google account");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +153,11 @@ class _SignupPageState extends State<SignupPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10,),
+                margin: const EdgeInsets.only(
+                  left: 20.0,
+                  top: 10.0,
+                  bottom: 10,
+                ),
                 child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -187,13 +227,16 @@ class _SignupPageState extends State<SignupPage> {
                                     signUpUser();
                                   },
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all<Color>(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
                                       const Color.fromARGB(255, 159, 41, 33),
                                     ),
-                                    foregroundColor: MaterialStateProperty.all<Color>(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
                                       Colors.white,
                                     ),
-                                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                    padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
                                       const EdgeInsets.symmetric(
                                         horizontal: 80.0,
                                         vertical: 15.0,
@@ -208,7 +251,8 @@ class _SignupPageState extends State<SignupPage> {
                                 children: [
                                   Expanded(child: Divider()),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.0),
                                     child: Text('OR CONTINUE WITH'),
                                   ),
                                   Expanded(child: Divider()),
@@ -217,16 +261,19 @@ class _SignupPageState extends State<SignupPage> {
                               const Spacer(),
                               Center(
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: _handledGoogleSignIn,
                                   style: ButtonStyle(
-                                    side: MaterialStateProperty.all(BorderSide.none),
+                                    side: MaterialStateProperty.all(
+                                        BorderSide.none),
                                   ),
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
                                     child: SizedBox(
                                       width: 50,
                                       height: 50,
-                                      child: Image.asset('assets/google.png'),
+                                      child: Image.asset(
+                                        'assets/google.png',
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -269,7 +316,8 @@ class _SignupPageState extends State<SignupPage> {
         ),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 10.0,
+            horizontal: 16.0,
+            vertical: 10.0,
           ),
           labelText: 'Email',
           labelStyle: const TextStyle(
@@ -303,14 +351,18 @@ class _SignupPageState extends State<SignupPage> {
   }
 }
 
-
 //--------------------- CREATE ACCOUNT PAGE ---------------------//
 
 class CreateAccountPage extends StatefulWidget {
   final String email;
   final String password;
+  final UserCredential? userCredential;
 
-  const CreateAccountPage({super.key, required this.email, required this.password});
+  const CreateAccountPage(
+      {super.key,
+      required this.email,
+      required this.password,
+      this.userCredential});
 
   @override
   _CreateAccountScreenState createState() => _CreateAccountScreenState();
@@ -321,11 +373,20 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
   final TextEditingController _lastnameController = TextEditingController();
   String? _selectedCampus;
   String? _selectedGradeLevel;
+  late UserCredential userCredential;
 
   // Initial list of campuses
   final List<String> _allCampuses = [
-    'Alangilan', 'Balayan', 'Lemery', 'Lipa', 'Lobo', 'Malvar',
-    'Nasugbu', 'Pablo Borbon (Main)', 'Rosario', 'San Juan'
+    'Alangilan',
+    'Balayan',
+    'Lemery',
+    'Lipa',
+    'Lobo',
+    'Malvar',
+    'Nasugbu',
+    'Pablo Borbon (Main)',
+    'Rosario',
+    'San Juan'
   ];
   List<String> _filteredCampuses = []; // Filtered campuses based on grade level
 
@@ -347,15 +408,21 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
     if (_validateInput()) {
       try {
         // Create user in Firebase Auth
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-          email: widget.email,
-          password: widget.password,
-        );
+        if (widget.password != "") {
+          userCredential =
+              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: widget.email,
+            password: widget.password,
+          );
+        } else {
+          userCredential = widget.userCredential!;
+        }
 
         // Store additional information in Firestore
-        await FirebaseFirestore.instance.collection('users').doc(
-            userCredential.user!.uid).set({
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
           'firstName': _firstnameController.text,
           'lastName': _lastnameController.text,
           'campus': _selectedCampus!,
@@ -386,6 +453,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
 
         showSnackBar(context, "Account Created Successfully");
       } on FirebaseAuthException catch (e) {
+        print(e);
         if (e.code == 'email-already-in-use') {
           showSnackBar(context, "This email is already in use.");
         } else {
@@ -393,12 +461,13 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         }
       } catch (e) {
         // Handle other exceptions
-        showSnackBar(context, "An unexpected error occurred. Please try again.");
+        print(e);
+
+        showSnackBar(
+            context, "An unexpected error occurred. Please try again.");
       }
     }
   }
-
-
 
   bool _validateInput() {
     if (_firstnameController.text.isEmpty) {
@@ -456,7 +525,11 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10,),
+            margin: const EdgeInsets.only(
+              left: 20.0,
+              top: 10.0,
+              bottom: 10,
+            ),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -524,7 +597,8 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
                     ),
                     const Spacer(),
                     Center(
-                      child: _selectedGradeLevel == 'Grade 12' || _selectedGradeLevel == 'Fourth-year College'
+                      child: _selectedGradeLevel == 'Grade 12' ||
+                              _selectedGradeLevel == 'Fourth-year College'
                           ? _buildNextButton()
                           : _buildCreateAccountButton(),
                     ),
@@ -546,7 +620,6 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
       ),
     );
   }
-
 
   Widget _buildCreateAccountButton() {
     return ElevatedButton(
@@ -594,8 +667,8 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
     );
   }
 
-
-  Widget _buildNameTextField(TextEditingController controller, String labelText) {
+  Widget _buildNameTextField(
+      TextEditingController controller, String labelText) {
     return Container(
       height: 50.0,
       decoration: BoxDecoration(
@@ -617,7 +690,8 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         ),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 10.0,
+            horizontal: 16.0,
+            vertical: 10.0,
           ),
           labelText: labelText,
           labelStyle: const TextStyle(
@@ -696,7 +770,6 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
   }
 }
 
-
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
@@ -752,7 +825,8 @@ class _PasswordFieldState extends State<PasswordField> {
             borderSide: BorderSide.none,
           ),
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 10.0,
+            horizontal: 16.0,
+            vertical: 10.0,
           ),
           suffixIcon: InkWell(
             onTap: () {

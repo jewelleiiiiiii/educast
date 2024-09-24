@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Home/homeg10.dart';
+import 'package:educast/Search/searchg10.dart';
 import 'package:video_player/video_player.dart';
 import '../Result/resultg10.dart';
-
 
 class Questionnaire4G10 extends StatefulWidget {
   final Map<String, int>? previousAnswers;
@@ -17,8 +16,10 @@ class Questionnaire4G10 extends StatefulWidget {
 }
 
 class _Questionnaire4G10 extends State<Questionnaire4G10> {
-  List<String> _questions = List.generate(12, (index) => ''); // 12 questions now
-  List<int?> _selectedOptions = List.generate(12, (index) => null); // 12 options now
+  List<String> _questions =
+      List.generate(12, (index) => ''); // 12 questions now
+  List<int?> _selectedOptions =
+      List.generate(12, (index) => null); // 12 options now
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
           setState(() {
             _questions = List.generate(
               12,
-                  (index) => data[(index + 31).toString()] ?? 'No Question',
+              (index) => data[(index + 31).toString()] ?? 'No Question',
             );
           });
         }
@@ -86,7 +87,7 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
             .collection('userAnswerG10')
             .doc(uid)
             .set(
-          { (index + 31).toString(): value ?? -1 },
+          {(index + 31).toString(): value ?? -1},
           SetOptions(merge: true),
         );
         print('Answer updated successfully');
@@ -129,7 +130,6 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +184,8 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -216,7 +217,10 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (String label in ['AGREE', 'DISAGREE'])
+                                      for (String label in [
+                                        'AGREE',
+                                        'DISAGREE'
+                                      ])
                                         Container(
                                           width: 150.0,
                                           child: Center(
@@ -244,7 +248,8 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                                   String question = entry.value;
 
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
                                     child: Row(
                                       children: [
                                         Container(
@@ -265,10 +270,12 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                                               child: Center(
                                                 child: Radio<int>(
                                                   value: 0, // AGREE
-                                                  groupValue: _selectedOptions[index],
+                                                  groupValue:
+                                                      _selectedOptions[index],
                                                   onChanged: (int? value) {
                                                     setState(() {
-                                                      _selectedOptions[index] = value;
+                                                      _selectedOptions[index] =
+                                                          value;
                                                     });
                                                     _updateAnswer(index, value);
                                                   },
@@ -280,10 +287,12 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                                               child: Center(
                                                 child: Radio<int>(
                                                   value: 1, // DISAGREE
-                                                  groupValue: _selectedOptions[index],
+                                                  groupValue:
+                                                      _selectedOptions[index],
                                                   onChanged: (int? value) {
                                                     setState(() {
-                                                      _selectedOptions[index] = value;
+                                                      _selectedOptions[index] =
+                                                          value;
                                                     });
                                                     _updateAnswer(index, value);
                                                   },
@@ -308,7 +317,8 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
             ),
             SizedBox(height: 10.0),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
               child: Row(
                 children: [
                   Container(
@@ -322,24 +332,30 @@ class _Questionnaire4G10 extends State<Questionnaire4G10> {
                   ),
                   Spacer(),
                   Spacer(),
-
                   ElevatedButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context);
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]!),
-                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20.0)),
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black.withOpacity(0.6)), // Semi-black text color
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.grey[200]!),
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(horizontal: 20.0)),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors
+                          .black
+                          .withOpacity(0.6)), // Semi-black text color
                     ),
                     child: Text('Previous'),
                   ),
                   ElevatedButton(
                     onPressed: _submitAnswers,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 158, 39, 39)),
-                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 20.0)),
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Set font color to white
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(255, 158, 39, 39)),
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(horizontal: 20.0)),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white), // Set font color to white
                     ),
                     child: Text('SUBMIT'),
                   ),
@@ -528,7 +544,8 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
 
     // Evaluate the answers
     for (int i = 1; i <= 42; i++) {
-      if (userAnswersSnapshot.get('$i') == 0) { // Updated to access field as "1", "2", etc.
+      if (userAnswersSnapshot.get('$i') == 0) {
+        // Updated to access field as "1", "2", etc.
         results[fieldMapping[i]!] = results[fieldMapping[i]!]! + 1;
       }
     }
@@ -542,7 +559,9 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
     // Navigate to the results page or perform further actions
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ResultG10()), // Replace with your actual results page widget
+      MaterialPageRoute(
+          builder: (context) =>
+              ResultG10()), // Replace with your actual results page widget
     );
   }
 
@@ -635,7 +654,8 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
                       onPressed: _viewResults,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 158, 39, 39),
-                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),

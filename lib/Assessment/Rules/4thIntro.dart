@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/4thRules.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/Home4th.dart';
+import 'package:educast/Assessment/Rules/4thRules.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/Home4th.dart';
 
 class FourthIntro extends StatefulWidget {
   const FourthIntro({super.key});
@@ -202,12 +202,14 @@ class _FourthIntro extends State<FourthIntro> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const FourthIntro()),
+                          MaterialPageRoute(
+                              builder: (context) => const FourthIntro()),
                         );
                       }
                     }
@@ -226,5 +228,3 @@ class _FourthIntro extends State<FourthIntro> {
     );
   }
 }
-
-

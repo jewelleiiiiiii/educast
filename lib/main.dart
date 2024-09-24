@@ -1,13 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/firebase_options.dart';
+import 'package:educast/firebase_options.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'LoginSignUpPages/LoginSignupPage.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
   // Ensure that widget binding is initialized before calling Firebase.initializeApp
   WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   // Initialize Firebase with the default options
   await Firebase.initializeApp(
@@ -33,7 +45,7 @@ class EduCAST extends StatelessWidget {
       title: 'EduCAST',
       home: SplashScreen(),
     );
-    }
+  }
 }
 
 class SplashScreen extends StatefulWidget {
@@ -47,10 +59,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () => Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginSignupPage()),
-    ));
+    checkPermision(Permission.notification);
+
+    Timer(
+        const Duration(seconds: 3),
+        () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginSignupPage()),
+            ));
+  }
+
+  Future<bool> checkPermision(Permission permission) async {
+    // final permission = Permission.locationAlways;
+    final status = await permission.request();
+    if (status.isGranted) {
+      return true;
+    } else if (status.isLimited) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override

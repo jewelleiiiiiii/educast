@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/assess2g10.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Assessment/assess2g10.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg10.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:educast/Search/searchg10.dart';
 
 class Questionnaire1G10 extends StatefulWidget {
   const Questionnaire1G10({super.key});
@@ -13,6 +13,7 @@ class Questionnaire1G10 extends StatefulWidget {
   @override
   _Questionnaire1G10 createState() => _Questionnaire1G10();
 }
+
 class _Questionnaire1G10 extends State<Questionnaire1G10> {
   List<String> _questions = List.generate(10, (index) => '');
   List<int?> _selectedOptions = List.generate(10, (index) => null);
@@ -38,7 +39,8 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
             setState(() {
               _questions = List.generate(
                 10,
-                    (index) => questionData[(index + 1).toString()] ?? 'No Question',
+                (index) =>
+                    questionData[(index + 1).toString()] ?? 'No Question',
               );
             });
           }
@@ -57,7 +59,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
             setState(() {
               _selectedOptions = List.generate(
                 10,
-                    (index) => answerData[(index + 1).toString()] as int?,
+                (index) => answerData[(index + 1).toString()] as int?,
               );
             });
           }
@@ -179,7 +181,8 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -211,7 +214,10 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (String label in ['AGREE', 'DISAGREE'])
+                                      for (String label in [
+                                        'AGREE',
+                                        'DISAGREE'
+                                      ])
                                         Container(
                                           width: 150.0,
                                           child: Center(
@@ -238,7 +244,8 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                   String question = entry.value;
 
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
                                     child: Row(
                                       children: [
                                         Container(
@@ -259,12 +266,15 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                               child: Center(
                                                 child: Radio<int>(
                                                   value: 0, // AGREE
-                                                  groupValue: _selectedOptions[index],
+                                                  groupValue:
+                                                      _selectedOptions[index],
                                                   onChanged: (int? value) {
                                                     setState(() {
-                                                      _selectedOptions[index] = value;
+                                                      _selectedOptions[index] =
+                                                          value;
                                                     });
-                                                    _updateAnswer(index, value); // Update Firestore in real-time
+                                                    _updateAnswer(index,
+                                                        value); // Update Firestore in real-time
                                                   },
                                                 ),
                                               ),
@@ -274,12 +284,15 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                               child: Center(
                                                 child: Radio<int>(
                                                   value: 1, // DISAGREE
-                                                  groupValue: _selectedOptions[index],
+                                                  groupValue:
+                                                      _selectedOptions[index],
                                                   onChanged: (int? value) {
                                                     setState(() {
-                                                      _selectedOptions[index] = value;
+                                                      _selectedOptions[index] =
+                                                          value;
                                                     });
-                                                    _updateAnswer(index, value); // Update Firestore in real-time
+                                                    _updateAnswer(index,
+                                                        value); // Update Firestore in real-time
                                                   },
                                                 ),
                                               ),
@@ -302,7 +315,8 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
             ),
             SizedBox(height: 10.0),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Row(
@@ -377,7 +391,8 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchG10()),
                     );
                   },
                   icon: Image.asset(
@@ -388,8 +403,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -438,16 +452,17 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
+                          MaterialPageRoute(
+                              builder: (context) => const Questionnaire1G10()),
                         );
                       }
-                    } else {
-                    }
+                    } else {}
                   },
                   icon: Image.asset(
                     'assets/main.png',

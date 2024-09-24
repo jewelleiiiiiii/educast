@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/LoginSignUpPages/Login.dart';
-import 'package:myapp/LoginSignUpPages/Signup.dart';
+import 'package:educast/LoginSignUpPages/Login.dart';
+import 'package:educast/LoginSignUpPages/Signup.dart';
 
 class LoginSignupPage extends StatefulWidget {
   const LoginSignupPage({super.key});
@@ -42,9 +42,12 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     super.initState();
     // Set the status bar text color to black
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // Optional: to make the status bar transparent
-      statusBarIconBrightness: Brightness.dark, // Set the status bar icons to black
-      statusBarBrightness: Brightness.light, // For iOS: Sets status bar text to black
+      statusBarColor:
+          Colors.transparent, // Optional: to make the status bar transparent
+      statusBarIconBrightness:
+          Brightness.dark, // Set the status bar icons to black
+      statusBarBrightness:
+          Brightness.light, // For iOS: Sets status bar text to black
     ));
   }
 
@@ -76,9 +79,9 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
                   const SizedBox(height: 50),
                   const Text(
                     'Welcome to EduCAST!\n'
-                        'Your mapping pathways\n'
-                        'to unlock your potential\n'
-                        'and navigate your future.',
+                    'Your mapping pathways\n'
+                    'to unlock your potential\n'
+                    'and navigate your future.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
@@ -121,7 +124,6 @@ class _LoginSignupTogglePageState extends State<LoginSignupPage> {
     );
   }
 }
-
 
 class BlankPage extends StatelessWidget {
   const BlankPage({super.key});
@@ -561,8 +563,8 @@ class _CreateAccountScreenState2 extends State<CreateAccountScreen2> {
   }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class educast extends StatelessWidget {
+  const educast({super.key});
 
   @override
   Widget build(BuildContext context) {

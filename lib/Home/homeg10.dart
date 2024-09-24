@@ -1,22 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/Rules/G10Intro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/Info/Abm.dart';
-import 'package:myapp/Home/Info/GAS.dart';
-import 'package:myapp/Home/Info/HUMSS.dart';
-import 'package:myapp/Home/Info/STEM.dart';
-import 'package:myapp/Home/User/UserG10.dart';
-import 'package:myapp/LoginSignUpPages/Login.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart' hide CarouselController;
+import 'package:educast/Assessment/Rules/G10Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/Info/Abm.dart';
+import 'package:educast/Home/Info/GAS.dart';
+import 'package:educast/Home/Info/HUMSS.dart';
+import 'package:educast/Home/Info/STEM.dart';
+import 'package:educast/Home/User/UserG10.dart';
+import 'package:educast/LoginSignUpPages/Login.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:educast/Search/searchg10.dart';
+import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
 class HomeG10 extends StatefulWidget {
-  const HomeG10({super.key,});
+  const HomeG10({
+    super.key,
+  });
 
   @override
   _HomeG10 createState() => _HomeG10();
@@ -29,7 +30,6 @@ class _HomeG10 extends State<HomeG10> {
   String? firstName;
   List<String> strands = ['ABM', 'GAS', 'HUMSS', 'STEM'];
 
-
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,10 @@ class _HomeG10 extends State<HomeG10> {
   void _fetchUserFirstName() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       setState(() {
         firstName = userDoc['firstName'];
       });
@@ -114,7 +117,8 @@ class _HomeG10 extends State<HomeG10> {
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 0, 0, screenHeight * 0.02),
+                      padding: EdgeInsets.fromLTRB(
+                          screenWidth * 0.05, 0, 0, screenHeight * 0.02),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -127,10 +131,10 @@ class _HomeG10 extends State<HomeG10> {
                         ],
                       ),
                     ),
-
                     Container(
                       height: screenHeight * 0.19,
-                      margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: paddingHorizontal),
                       decoration: BoxDecoration(
                         image: const DecorationImage(
                           image: AssetImage('assets/1.png'),
@@ -143,7 +147,8 @@ class _HomeG10 extends State<HomeG10> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 150.0, left: 20),
+                              padding:
+                                  const EdgeInsets.only(right: 150.0, left: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,23 +182,29 @@ class _HomeG10 extends State<HomeG10> {
                                 width: 120,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    final user = FirebaseAuth.instance.currentUser;
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
                                     if (user != null) {
-                                      final userResultDoc = FirebaseFirestore.instance
+                                      final userResultDoc = FirebaseFirestore
+                                          .instance
                                           .collection('userResultG10')
                                           .doc(user.uid);
 
-                                      final docSnapshot = await userResultDoc.get();
+                                      final docSnapshot =
+                                          await userResultDoc.get();
 
                                       if (docSnapshot.exists) {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SubmissionConfirmation()),
                                         );
                                       } else {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => G10Intro()),
+                                          MaterialPageRoute(
+                                              builder: (context) => G10Intro()),
                                         );
                                       }
                                     } else {
@@ -203,7 +214,8 @@ class _HomeG10 extends State<HomeG10> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 9.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 9.0),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(9),
                                     ),
@@ -261,7 +273,8 @@ class _HomeG10 extends State<HomeG10> {
                         height: 150.0,
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -271,22 +284,34 @@ class _HomeG10 extends State<HomeG10> {
                           itemBuilder: (context, index) {
                             List<Gradient> gradients = [
                               LinearGradient(
-                                colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
+                                colors: [
+                                  Colors.blueAccent,
+                                  Colors.purpleAccent.shade100
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                               LinearGradient(
-                                colors: [Colors.teal.shade300, Colors.cyan.shade100],
+                                colors: [
+                                  Colors.teal.shade300,
+                                  Colors.cyan.shade100
+                                ],
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
                               ),
                               LinearGradient(
-                                colors: [Colors.pink.shade600, Colors.orange.shade300],
+                                colors: [
+                                  Colors.pink.shade600,
+                                  Colors.orange.shade300
+                                ],
                                 begin: Alignment.bottomLeft,
                                 end: Alignment.topRight,
                               ),
                               LinearGradient(
-                                colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
+                                colors: [
+                                  Colors.indigo.shade500,
+                                  Colors.blueGrey.shade200
+                                ],
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                               ),
@@ -298,25 +323,29 @@ class _HomeG10 extends State<HomeG10> {
                                   case 'ABM':
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => AbmInfo()),
+                                      MaterialPageRoute(
+                                          builder: (context) => AbmInfo()),
                                     );
                                     break;
                                   case 'STEM':
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => StemInfo()),
+                                      MaterialPageRoute(
+                                          builder: (context) => StemInfo()),
                                     );
                                     break;
                                   case 'HUMSS':
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => HumssInfo()),
+                                      MaterialPageRoute(
+                                          builder: (context) => HumssInfo()),
                                     );
                                     break;
                                   case 'GAS':
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => GasInfo()),
+                                      MaterialPageRoute(
+                                          builder: (context) => GasInfo()),
                                     );
                                     break;
                                   default:
@@ -337,20 +366,25 @@ class _HomeG10 extends State<HomeG10> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
                                             // Card content
                                             Expanded(
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     strands[index],
                                                     style: TextStyle(
                                                       fontSize: 14.0,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.black,
                                                     ),
                                                     textAlign: TextAlign.center,
@@ -364,8 +398,10 @@ class _HomeG10 extends State<HomeG10> {
                                       // Like icon positioned at the top-right corner
                                       if (strands[index] == 'STEM')
                                         Positioned(
-                                          top: 5.0,  // Adjust based on the padding or spacing you want
-                                          left: 8.0, // Adjust based on the padding or spacing you want
+                                          top:
+                                              5.0, // Adjust based on the padding or spacing you want
+                                          left:
+                                              8.0, // Adjust based on the padding or spacing you want
                                           child: Icon(
                                             Icons.bookmark,
                                             color: Colors.yellow,
@@ -377,7 +413,6 @@ class _HomeG10 extends State<HomeG10> {
                                 ),
                               ),
                             );
-
                           },
                         ),
                       ),
@@ -385,13 +420,13 @@ class _HomeG10 extends State<HomeG10> {
                   ),
                 ),
               ),
-
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, screenHeight * 0.01, 0, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          screenWidth * 0.05, screenHeight * 0.01, 0, 0),
                       child: Text(
                         'Explore BatStateU-IS',
                         style: const TextStyle(
@@ -401,12 +436,10 @@ class _HomeG10 extends State<HomeG10> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-
-                    CarouselSlider(
+                    slider.CarouselSlider(
                       items: [
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/ISSTUD.png',
                             fit: BoxFit.cover,
@@ -414,8 +447,7 @@ class _HomeG10 extends State<HomeG10> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/IS.jpg',
                             fit: BoxFit.cover,
@@ -423,8 +455,7 @@ class _HomeG10 extends State<HomeG10> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/ISCHART.png',
                             fit: BoxFit.cover,
@@ -432,7 +463,7 @@ class _HomeG10 extends State<HomeG10> {
                           ),
                         ),
                       ],
-                      options: CarouselOptions(
+                      options: slider.CarouselOptions(
                         height: screenHeight * 0.3,
                         autoPlay: true,
                         enlargeCenterPage: false,
@@ -445,7 +476,6 @@ class _HomeG10 extends State<HomeG10> {
                       ),
                     ),
                     SizedBox(height: 5.0),
-
                     SizedBox(
                       height: 20.0,
                       child: Center(
@@ -474,11 +504,8 @@ class _HomeG10 extends State<HomeG10> {
                   ],
                 ),
               ),
-
-
             ],
           ),
-
           if (_isDrawerOpen)
             Positioned.fill(
               child: GestureDetector(
@@ -488,7 +515,7 @@ class _HomeG10 extends State<HomeG10> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: FractionallySizedBox(
-                      widthFactor: 0.5,  // Drawer covers half the screen width
+                      widthFactor: 0.5, // Drawer covers half the screen width
                       child: Container(
                         color: Colors.white,
                         child: Column(
@@ -499,8 +526,8 @@ class _HomeG10 extends State<HomeG10> {
                               ),
                               child: Center(
                                 child: Image.asset(
-                                  'assets/logo.png',  // Ensure this asset exists in your project
-                                  width: 150,  // Adjust size as needed
+                                  'assets/logo.png', // Ensure this asset exists in your project
+                                  width: 150, // Adjust size as needed
                                   height: 150,
                                 ),
                               ),
@@ -510,50 +537,70 @@ class _HomeG10 extends State<HomeG10> {
                                 padding: EdgeInsets.all(paddingHorizontal),
                                 children: [
                                   ListTile(
-                                    leading: const Icon(Icons.settings, color: Colors.black),
-                                    title: const Text('Settings', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
-                                    onTap: () {
-
-                                    },
+                                    leading: const Icon(Icons.settings,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'Settings',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onTap: () {},
                                   ),
                                   ListTile(
-                                    leading: const Icon(Icons.history, color: Colors.black),
-                                    title: const Text('History', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
-                                    onTap: () {
-                                      // Handle menu item tap
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.info, color: Colors.black),
-                                    title: const Text('About', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
+                                    leading: const Icon(Icons.history,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'History',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: const Icon(Icons.feedback, color: Colors.black),
-                                    title: const Text('Feedback', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
+                                    leading: const Icon(Icons.info,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'About',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: const Icon(Icons.logout, color: Colors.black),
-                                    title: const Text('Logout', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
+                                    leading: const Icon(Icons.feedback,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'Feedback',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // Handle menu item tap
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.logout,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     onTap: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginPage()),
                                       );
                                     },
                                   ),
@@ -568,7 +615,6 @@ class _HomeG10 extends State<HomeG10> {
                 ),
               ),
             ),
-
         ],
       ),
       bottomNavigationBar: Container(
@@ -623,8 +669,7 @@ class _HomeG10 extends State<HomeG10> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -673,7 +718,8 @@ class _HomeG10 extends State<HomeG10> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
@@ -681,8 +727,7 @@ class _HomeG10 extends State<HomeG10> {
                           MaterialPageRoute(builder: (context) => G10Intro()),
                         );
                       }
-                    } else {
-                    }
+                    } else {}
                   },
                   icon: Image.asset(
                     'assets/main.png',

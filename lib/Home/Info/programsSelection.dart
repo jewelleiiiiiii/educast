@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Home/homeg12.dart';
+import 'package:educast/Home/homeg12.dart';
 
 class Programs extends StatefulWidget {
   const Programs({super.key});
@@ -54,7 +54,8 @@ class _ProgramsState extends State<Programs> {
             bottom: 20,
             child: Column(
               children: [
-                overlappingCard("College of Arts and Science (CAS)", Colors.blueAccent),
+                overlappingCard(
+                    "College of Arts and Science (CAS)", Colors.blueAccent),
               ],
             ),
           ),
@@ -65,7 +66,8 @@ class _ProgramsState extends State<Programs> {
             bottom: 20,
             child: Column(
               children: [
-                overlappingCard("College of Engineering \nTechnology (CET)", Colors.red),
+                overlappingCard(
+                    "College of Engineering \nTechnology (CET)", Colors.red),
               ],
             ),
           ),
@@ -77,7 +79,9 @@ class _ProgramsState extends State<Programs> {
             bottom: 40,
             child: Column(
               children: [
-                overlappingCard("College of Informatics and \nComputing Sciences (CICS)", Colors.green),
+                overlappingCard(
+                    "College of Informatics and \nComputing Sciences (CICS)",
+                    Colors.green),
               ],
             ),
           ),
@@ -193,9 +197,9 @@ class _ProgramsState extends State<Programs> {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2), // Shadow color
-            offset: Offset(4, 4),  // Horizontal and vertical offset
-            blurRadius: 10,        // Amount of blur
-            spreadRadius: 2,       // Spread of the shadow
+            offset: Offset(4, 4), // Horizontal and vertical offset
+            blurRadius: 10, // Amount of blur
+            spreadRadius: 2, // Spread of the shadow
           ),
         ],
       ),

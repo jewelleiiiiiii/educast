@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/Assessment/assess1g10.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Assessment/assess1g10.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Search/searchg10.dart';
 import '../Assessment/AssessmentHistory/AssessmentHistoryG10.dart';
 import '../Home/homeg10.dart';
 
@@ -28,7 +28,8 @@ class _ResultG10State extends State<ResultG10> {
     final iconSize = screenWidth * 0.10;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Make the status bar transparent
-      statusBarBrightness: Brightness.light, // Ensure the status bar text is readable (white)
+      statusBarBrightness:
+          Brightness.light, // Ensure the status bar text is readable (white)
     ));
 
     return Scaffold(
@@ -68,11 +69,20 @@ class _ResultG10State extends State<ResultG10> {
                 } else {
                   var data = snapshot.data!.data() as Map<String, dynamic>;
                   double humssScore = (data['Social'] as num).toDouble();
-                  double abmScore = ((data['Enterprising'] as num).toDouble() + (data['Conventional'] as num).toDouble()) / 2;
-                  double stemScore = ((data['Realistic'] as num).toDouble() + (data['Investigative'] as num).toDouble()) / 2;
+                  double abmScore = ((data['Enterprising'] as num).toDouble() +
+                          (data['Conventional'] as num).toDouble()) /
+                      2;
+                  double stemScore = ((data['Realistic'] as num).toDouble() +
+                          (data['Investigative'] as num).toDouble()) /
+                      2;
                   double gasScore = (data['Artistic'] as num).toDouble();
 
-                  List<double> scores = [humssScore, abmScore, stemScore, gasScore];
+                  List<double> scores = [
+                    humssScore,
+                    abmScore,
+                    stemScore,
+                    gasScore
+                  ];
                   List<String> strands = [
                     "Humanities, and Social Sciences",
                     "Accountancy, Business, and Management",
@@ -168,7 +178,8 @@ class _ResultG10State extends State<ResultG10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchG10()),
                     );
                   },
                   icon: Image.asset(
@@ -179,8 +190,7 @@ class _ResultG10State extends State<ResultG10> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -229,16 +239,17 @@ class _ResultG10State extends State<ResultG10> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
+                          MaterialPageRoute(
+                              builder: (context) => const Questionnaire1G10()),
                         );
                       }
-                    } else {
-                    }
+                    } else {}
                   },
                   icon: Image.asset(
                     'assets/main.png',
@@ -265,20 +276,17 @@ class _ResultG10State extends State<ResultG10> {
         .get();
   }
 
-
-
   Widget _buildResultPage(
-      BuildContext context, {
-        required double humssScore,
-        required double abmScore,
-        required double stemScore,
-        required double gasScore,
-        required String likelyToChooseText,
-        required String likelyToChooseStrand,
-        required bool isBold,
-        required int progressPercentage,
-      }) {
-
+    BuildContext context, {
+    required double humssScore,
+    required double abmScore,
+    required double stemScore,
+    required double gasScore,
+    required String likelyToChooseText,
+    required String likelyToChooseStrand,
+    required bool isBold,
+    required int progressPercentage,
+  }) {
     List<Map<String, dynamic>> strands = [
       {"label": "HUMSS", "score": humssScore},
       {"label": "ABM", "score": abmScore},
@@ -296,7 +304,8 @@ class _ResultG10State extends State<ResultG10> {
       for (var strand in strands) {
         double score = strand['score'];
         double percentage = (score / totalMaxScore) * 100;
-        print('${strand['label']}: $score / $totalMaxScore = ${score / totalMaxScore}');
+        print(
+            '${strand['label']}: $score / $totalMaxScore = ${score / totalMaxScore}');
         print('Percent: ${percentage.toStringAsFixed(2)}%');
       }
 
@@ -315,14 +324,26 @@ class _ResultG10State extends State<ResultG10> {
         if (topStrands.length == 1) {
           calculatedProgressPercentage = maxScore / totalMaxScore * 100;
         } else if (topStrands.length == 2) {
-          calculatedProgressPercentage = (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
-              scores[strands.indexWhere((s) => s['label'] == topStrands[1])]) / (2 * totalMaxScore) * 100;
+          calculatedProgressPercentage =
+              (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
+                      scores[strands
+                          .indexWhere((s) => s['label'] == topStrands[1])]) /
+                  (2 * totalMaxScore) *
+                  100;
         } else if (topStrands.length == 3) {
-          calculatedProgressPercentage = (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
-              scores[strands.indexWhere((s) => s['label'] == topStrands[1])] +
-              scores[strands.indexWhere((s) => s['label'] == topStrands[2])]) / (3 * totalMaxScore) * 100;
+          calculatedProgressPercentage =
+              (scores[strands.indexWhere((s) => s['label'] == topStrands[0])] +
+                      scores[strands
+                          .indexWhere((s) => s['label'] == topStrands[1])] +
+                      scores[strands
+                          .indexWhere((s) => s['label'] == topStrands[2])]) /
+                  (3 * totalMaxScore) *
+                  100;
         } else {
-          calculatedProgressPercentage = (scores[0] + scores[1] + scores[2] + scores[3]) / (4 * totalMaxScore) * 100;
+          calculatedProgressPercentage =
+              (scores[0] + scores[1] + scores[2] + scores[3]) /
+                  (4 * totalMaxScore) *
+                  100;
         }
       }
     }
@@ -331,7 +352,8 @@ class _ResultG10State extends State<ResultG10> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 110), // Ensures the scroll starts 110 pixels from the top
+            padding: const EdgeInsets.only(
+                top: 110), // Ensures the scroll starts 110 pixels from the top
             child: SingleChildScrollView(
               child: Center(
                 child: SizedBox(
@@ -340,7 +362,9 @@ class _ResultG10State extends State<ResultG10> {
                     children: <Widget>[
                       // Padding for the progress indicator to fine-tune its top space
                       Padding(
-                        padding: const EdgeInsets.only(top: 5), // Adjust to control the space above the progress indicator
+                        padding: const EdgeInsets.only(
+                            top:
+                                5), // Adjust to control the space above the progress indicator
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -350,7 +374,8 @@ class _ResultG10State extends State<ResultG10> {
                               child: CircularProgressIndicator(
                                 value: calculatedProgressPercentage / 100,
                                 strokeWidth: 10,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
                                 backgroundColor: Colors.red.shade100,
                               ),
                             ),
@@ -387,7 +412,8 @@ class _ResultG10State extends State<ResultG10> {
                         likelyToChooseStrand,
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                          fontWeight:
+                              isBold ? FontWeight.bold : FontWeight.normal,
                           color: Colors.black,
                         ),
                       ),
@@ -431,7 +457,8 @@ class _ResultG10State extends State<ResultG10> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => AssessmentHistoryG10(),
+                                        builder: (context) =>
+                                            AssessmentHistoryG10(),
                                       ),
                                     );
                                   },
@@ -473,7 +500,8 @@ class AssessmentContainer extends StatelessWidget {
   final double score;
   final double totalMaxScore;
 
-  const AssessmentContainer({super.key,
+  const AssessmentContainer({
+    super.key,
     required this.label,
     required this.score,
     required this.totalMaxScore,

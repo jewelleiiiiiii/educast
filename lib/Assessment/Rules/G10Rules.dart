@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G10Intro.dart';
-import 'package:myapp/Assessment/assess1g10.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Assessment/Rules/G10Intro.dart';
+import 'package:educast/Assessment/assess1g10.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg10.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:educast/Search/searchg10.dart';
 
 class G10Rules extends StatefulWidget {
   const G10Rules({super.key});
@@ -21,7 +21,8 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
   String animatedText = '';
   int _currentIndex = 0;
   late Timer _textTimer;
-  final String _message = "This assessment will guide you \nin choosing your next path.";
+  final String _message =
+      "This assessment will guide you \nin choosing your next path.";
 
   @override
   void initState() {
@@ -266,12 +267,14 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G10Intro()),
+                        MaterialPageRoute(
+                            builder: (context) => const G10Intro()),
                       );
                     }
                   }
@@ -290,7 +293,6 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
   }
 }
 
-
 class G10Rules2 extends StatefulWidget {
   const G10Rules2({super.key});
 
@@ -303,7 +305,8 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
   String animatedText2 = '';
   int _currentIndex2 = 0;
   late Timer _textTimer2;
-  final String _message2 = "Before you begin answering the EduQUEST, \nyou must follow the  rules...";
+  final String _message2 =
+      "Before you begin answering the EduQUEST, \nyou must follow the  rules...";
 
   @override
   void initState() {
@@ -330,7 +333,8 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
           animatedText2 += _message2[_currentIndex2];
           _currentIndex2++;
         } else {
-          timer.cancel(); // Stop the text animation when the full message is printed
+          timer
+              .cancel(); // Stop the text animation when the full message is printed
         }
       });
     });
@@ -548,12 +552,14 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G10Intro()),
+                        MaterialPageRoute(
+                            builder: (context) => const G10Intro()),
                       );
                     }
                   }
@@ -571,6 +577,7 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
     );
   }
 }
+
 class G10Rules3 extends StatefulWidget {
   const G10Rules3({super.key});
 
@@ -617,77 +624,89 @@ class _G10Rules3 extends State<G10Rules3> {
             ),
           ),
 
-      Center(
-        child: Container(
-          width: screenWidth * 0.80,
-          height: 380,
-          padding: const EdgeInsets.all(20),
-          margin: EdgeInsets.only(top: 100), // Adjust margin for overlap effect
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildRuleText('1. ', 'Read Carefully', 'Read each statement. If you agree with the statement, select the \'Agree\' button. Choose \'Disagree\' if otherwise. There are no wrong answers!'),
-              SizedBox(height: 10),
-              _buildRuleText('2. ', 'Result', 'Each statement corresponds to a category. The system will tally scores automatically.'),
-              SizedBox(height: 50),
-              Center(child:
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CareerG10()),
-                  );
-                  },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  backgroundColor: const Color.fromARGB(255, 159, 41, 33), // Customize the background color if needed
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+          Center(
+            child: Container(
+              width: screenWidth * 0.80,
+              height: 380,
+              padding: const EdgeInsets.all(20),
+              margin:
+                  EdgeInsets.only(top: 100), // Adjust margin for overlap effect
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min, // Keeps the button as small as needed
-                  children: const [
-                    Text(
-                      'View career pathways',
-                      style: TextStyle(
-                        color: Colors.white, // Customize text color if needed
-                        fontSize: 16,
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildRuleText('1. ', 'Read Carefully',
+                      'Read each statement. If you agree with the statement, select the \'Agree\' button. Choose \'Disagree\' if otherwise. There are no wrong answers!'),
+                  SizedBox(height: 10),
+                  _buildRuleText('2. ', 'Result',
+                      'Each statement corresponds to a category. The system will tally scores automatically.'),
+                  SizedBox(height: 50),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CareerG10()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        backgroundColor: const Color.fromARGB(255, 159, 41,
+                            33), // Customize the background color if needed
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize
+                            .min, // Keeps the button as small as needed
+                        children: const [
+                          Text(
+                            'View career pathways',
+                            style: TextStyle(
+                              color: Colors
+                                  .white, // Customize text color if needed
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(
+                              width:
+                                  10), // Space between text and the arrow icon
+                          Icon(
+                            Icons
+                                .arrow_forward, // Arrow icon pointing to the right
+                            color:
+                                Colors.white, // Customize icon color if needed
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 10), // Space between text and the arrow icon
-                    Icon(
-                      Icons.arrow_forward, // Arrow icon pointing to the right
-                      color: Colors.white,  // Customize icon color if needed
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-      Positioned(
+          Positioned(
             right: 60.0,
             bottom: 30.0,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Questionnaire1G10()),
+                  MaterialPageRoute(
+                      builder: (context) => const Questionnaire1G10()),
                 );
               },
               child: const Text(
@@ -700,9 +719,10 @@ class _G10Rules3 extends State<G10Rules3> {
                 ),
               ),
             ),
-          ),Positioned(
+          ),
+          Positioned(
             left: 20, // Adjust the left position as needed
-            top: 63,  // Adjust the top position for overlap effect
+            top: 63, // Adjust the top position for overlap effect
             child: SizedBox(
               width: 130,
               height: 130,
@@ -848,12 +868,14 @@ class _G10Rules3 extends State<G10Rules3> {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G10Intro()),
+                        MaterialPageRoute(
+                            builder: (context) => const G10Intro()),
                       );
                     }
                   }
@@ -881,9 +903,9 @@ class CareerG10 extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
-            'assets/back.png',  // Path to the image
-            width: 24,          // Set the width
-            height: 24,         // Set the height
+            'assets/back.png', // Path to the image
+            width: 24, // Set the width
+            height: 24, // Set the height
           ),
           onPressed: () {
             // Add back button functionality here
@@ -893,18 +915,28 @@ class CareerG10 extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-
-
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Which Career Pathway is right for you?', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            Text(
+              'Which Career Pathway is right for you?',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
             Divider(thickness: 1),
             SizedBox(height: 15.0),
-            Center (child:
-            Text('Holland\'s Theory of Career Choice - RIASEC', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.left,),
+            Center(
+              child: Text(
+                'Holland\'s Theory of Career Choice - RIASEC',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
             ),
             SizedBox(height: 15.0),
             RichText(
@@ -920,14 +952,15 @@ class CareerG10 extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                    '- These people are often good at mechanical or athletic jobs. Good college majors for Realistic people are:\n',
+                        '- These people are often good at mechanical or athletic jobs. Good college majors for Realistic people are:\n',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
                   TextSpan(
-                    text: '   • Agriculture\n   • Health Assistant\n   • Computers\n   • Construction\n   • Mechanic/Machinist\n   • Engineering\n   • Food\n',
+                    text:
+                        '   • Agriculture\n   • Health Assistant\n   • Computers\n   • Construction\n   • Mechanic/Machinist\n   • Engineering\n   • Food\n',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
@@ -947,14 +980,15 @@ class CareerG10 extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                    '- These people like to watch, learn, analyze and solve problems. Good college majors for Investigative people are:\n',
+                        '- These people like to watch, learn, analyze and solve problems. Good college majors for Investigative people are:\n',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
                   TextSpan(
-                    text: '   • Marine Biology\n   • Engineering\n   • Chemistry\n   • Zoology\n   • Medicine/Surgery\n   • Consumer Economics\n   • Psychology\n',
+                    text:
+                        '   • Marine Biology\n   • Engineering\n   • Chemistry\n   • Zoology\n   • Medicine/Surgery\n   • Consumer Economics\n   • Psychology\n',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
@@ -974,14 +1008,15 @@ class CareerG10 extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                    '- These people like to work in unstructured situations where they can use their creativity. Good majors for Artistic people are:\n',
+                        '- These people like to work in unstructured situations where they can use their creativity. Good majors for Artistic people are:\n',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
                   TextSpan(
-                    text: '   • Communications\n   • Cosmetology\n   • Fine and Performing Arts\n   • Photography\n   • Radio and TV\n   • Interior Design\n   • Architecture\n',
+                    text:
+                        '   • Communications\n   • Cosmetology\n   • Fine and Performing Arts\n   • Photography\n   • Radio and TV\n   • Interior Design\n   • Architecture\n',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
@@ -1001,14 +1036,15 @@ class CareerG10 extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                    '- These people like to work with other people, rather than things. Good college majors for Social people are:\n',
+                        '- These people like to work with other people, rather than things. Good college majors for Social people are:\n',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
                   TextSpan(
-                    text: '   • Counseling\n   • Nursing\n   • Physical Theraphy\n   • Travel\n   • Advertising\n   • Public Relations\n   • Education',
+                    text:
+                        '   • Counseling\n   • Nursing\n   • Physical Theraphy\n   • Travel\n   • Advertising\n   • Public Relations\n   • Education',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
@@ -1028,14 +1064,15 @@ class CareerG10 extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                    '-These people like to work with others and enjoy persuading and and performing. Good college majors for Enterprising people are:\n',
+                        '-These people like to work with others and enjoy persuading and and performing. Good college majors for Enterprising people are:\n',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
                   TextSpan(
-                    text: '   • Fashion Merchandising\n   • Real Estate\n   • Marketing/Sales\n   • Law\n   • Political Science\n   • International Trade\n',
+                    text:
+                        '   • Fashion Merchandising\n   • Real Estate\n   • Marketing/Sales\n   • Law\n   • Political Science\n   • International Trade\n',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
@@ -1054,14 +1091,15 @@ class CareerG10 extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                    'These people are very detail oriented,organized and like to work with data. Good college majors for Conventional people are\n',
+                        'These people are very detail oriented,organized and like to work with data. Good college majors for Conventional people are\n',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                     ),
                   ),
                   TextSpan(
-                    text: '   • Accounting\n   • Court Reporting\n   • Insurance\n   • Administration\n   • Medical Records\n   • Banking\n   • Data Processing\n',
+                    text:
+                        '   • Accounting\n   • Court Reporting\n   • Insurance\n   • Administration\n   • Medical Records\n   • Banking\n   • Data Processing\n',
                     style: TextStyle(color: Colors.black),
                   ),
                 ],

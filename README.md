@@ -1,4 +1,4 @@
-# myapp
+# educast
 
 A new Flutter project.
 

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G12Intro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg12.dart';
-import 'package:myapp/Search/searchg12.dart';
+import 'package:educast/Assessment/Rules/G12Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg12.dart';
+import 'package:educast/Search/searchg12.dart';
 
 class G12Rules extends StatefulWidget {
   const G12Rules({super.key});
@@ -19,7 +19,8 @@ class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
   String animatedText = '';
   int _currentIndex = 0;
   late Timer _textTimer;
-  final String _message = "This assessment will guide you \nin choosing your next path.";
+  final String _message =
+      "This assessment will guide you \nin choosing your next path.";
 
   @override
   void initState() {
@@ -46,7 +47,8 @@ class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
           animatedText += _message[_currentIndex];
           _currentIndex++;
         } else {
-          timer.cancel(); // Stop the text animation when the full message is printed
+          timer
+              .cancel(); // Stop the text animation when the full message is printed
         }
       });
     });
@@ -264,12 +266,14 @@ class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G12Intro()),
+                        MaterialPageRoute(
+                            builder: (context) => const G12Intro()),
                       );
                     }
                   }
@@ -288,7 +292,6 @@ class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
   }
 }
 
-
 class G12Rules2 extends StatefulWidget {
   const G12Rules2({super.key});
 
@@ -301,7 +304,8 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
   String animatedText2 = '';
   int _currentIndex2 = 0;
   late Timer _textTimer2;
-  final String _message2 = "Before you begin answering the EduQUEST, \nyou must follow the  rules...";
+  final String _message2 =
+      "Before you begin answering the EduQUEST, \nyou must follow the  rules...";
 
   @override
   void initState() {
@@ -328,7 +332,8 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
           animatedText2 += _message2[_currentIndex2];
           _currentIndex2++;
         } else {
-          timer.cancel(); // Stop the text animation when the full message is printed
+          timer
+              .cancel(); // Stop the text animation when the full message is printed
         }
       });
     });
@@ -546,12 +551,14 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G12Intro()),
+                        MaterialPageRoute(
+                            builder: (context) => const G12Intro()),
                       );
                     }
                   }
@@ -569,6 +576,7 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
     );
   }
 }
+
 class G12Rules3 extends StatefulWidget {
   const G12Rules3({super.key});
 
@@ -620,7 +628,8 @@ class _G12Rules3 extends State<G12Rules3> {
               width: screenWidth * 0.80,
               height: 380,
               padding: const EdgeInsets.all(20),
-              margin: EdgeInsets.only(top: 100), // Adjust margin for overlap effect
+              margin:
+                  EdgeInsets.only(top: 100), // Adjust margin for overlap effect
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -636,15 +645,20 @@ class _G12Rules3 extends State<G12Rules3> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildRuleText('1. ', 'One Attempt Only', 'You can take the test only once, so be prepared before starting.'),
+                  _buildRuleText('1. ', 'One Attempt Only',
+                      'You can take the test only once, so be prepared before starting.'),
                   SizedBox(height: 10),
-                  _buildRuleText('2. ', 'Time-Limited', 'This is a speed test, so each question will have a strict time limit. Pay attention to the timer and answer as quickly and accurately as possible.'),
+                  _buildRuleText('2. ', 'Time-Limited',
+                      'This is a speed test, so each question will have a strict time limit. Pay attention to the timer and answer as quickly and accurately as possible.'),
                   SizedBox(height: 10),
-                  _buildRuleText('3. ', 'No Pausing', "Since it is a speed test, pauses aren't allowed."),
+                  _buildRuleText('3. ', 'No Pausing',
+                      "Since it is a speed test, pauses aren't allowed."),
                   SizedBox(height: 10),
-                  _buildRuleText('4. ', 'No Help Allowed', 'Complete the assessment independently, without external resources.'),
+                  _buildRuleText('4. ', 'No Help Allowed',
+                      'Complete the assessment independently, without external resources.'),
                   SizedBox(height: 10),
-                  _buildRuleText('5. ', 'Result', 'Your results are final once submitted.'),
+                  _buildRuleText('5. ', 'Result',
+                      'Your results are final once submitted.'),
                 ],
               ),
             ),
@@ -669,9 +683,10 @@ class _G12Rules3 extends State<G12Rules3> {
                 ),
               ),
             ),
-          ),Positioned(
+          ),
+          Positioned(
             left: 20, // Adjust the left position as needed
-            top: 63,  // Adjust the top position for overlap effect
+            top: 63, // Adjust the top position for overlap effect
             child: SizedBox(
               width: 130,
               height: 130,
@@ -817,12 +832,14 @@ class _G12Rules3 extends State<G12Rules3> {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const G12Intro()),
+                        MaterialPageRoute(
+                            builder: (context) => const G12Intro()),
                       );
                     }
                   }

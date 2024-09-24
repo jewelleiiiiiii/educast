@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G10Rules.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Assessment/Rules/G10Rules.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg10.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:educast/Search/searchg10.dart';
 
 class G10Intro extends StatefulWidget {
   const G10Intro({super.key});
@@ -144,7 +144,8 @@ class _G10Intro extends State<G10Intro> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchG10()),
                     );
                   },
                   icon: Image.asset(
@@ -204,12 +205,14 @@ class _G10Intro extends State<G10Intro> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const G10Intro()),
+                          MaterialPageRoute(
+                              builder: (context) => const G10Intro()),
                         );
                       }
                     }
@@ -228,5 +231,3 @@ class _G10Intro extends State<G10Intro> {
     );
   }
 }
-
-

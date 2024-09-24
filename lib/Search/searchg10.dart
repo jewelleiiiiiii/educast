@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/Rules/G10Intro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Result/resultg10.dart';
+import 'package:educast/Assessment/Rules/G10Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Result/resultg10.dart';
 import '../Home/Info/Abm.dart';
 import '../Home/Info/GAS.dart';
 import '../Home/Info/HUMSS.dart';
@@ -26,7 +26,6 @@ class _SearchG10 extends State<SearchG10> {
   TextEditingController searchController = TextEditingController();
   String selectedFilter = 'All'; // Default value for the dropdown
 
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +35,8 @@ class _SearchG10 extends State<SearchG10> {
 
   Future<void> _fetchTopCourses() async {
     try {
-      final collectionRef = FirebaseFirestore.instance.collection('TopCoursesInBatStateU');
+      final collectionRef =
+          FirebaseFirestore.instance.collection('TopCoursesInBatStateU');
 
       final Map<String, List<String>> filterCourses = {
         'STEM': [
@@ -75,7 +75,7 @@ class _SearchG10 extends State<SearchG10> {
 
       // Retrieve the courses to be fetched based on selected filter
       final List<String> coursesToRetrieve = selectedFilter == 'All'
-          ? []  // Empty list to get all fields
+          ? [] // Empty list to get all fields
           : filterCourses[selectedFilter] ?? [];
 
       List<Map<String, dynamic>> courses = [];
@@ -200,8 +200,6 @@ class _SearchG10 extends State<SearchG10> {
     }
   }
 
-
-
   void removeSearchResult(int index) {
     setState(() {
       searchResults.removeAt(index);
@@ -254,9 +252,8 @@ class _SearchG10 extends State<SearchG10> {
             uniqueResults.add(docSnapshot.id);
           } else {
             // Search within document fields if data is not null
-            final Map<String, dynamic>? data = docSnapshot.data() as Map<
-                String,
-                dynamic>?;
+            final Map<String, dynamic>? data =
+                docSnapshot.data() as Map<String, dynamic>?;
             if (data != null) {
               data.forEach((key, value) {
                 if (value.toString().toLowerCase().contains(query)) {
@@ -354,14 +351,16 @@ class _SearchG10 extends State<SearchG10> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 160), // Keep the top scroll cut at 150
+            padding: const EdgeInsets.only(
+                top: 160), // Keep the top scroll cut at 150
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   Container(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 10), // Adjust bottom padding for spacing
+                      padding: const EdgeInsets.fromLTRB(
+                          16.0, 0, 16, 10), // Adjust bottom padding for spacing
                       child: Row(
                         children: [
                           Expanded(
@@ -435,7 +434,7 @@ class _SearchG10 extends State<SearchG10> {
                     ),
                   const SizedBox(height: 20.0),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16,16,0),
+                    padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
@@ -457,7 +456,8 @@ class _SearchG10 extends State<SearchG10> {
                         child: DropdownButton<String>(
                           dropdownColor: Colors.white,
                           value: selectedFilter,
-                          isExpanded: true, // Ensures the dropdown button takes the full width
+                          isExpanded:
+                              true, // Ensures the dropdown button takes the full width
                           items: <String>['All', 'STEM', 'ABM', 'GAS', 'HUMSS']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -475,10 +475,9 @@ class _SearchG10 extends State<SearchG10> {
                       ),
                     ),
                   ),
-                  Padding (
+                  Padding(
                     padding: EdgeInsets.all(20),
-                    child:
-                  TopCoursesBarChart(topCourses: topCourses),
+                    child: TopCoursesBarChart(topCourses: topCourses),
                   ),
                   const SizedBox(height: 30.0),
                   // Add the chart here
@@ -529,7 +528,8 @@ class _SearchG10 extends State<SearchG10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG10()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchG10()),
                     );
                   },
                   icon: Image.asset(
@@ -615,11 +615,12 @@ class _SearchG10 extends State<SearchG10> {
   }
 }
 
-  class SearchResultTile extends StatelessWidget {
+class SearchResultTile extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const SearchResultTile({super.key,
+  const SearchResultTile({
+    super.key,
     required this.text,
     required this.onTap,
   });
@@ -638,7 +639,8 @@ class YouMayLikeTile extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const YouMayLikeTile({super.key,
+  const YouMayLikeTile({
+    super.key,
     required this.title,
     required this.onTap,
   });
@@ -656,7 +658,8 @@ class YouMayLikeTile extends StatelessWidget {
 class TopCoursesBarChart extends StatelessWidget {
   final List<Map<String, dynamic>> topCourses;
 
-  const TopCoursesBarChart({Key? key, required this.topCourses}) : super(key: key);
+  const TopCoursesBarChart({Key? key, required this.topCourses})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -674,87 +677,93 @@ class TopCoursesBarChart extends StatelessWidget {
       child: topCourses.isEmpty
           ? Center(child: Text('No data available'))
           : SingleChildScrollView(
-        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-        child: SizedBox(
-          width: dynamicWidth > minWidth ? dynamicWidth : minWidth, // Use max of dynamic and min width
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.spaceEvenly,
-              maxY: 1000, // Set the max Y-axis value
-              barTouchData: BarTouchData(enabled: false),
-              titlesData: FlTitlesData(
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 60, // Increase reserved space for Y-axis labels
-                    interval: 200, // Set interval to display 0, 200, 400, 600, 800
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+              child: SizedBox(
+                width: dynamicWidth > minWidth
+                    ? dynamicWidth
+                    : minWidth, // Use max of dynamic and min width
+                child: BarChart(
+                  BarChartData(
+                    alignment: BarChartAlignment.spaceEvenly,
+                    maxY: 1000, // Set the max Y-axis value
+                    barTouchData: BarTouchData(enabled: false),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize:
+                              60, // Increase reserved space for Y-axis labels
+                          interval:
+                              200, // Set interval to display 0, 200, 400, 600, 800
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            return Text(
+                              value.toInt().toString(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 60, // Same reserved size as the left
-                    interval: 200, // Same interval for right Y-axis
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 60, // Same reserved size as the left
+                          interval: 200, // Same interval for right Y-axis
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            return Text(
+                              value.toInt().toString(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (double value, TitleMeta meta) {
-                      int index = value.toInt();
-                      if (index >= 0 && index < topCourses.length) {
-                        return Text(topCourses[index]['label']);
-                      } else {
-                        return const Text(''); // Return empty if out of bounds
-                      }
-                    },
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (double value, TitleMeta meta) {
+                            int index = value.toInt();
+                            if (index >= 0 && index < topCourses.length) {
+                              return Text(topCourses[index]['label']);
+                            } else {
+                              return const Text(
+                                  ''); // Return empty if out of bounds
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barGroups: topCourses
+                        .asMap()
+                        .map((index, course) {
+                          return MapEntry(
+                            index,
+                            BarChartGroupData(
+                              x: index,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: course['value']
+                                      .toDouble(), // Use the actual value from the database
+                                  color: Color.fromARGB(255, 158, 39, 39),
+                                  width: 20,
+                                ),
+                              ],
+                            ),
+                          );
+                        })
+                        .values
+                        .toList(),
                   ),
                 ),
               ),
-              borderData: FlBorderData(show: false),
-              barGroups: topCourses
-                  .asMap()
-                  .map((index, course) {
-                return MapEntry(
-                  index,
-                  BarChartGroupData(
-                    x: index,
-                    barRods: [
-                      BarChartRodData(
-                        toY: course['value'].toDouble(), // Use the actual value from the database
-                        color: Color.fromARGB(255, 158, 39, 39),
-                        width: 20,
-                      ),
-                    ],
-                  ),
-                );
-              })
-                  .values
-                  .toList(),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -1,13 +1,16 @@
+import 'package:educast/LoginSignUpPages/CustomAlertDialog.dart';
+import 'package:educast/services/notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/Home/Home4th.dart';
-import 'package:myapp/Home/homeg12.dart';
-import 'package:myapp/LoginSignUpPages/LoginSignupPage.dart';
-import 'package:myapp/LoginSignUpPages/Signup.dart';
-import 'package:myapp/services/authentication.dart';
-import 'package:myapp/services/snackbar.dart';
-import 'package:myapp/Home/homeg10.dart';
+import 'package:educast/Home/Home4th.dart';
+import 'package:educast/Home/homeg12.dart';
+import 'package:educast/LoginSignUpPages/LoginSignupPage.dart';
+import 'package:educast/LoginSignUpPages/Signup.dart';
+import 'package:educast/services/authentication.dart';
+import 'package:educast/services/snackbar.dart';
+import 'package:educast/Home/homeg10.dart';
+import 'package:vibration/vibration.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,79 +26,260 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   void loginUsers() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (_emailController.text != "") {
+      setState(() {
+        isLoading = true;
+      });
 
-    try {
-      String email = '${_emailController.text}@g.batstate-u.edu.ph';
+      try {
+        String email = '${_emailController.text}@g.batstate-u.edu.ph';
 
-      // Attempt to log in the user
-      String res = await _auth.loginUser(
-        email: email,
-        password: _passwordController.text,
-        context: context,
-      );
+        // Attempt to log in the user
+        String res = await _auth.loginUser(
+          email: email,
+          password: _passwordController.text,
+          context: context,
+        );
 
-      if (!mounted) return;
+        if (!mounted) return;
 
-      if (res == "Success") {
-        // Get the current user's UID from Firebase Auth
-        User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          String uid = user.uid;
+        if (res == "Success") {
+          // Get the current user's UID from Firebase Auth
+          User? user = FirebaseAuth.instance.currentUser;
+          bool isActive = _auth.checkIfUserIsSignedIn();
 
-          // Retrieve user data from Firestore using UID
-          var userSnapshot = await _auth.getUserData(uid);
-
-          if (userSnapshot != null) {
-            String gradeLevel = userSnapshot['gradeLevel'];
-
-            // Redirect based on grade level
-            if (gradeLevel == 'Grade 10') {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeG10(),
-                ),
-              );
-            } else if (gradeLevel == 'Grade 12') {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeG12(),
-                ),
-              );
-            } else if (gradeLevel == 'Fourth-year College') {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Home4th(),
-                ),
-              );
+          if (isActive) {
+            NotificationHelper.isNotifShown = false;
+            NotificationHelper.showNotification(
+                title: "Location Alert",
+                body:
+                    "User ${user!.email} is already signed in to other account.",
+                payload: "jawara.poge");
+            if (await Vibration.hasVibrator() == true) {
+              Vibration.vibrate(duration: 1000);
+              await Future.delayed(const Duration(milliseconds: 2000));
+              Vibration.vibrate(duration: 1000);
             } else {
-              // If no valid grade level is found
-              showSnackBar(context, 'Grade level not recognized.');
+              Vibration.cancel();
             }
           } else {
-            // Handle the case where user data is not found
-            showSnackBar(context, 'User data not found.');
+            NotificationHelper.isNotifShown = true;
+            Vibration.cancel();
+          }
+          if (user != null) {
+            String uid = user.uid;
+
+            // Retrieve user data from Firestore using UID
+            var userSnapshot = await _auth.getUserData(uid);
+
+            if (userSnapshot != null) {
+              String gradeLevel = userSnapshot['gradeLevel'];
+
+              // Redirect based on grade level
+              if (gradeLevel == 'Grade 10') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeG10(),
+                  ),
+                );
+              } else if (gradeLevel == 'Grade 12') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeG12(),
+                  ),
+                );
+              } else if (gradeLevel == 'Fourth-year College') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Home4th(),
+                  ),
+                );
+              } else {
+                // If no valid grade level is found
+                showSnackBar(context, 'Grade level not recognized.');
+              }
+            } else {
+              // Handle the case where user data is not found
+              showSnackBar(context, 'User data not found.');
+            }
+          } else {
+            showSnackBar(context, 'User not authenticated.');
           }
         } else {
-          showSnackBar(context, 'User not authenticated.');
+          showSnackBar(context, res);
         }
-      } else {
-        showSnackBar(context, res);
+      } catch (e) {
+        showSnackBar(context, 'Error during login: $e');
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
       }
-    } catch (e) {
-      showSnackBar(context, 'Error during login: $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+                colorMessage: Colors.redAccent,
+                actionLabel: "Close",
+                title: "No Email Error",
+                onPressedCloseBtn: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                    "Please enter a valid email address. It appears that no email address was provided or the entered address is not valid."));
+          });
     }
   }
 
+  void loginWithGoogle() async {
+    String res = await _auth.loginWithGoogle(context);
+
+    if (res == "Success") {
+      // Get the current user's UID from Firebase Auth
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String uid = user.uid;
+
+        // Retrieve user data from Firestore using UID
+        var userSnapshot = await _auth.getUserData(uid);
+
+        if (userSnapshot != null) {
+          String gradeLevel = userSnapshot['gradeLevel'];
+
+          // Redirect based on grade level
+          if (gradeLevel == 'Grade 10') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeG10(),
+              ),
+            );
+          } else if (gradeLevel == 'Grade 12') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeG12(),
+              ),
+            );
+          } else if (gradeLevel == 'Fourth-year College') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Home4th(),
+              ),
+            );
+          } else {
+            // If no valid grade level is found
+            showSnackBar(context, 'Grade level not recognized.');
+          }
+        } else {
+          // Handle the case where user data is not found
+          showSnackBar(context, 'User data not found.');
+        }
+      } else {
+        showSnackBar(context, 'User not authenticated.');
+      }
+    } else {
+      showSnackBar(context, res);
+    }
+  }
+
+  void _forgotPassword() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          double _w = MediaQuery.of(context).size.width;
+          return CustomAlertDialog(
+              colorMessage: Colors.green,
+              title: "Reset Password",
+              height: 70,
+              widght: _w,
+              actionOkayVisibility: true,
+              onPressedCloseBtn: () {
+                Navigator.of(context).pop();
+              },
+              onPressOkay: () {
+                resetPassword();
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildEmailTextField(),
+                ],
+              ));
+        });
+  }
+
+  void resetPassword() async {
+    AuthServices _auth = AuthServices();
+
+    if (_emailController.text != "") {
+      String email = '${_emailController.text}@g.batstate-u.edu.ph';
+
+      bool hasEmail = await _auth.checkEmailExists(email);
+
+      if (hasEmail) {
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+        showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                  colorMessage: Colors.greenAccent,
+                  title: "Success",
+                  onPressedCloseBtn: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                      "An email has been sent to your account with instructions on how to change your password. Thank you!"));
+            });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                  colorMessage: Colors.redAccent,
+                  actionOkayVisibility: true,
+                  actionLabel: "Sign Up",
+                  title: "Invalid",
+                  onPressOkay: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignupPage(),
+                      ),
+                    );
+                  }, //, => _signUp(MediaQuery.of(context).size.width),
+                  onPressedCloseBtn: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                      "The email address you entered was not found, or the user may have been deleted. Would you like to sign up?"));
+            });
+      }
+      // ignore: use_build_context_synchronously
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+                colorMessage: Colors.redAccent,
+                actionLabel: "Close",
+                title: "No Email Error",
+                onPressedCloseBtn: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                    "Please enter a valid email address. It appears that no email address was provided or the entered address is not valid."));
+          });
+    }
+  }
 
   @override
   void dispose() {
@@ -198,9 +382,7 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         InkWell(
-                          onTap: () {
-                            // Implement forgot password logic
-                          },
+                          onTap: _forgotPassword,
                           child: const MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: Text(
@@ -224,7 +406,8 @@ class _LoginPageState extends State<LoginPage> {
                           foregroundColor: MaterialStateProperty.all<Color>(
                             Colors.white,
                           ),
-                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
                             const EdgeInsets.symmetric(
                               horizontal: 80.0,
                               vertical: 15.0,
@@ -233,8 +416,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: isLoading
                             ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
+                                color: Colors.white,
+                              )
                             : const Text('LOGIN'),
                       ),
                     ),
@@ -252,9 +435,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Spacer(),
                     Center(
                       child: OutlinedButton(
-                        onPressed: () async {
-                          await _auth.loginWithGoogle(context);
-                        },
+                        onPressed: loginWithGoogle,
                         style: ButtonStyle(
                           side: MaterialStateProperty.all(BorderSide.none),
                         ),
@@ -278,8 +459,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
-
   Widget _buildEmailTextField() {
     return Container(
       height: 50.0,
@@ -299,7 +478,7 @@ class _LoginPageState extends State<LoginPage> {
         style: const TextStyle(fontSize: 15.0),
         decoration: InputDecoration(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           labelText: 'Email',
           labelStyle: const TextStyle(color: Colors.black),
           filled: true,

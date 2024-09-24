@@ -1,18 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/Rules/G12Intro.dart';
-import 'package:myapp/Home/Info/programsSelection.dart';
-import 'package:myapp/Home/User/UserG12.dart';
-import 'package:myapp/LoginSignUpPages/Login.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:myapp/Search/searchg12.dart';
+import 'package:flutter/material.dart' hide CarouselController;
+import 'package:educast/Assessment/Rules/G12Intro.dart';
+import 'package:educast/Home/Info/programsSelection.dart';
+import 'package:educast/Home/User/UserG12.dart';
+import 'package:educast/LoginSignUpPages/Login.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:carousel_slider/carousel_slider.dart' as slider;
+import 'package:educast/Search/searchg12.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-
 class HomeG12 extends StatefulWidget {
-  const HomeG12({super.key,});
+  const HomeG12({
+    super.key,
+  });
 
   @override
   _HomeG12State createState() => _HomeG12State();
@@ -36,7 +37,10 @@ class _HomeG12State extends State<HomeG12> {
   void _fetchUserStrand() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       setState(() {
         userStrand = userDoc['strand'];
         _updateCoursesBasedOnStrand(userStrand!);
@@ -48,7 +52,10 @@ class _HomeG12State extends State<HomeG12> {
   void _fetchUserFirstName() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       setState(() {
         firstName = userDoc['firstName'];
       });
@@ -173,7 +180,8 @@ class _HomeG12State extends State<HomeG12> {
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, 0, 0, screenHeight * 0.02),
+                      padding: EdgeInsets.fromLTRB(
+                          screenWidth * 0.05, 0, 0, screenHeight * 0.02),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -186,10 +194,10 @@ class _HomeG12State extends State<HomeG12> {
                         ],
                       ),
                     ),
-
                     Container(
                       height: screenHeight * 0.19,
-                      margin: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: paddingHorizontal),
                       decoration: BoxDecoration(
                         image: const DecorationImage(
                           image: AssetImage('assets/1.png'),
@@ -202,7 +210,8 @@ class _HomeG12State extends State<HomeG12> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 150.0, left: 20),
+                              padding:
+                                  const EdgeInsets.only(right: 150.0, left: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,11 +244,11 @@ class _HomeG12State extends State<HomeG12> {
                               child: SizedBox(
                                 width: 120,
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                  },
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 9.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 9.0),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(9),
                                     ),
@@ -259,12 +268,9 @@ class _HomeG12State extends State<HomeG12> {
                         ],
                       ),
                     ),
-
-
                   ],
                 ),
               ),
-
               SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.zero,
@@ -299,9 +305,10 @@ class _HomeG12State extends State<HomeG12> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const Programs()),
+                                  MaterialPageRoute(
+                                      builder: (context) => const Programs()),
                                 );
-                                },
+                              },
                               child: Text(
                                 "View All",
                                 style: TextStyle(
@@ -319,7 +326,8 @@ class _HomeG12State extends State<HomeG12> {
                         height: 150.0,
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -327,34 +335,39 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                           itemCount: courses.length > 4 ? 4 : courses.length,
                           itemBuilder: (context, index) {
-
                             List<Gradient> gradients = [
                               LinearGradient(
-                                colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
+                                colors: [
+                                  Colors.blueAccent,
+                                  Colors.purpleAccent.shade100
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
-
                               LinearGradient(
-                                colors: [Colors.teal.shade300, Colors.cyan.shade100],
+                                colors: [
+                                  Colors.teal.shade300,
+                                  Colors.cyan.shade100
+                                ],
                                 begin: Alignment.topRight,
                                 end: Alignment.bottomLeft,
                               ),
-
                               LinearGradient(
-                                colors: [Colors.pink.shade600, Colors.orange.shade300],
+                                colors: [
+                                  Colors.pink.shade600,
+                                  Colors.orange.shade300
+                                ],
                                 begin: Alignment.bottomLeft,
                                 end: Alignment.topRight,
                               ),
-
                               LinearGradient(
-                                colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
+                                colors: [
+                                  Colors.indigo.shade500,
+                                  Colors.blueGrey.shade200
+                                ],
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                               ),
-
-
-
                             ];
 
                             return Card(
@@ -370,7 +383,8 @@ class _HomeG12State extends State<HomeG12> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         courses[index],
@@ -393,14 +407,13 @@ class _HomeG12State extends State<HomeG12> {
                   ),
                 ),
               ),
-
-
               SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(screenWidth * 0.05, screenHeight * 0.01, 0, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          screenWidth * 0.05, screenHeight * 0.01, 0, 0),
                       child: Text(
                         'Explore BatStateU-IS',
                         style: const TextStyle(
@@ -410,12 +423,10 @@ class _HomeG12State extends State<HomeG12> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-
-                    CarouselSlider(
+                    slider.CarouselSlider(
                       items: [
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/ISSTUD.png',
                             fit: BoxFit.cover,
@@ -423,8 +434,7 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/IS.jpg',
                             fit: BoxFit.cover,
@@ -432,8 +442,7 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: Image.asset(
                             'assets/ISCHART.png',
                             fit: BoxFit.cover,
@@ -441,7 +450,7 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                         ),
                       ],
-                      options: CarouselOptions(
+                      options: slider.CarouselOptions(
                         height: screenHeight * 0.3,
                         autoPlay: true,
                         enlargeCenterPage: false,
@@ -454,7 +463,6 @@ class _HomeG12State extends State<HomeG12> {
                       ),
                     ),
                     SizedBox(height: 5.0),
-
                     SizedBox(
                       height: 20.0,
                       child: Center(
@@ -483,11 +491,8 @@ class _HomeG12State extends State<HomeG12> {
                   ],
                 ),
               ),
-
-
             ],
           ),
-
           if (_isDrawerOpen)
             Positioned.fill(
               child: GestureDetector(
@@ -497,7 +502,7 @@ class _HomeG12State extends State<HomeG12> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: FractionallySizedBox(
-                      widthFactor: 0.5,  // Drawer covers half the screen width
+                      widthFactor: 0.5, // Drawer covers half the screen width
                       child: Container(
                         color: Colors.white,
                         child: Column(
@@ -508,8 +513,8 @@ class _HomeG12State extends State<HomeG12> {
                               ),
                               child: Center(
                                 child: Image.asset(
-                                  'assets/logo.png',  // Ensure this asset exists in your project
-                                  width: 150,  // Adjust size as needed
+                                  'assets/logo.png', // Ensure this asset exists in your project
+                                  width: 150, // Adjust size as needed
                                   height: 150,
                                 ),
                               ),
@@ -519,50 +524,70 @@ class _HomeG12State extends State<HomeG12> {
                                 padding: EdgeInsets.all(paddingHorizontal),
                                 children: [
                                   ListTile(
-                                    leading: const Icon(Icons.settings, color: Colors.black),
-                                    title: const Text('Settings', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
-                                    onTap: () {
-
-                                    },
+                                    leading: const Icon(Icons.settings,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'Settings',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onTap: () {},
                                   ),
                                   ListTile(
-                                    leading: const Icon(Icons.history, color: Colors.black),
-                                    title: const Text('History', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
-                                    onTap: () {
-                                      // Handle menu item tap
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(Icons.info, color: Colors.black),
-                                    title: const Text('About', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
+                                    leading: const Icon(Icons.history,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'History',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: const Icon(Icons.feedback, color: Colors.black),
-                                    title: const Text('Feedback', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
+                                    leading: const Icon(Icons.info,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'About',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     onTap: () {
                                       // Handle menu item tap
                                     },
                                   ),
                                   ListTile(
-                                    leading: const Icon(Icons.logout, color: Colors.black),
-                                    title: const Text('Logout', style: TextStyle(
-                                      fontSize: 18,
-                                    ),),
+                                    leading: const Icon(Icons.feedback,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'Feedback',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // Handle menu item tap
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.logout,
+                                        color: Colors.black),
+                                    title: const Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     onTap: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginPage()),
                                       );
                                     },
                                   ),
@@ -577,7 +602,6 @@ class _HomeG12State extends State<HomeG12> {
                 ),
               ),
             ),
-
         ],
       ),
       bottomNavigationBar: Container(
@@ -632,8 +656,7 @@ class _HomeG12State extends State<HomeG12> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -668,7 +691,6 @@ class _HomeG12State extends State<HomeG12> {
                     color: Colors.white.withOpacity(0.8),
                     width: 10,
                   ),
-
                 ),
                 child: IconButton(
                   onPressed: () {
@@ -688,8 +710,6 @@ class _HomeG12State extends State<HomeG12> {
           ],
         ),
       ),
-
-
     );
   }
 }

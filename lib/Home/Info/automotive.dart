@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/Home/homeg12.dart';
+import 'package:educast/Home/homeg12.dart';
 
 class AcademicAutomotiveScreen extends StatelessWidget {
   const AcademicAutomotiveScreen({super.key});
@@ -132,13 +132,15 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(5),
                                     border: Border.all(
-                                      color: const Color(0xFFFFC0CB).withOpacity(0.5),
+                                      color: const Color(0xFFFFC0CB)
+                                          .withOpacity(0.5),
                                       width: 1.5,
                                     ),
                                   ),
                                   child: SingleChildScrollView(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
                                         Container(
                                           margin: const EdgeInsets.symmetric(
@@ -153,13 +155,15 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                               bottomRight: Radius.circular(0),
                                             ),
                                             image: DecorationImage(
-                                              image: AssetImage('assets/stem1.png'),
+                                              image: AssetImage(
+                                                  'assets/stem1.png'),
                                               fit: BoxFit.cover,
                                             ),
                                           ),
                                         ),
                                         Container(
-                                          margin: const EdgeInsets.symmetric(vertical: 10.0),
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10.0),
                                           padding: const EdgeInsets.all(8.0),
                                           decoration: const BoxDecoration(
                                             color: Colors.transparent,
@@ -179,9 +183,11 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                               vertical: 15.0, horizontal: 20.0),
                                           height: 200,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                             image: const DecorationImage(
-                                              image: AssetImage('assets/stem2.png'),
+                                              image: AssetImage(
+                                                  'assets/stem2.png'),
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -191,20 +197,27 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                                 bottom: 0,
                                                 right: 0,
                                                 child: Container(
-                                                  decoration: const BoxDecoration(
-                                                    borderRadius: BorderRadius.only(
-                                                      topLeft: Radius.circular(15),
-                                                      bottomRight: Radius.circular(10),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      bottomRight:
+                                                          Radius.circular(10),
                                                     ),
                                                     color: Colors.white,
                                                   ),
-                                                  padding: const EdgeInsets.symmetric(
-                                                      horizontal: 10.0, vertical: 7.0),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10.0,
+                                                      vertical: 7.0),
                                                   child: const Text(
                                                     'See More',
                                                     style: TextStyle(
                                                         color: Colors.red,
-                                                        fontWeight: FontWeight.bold),
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                               ),
@@ -214,11 +227,15 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                         // Dynamic content display
                                         ListView.builder(
                                           shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
                                           itemCount: contentList.length,
                                           itemBuilder: (context, index) {
                                             return Container(
-                                              margin: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 15.0,
+                                                      horizontal: 20.0),
                                               padding: const EdgeInsets.all(10),
                                               decoration: const BoxDecoration(
                                                 color: Colors.transparent,
@@ -227,11 +244,18 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                                 children: [
                                                   // Pink container should be the first child in the stack
                                                   Container(
-                                                    margin: const EdgeInsets.symmetric(vertical: 5.0),
-                                                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 5.0),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10.0,
+                                                        horizontal: 10.0),
                                                     decoration: BoxDecoration(
                                                       color: Colors.pink[50],
-                                                      borderRadius: BorderRadius.circular(10),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
                                                     ),
                                                     child: Column(
                                                       children: [
@@ -241,25 +265,38 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                                               child: Center(
                                                                 child: Text(
                                                                   'What is BAET all about?',
-                                                                  style: TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight: FontWeight.bold,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ],
                                                         ),
-                                                        const SizedBox(height: 10.0),
+                                                        const SizedBox(
+                                                            height: 10.0),
                                                         Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      10.0,
+                                                                  vertical:
+                                                                      5.0),
                                                           child: Text(
                                                             contentList[index],
-                                                            style: const TextStyle(
+                                                            style:
+                                                                const TextStyle(
                                                               fontSize: 14,
                                                               height: 1.5,
                                                             ),
-                                                            textAlign: TextAlign.justify,
+                                                            textAlign: TextAlign
+                                                                .justify,
                                                           ),
                                                         ),
                                                       ],
@@ -267,32 +304,37 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                                                   ),
                                                   // Positioned number container on top of the pink container
                                                   Positioned(
-                                                    top: 0, // Adjust this value as needed
+                                                    top:
+                                                        0, // Adjust this value as needed
                                                     left: 10,
                                                     child: Container(
-                                                      padding: const EdgeInsets.all(10.0),
-                                                      decoration: const BoxDecoration(
-                                                        color: Color.fromARGB(255, 158, 39, 39),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              10.0),
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Color.fromARGB(
+                                                            255, 158, 39, 39),
                                                       ),
                                                       // Center the text inside the container
-                                                      alignment: Alignment.center, // Ensures text is centered
+                                                      alignment: Alignment
+                                                          .center, // Ensures text is centered
                                                       child: Text(
                                                         '${index + 1}',
                                                         style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 20,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-
                                                 ],
                                               ),
                                             );
                                           },
                                         ),
-
                                       ],
                                     ),
                                   ),
@@ -308,7 +350,8 @@ class AcademicAutomotiveScreen extends StatelessWidget {
                               angle: -0.785398, // -45 degrees in radians
                               child: Container(
                                 width: 200,
-                                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
                                 decoration: const BoxDecoration(
                                   color: Color(0xFFFFC0CB), // Light pink shade
                                 ),

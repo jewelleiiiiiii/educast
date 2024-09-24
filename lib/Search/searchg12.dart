@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Assessment/Rules/G12Intro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg12.dart';
-import 'package:myapp/Result/resultg10.dart';
+import 'package:educast/Assessment/Rules/G12Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg12.dart';
+import 'package:educast/Result/resultg10.dart';
 import '../Home/Info/Abm.dart';
 import '../Home/Info/GAS.dart';
 import '../Home/Info/HUMSS.dart';
@@ -85,9 +85,8 @@ class _SearchG12 extends State<SearchG12> {
             uniqueResults.add(docSnapshot.id);
           } else {
             // Search within document fields if data is not null
-            final Map<String, dynamic>? data = docSnapshot.data() as Map<
-                String,
-                dynamic>?;
+            final Map<String, dynamic>? data =
+                docSnapshot.data() as Map<String, dynamic>?;
             if (data != null) {
               data.forEach((key, value) {
                 if (value.toString().toLowerCase().contains(query)) {
@@ -156,10 +155,7 @@ class _SearchG12 extends State<SearchG12> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
 
     return Scaffold(
@@ -180,23 +176,25 @@ class _SearchG12 extends State<SearchG12> {
         ),
       ),
       body: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/bg7.png',
-                fit: BoxFit.cover,
-              ),
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/bg7.png',
+              fit: BoxFit.cover,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 170),
-              child: SingleChildScrollView(
-                child: Container( // Wrap Column in Container
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height - 160, // Adjust based on top padding
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 170),
+            child: SingleChildScrollView(
+              child: Container(
+                // Wrap Column in Container
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height -
+                      160, // Adjust based on top padding
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 10),
                       child: Row(
@@ -220,7 +218,6 @@ class _SearchG12 extends State<SearchG12> {
                         ],
                       ),
                     ),
-
                     if (showSearchResults) ...[
                       for (int i = 0; i < visibleResults.length; i++)
                         SearchResultTile(
@@ -231,89 +228,85 @@ class _SearchG12 extends State<SearchG12> {
                         ),
                       if (searchResults.length > 3) ...[
                         const SizedBox(height: 10.0),
-                        Center(child:
-                        TextButton(
-                          onPressed: toggleSeeMore,
-                          child: Text(
-                            visibleResults.length < searchResults.length
-                                ? 'See More'
-                                : 'See Less',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                        Center(
+                          child: TextButton(
+                            onPressed: toggleSeeMore,
+                            child: Text(
+                              visibleResults.length < searchResults.length
+                                  ? 'See More'
+                                  : 'See Less',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                          ),
-                        Center(child: const Icon(Icons.keyboard_arrow_down),
+                        Center(
+                          child: const Icon(Icons.keyboard_arrow_down),
                         ),
                       ],
                     ],
-
-                      const SizedBox(height: 20.0),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'You may like',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    const SizedBox(height: 20.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'You may like',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        child: YouMayLikeTile(),
-                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: YouMayLikeTile(),
+                    ),
                     const SizedBox(height: 30.0),
                     Center(
                       child: Text(
                         'Top Courses in BatStateU-TNEU',
                         style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 0,16,0),
-                        child: DynamicDropdownWidget(
-                          onDropdownChanged: (strand, option) {
-                            setState(() {
-                              selectedStrand = strand;
-                              selectedOption = option;
-                            });
-                          },
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
+                      child: DynamicDropdownWidget(
+                        onDropdownChanged: (strand, option) {
+                          setState(() {
+                            selectedStrand = strand;
+                            selectedOption = option;
+                          });
+                        },
                       ),
-                      const SizedBox(height: 20.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: TopCoursesBarChart(
-                          strand: selectedStrand,
-                          selectedOption: selectedOption,
-                        ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TopCoursesBarChart(
+                        strand: selectedStrand,
+                        selectedOption: selectedOption,
                       ),
-                      const SizedBox(height: 50.0),
+                    ),
+                    const SizedBox(height: 50.0),
                   ],
                 ),
               ),
             ),
-
-    ),
-          ],
-        ),
+          ),
+        ],
+      ),
       bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -389,10 +382,7 @@ class _SearchG12 extends State<SearchG12> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -418,8 +408,7 @@ class _SearchG12 extends State<SearchG12> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  SubmissionConfirmation()),
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
@@ -444,11 +433,12 @@ class _SearchG12 extends State<SearchG12> {
   }
 }
 
-  class SearchResultTile extends StatelessWidget {
+class SearchResultTile extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const SearchResultTile({super.key,
+  const SearchResultTile({
+    super.key,
     required this.text,
     required this.onTap,
   });
@@ -470,8 +460,10 @@ class YouMayLikeTile extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return []; // User is not authenticated
 
-    final userDoc = await FirebaseFirestore.instance.collection('users').doc(
-        user.uid).get();
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
     if (!userDoc.exists) return []; // User document doesn't exist
 
     final strand = userDoc.data()?['strand'] ?? '';
@@ -506,24 +498,27 @@ class YouMayLikeTile extends StatelessWidget {
         ];
         break;
       case "General Academic Strand":
-        specificFields = fields.sublist(0, fields.length -
-            1); // Exclude 'Bachelor of Science in Information Technology'
+        specificFields = fields.sublist(
+            0,
+            fields.length -
+                1); // Exclude 'Bachelor of Science in Information Technology'
         break;
       default:
         return [];
     }
 
     // Fetch all documents from the collection
-    final querySnapshot = await FirebaseFirestore.instance.collection(
-        'TopCoursesInBatStateU').get();
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('TopCoursesInBatStateU')
+        .get();
 
     // Create a map to aggregate the values
     final courseMap = <String, num>{};
     for (final doc in querySnapshot.docs) {
       final courseData = doc.data();
       for (var field in specificFields) {
-        final value = courseData[field] as num? ??
-            0; // Assuming value is numeric
+        final value =
+            courseData[field] as num? ?? 0; // Assuming value is numeric
         if (courseMap.containsKey(field)) {
           courseMap[field] =
               (courseMap[field] ?? 0) + value; // Aggregate values if necessary
@@ -542,13 +537,11 @@ class YouMayLikeTile extends StatelessWidget {
 
     // Sort by value and get the top 4
     courseList.sort((a, b) => b['value'].compareTo(a['value']));
-    final topTitles = courseList.take(4)
-        .map((e) => e['name'] as String)
-        .toList();
+    final topTitles =
+        courseList.take(4).map((e) => e['name'] as String).toList();
 
     return topTitles;
   }
-
 
   void _navigateToPage(String title, BuildContext context) {
     Widget page;
@@ -607,26 +600,25 @@ class YouMayLikeTile extends StatelessWidget {
         final topTitles = snapshot.data ?? [];
 
         // Limit to 4 titles, or show all if fewer than 4
-        final displayTitles = topTitles.length > 4
-            ? topTitles.take(4).toList()
-            : topTitles;
+        final displayTitles =
+            topTitles.length > 4 ? topTitles.take(4).toList() : topTitles;
 
         return Column(
           children: displayTitles
-              .map((title) =>
-              Column(
-                children: [
-                  ListTile(
-                    contentPadding: EdgeInsets.symmetric(vertical: -10.0, horizontal: 10),
-                    // Adjust vertical padding as needed
-                    leading: const Icon(Icons.local_fire_department),
-                    title: Text(title),
-                    onTap: () {
-                      _navigateToPage(title, context);
-                    },
-                  ), // Adjust spacing between ListTiles
-                ],
-              ))
+              .map((title) => Column(
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: -10.0, horizontal: 10),
+                        // Adjust vertical padding as needed
+                        leading: const Icon(Icons.local_fire_department),
+                        title: Text(title),
+                        onTap: () {
+                          _navigateToPage(title, context);
+                        },
+                      ), // Adjust spacing between ListTiles
+                    ],
+                  ))
               .toList(),
         );
       },
@@ -634,11 +626,11 @@ class YouMayLikeTile extends StatelessWidget {
   }
 }
 
-
-  class DynamicDropdownWidget extends StatefulWidget {
+class DynamicDropdownWidget extends StatefulWidget {
   final Function(String strand, String selectedOption) onDropdownChanged;
 
-  const DynamicDropdownWidget({Key? key, required this.onDropdownChanged}) : super(key: key);
+  const DynamicDropdownWidget({Key? key, required this.onDropdownChanged})
+      : super(key: key);
 
   @override
   _DynamicDropdownWidgetState createState() => _DynamicDropdownWidgetState();
@@ -699,33 +691,36 @@ class _DynamicDropdownWidgetState extends State<DynamicDropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return dropdownOptions.isEmpty
-        ? Center(child: CircularProgressIndicator()) // Show loader while fetching data
+        ? Center(
+            child:
+                CircularProgressIndicator()) // Show loader while fetching data
         : Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: DropdownButton<String>(
-              value: selectedOption,
-              items: dropdownOptions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedOption = newValue;
-                  widget.onDropdownChanged(userStrand, selectedOption!);
-                });
-              },
-            ),
-          ),
-        ],
-      )
-    );
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: selectedOption,
+                    items: dropdownOptions
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedOption = newValue;
+                        widget.onDropdownChanged(userStrand, selectedOption!);
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ));
   }
 }
+
 class TopCoursesBarChart extends StatefulWidget {
   final String strand;
   final String selectedOption;
@@ -746,31 +741,34 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
   Future<void> _fetchTopCourses() async {
     try {
       CollectionReference coursesCollection =
-      FirebaseFirestore.instance.collection('TopCoursesInBatStateU');
+          FirebaseFirestore.instance.collection('TopCoursesInBatStateU');
 
       QuerySnapshot querySnapshot = await coursesCollection.get();
 
       // Extract fields from each document
       setState(() {
-        topCourses = querySnapshot.docs.map((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        topCourses = querySnapshot.docs
+            .map((doc) {
+              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-          // Filter the data based on the fields relevant to the selected strand and option
-          Map<String, dynamic> filteredCourses = {};
-          data.forEach((key, value) {
-            if (_isRelevantCourse(key)) {
-              filteredCourses[key] = value;
-            }
-          });
+              // Filter the data based on the fields relevant to the selected strand and option
+              Map<String, dynamic> filteredCourses = {};
+              data.forEach((key, value) {
+                if (_isRelevantCourse(key)) {
+                  filteredCourses[key] = value;
+                }
+              });
 
-          // Convert the filtered data into a list of course info
-          return filteredCourses.entries.map((entry) {
-            return {
-              'label': entry.key,
-              'value': entry.value ?? 0,
-            };
-          }).toList();
-        }).expand((element) => element).toList(); // Flatten the list
+              // Convert the filtered data into a list of course info
+              return filteredCourses.entries.map((entry) {
+                return {
+                  'label': entry.key,
+                  'value': entry.value ?? 0,
+                };
+              }).toList();
+            })
+            .expand((element) => element)
+            .toList(); // Flatten the list
       });
     } catch (e) {
       print('Error fetching top courses: $e');
@@ -816,9 +814,7 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
           ];
           break;
         case 'CICS':
-          relevantCourses = [
-            'Bachelor of Science in Information Technology'
-          ];
+          relevantCourses = ['Bachelor of Science in Information Technology'];
           break;
       }
     } else if (widget.strand == 'Accountancy, Business, and Management') {
@@ -886,14 +882,14 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
       }
     }
 
-
     return relevantCourses.contains(courseName);
   }
 
   @override
   void didUpdateWidget(TopCoursesBarChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.strand != widget.strand || oldWidget.selectedOption != widget.selectedOption) {
+    if (oldWidget.strand != widget.strand ||
+        oldWidget.selectedOption != widget.selectedOption) {
       _fetchTopCourses();
     }
   }
@@ -924,7 +920,9 @@ class TopCoursesChart extends StatelessWidget {
   // Method to get the maximum Y value from the data
   double _getMaxYValue() {
     return topCourses.isNotEmpty
-        ? topCourses.map((course) => course['value'].toDouble()).reduce((a, b) => a > b ? a : b)
+        ? topCourses
+            .map((course) => course['value'].toDouble())
+            .reduce((a, b) => a > b ? a : b)
         : 0.0;
   }
 
@@ -1023,7 +1021,8 @@ class TopCoursesChart extends StatelessWidget {
                   getTitlesWidget: (double value, TitleMeta meta) {
                     int index = value.toInt();
                     if (index >= 0 && index < sortedCourses.length) {
-                      String shortName = _getShortCourseName(sortedCourses[index]['label']);
+                      String shortName =
+                          _getShortCourseName(sortedCourses[index]['label']);
                       return Text(shortName);
                     } else {
                       return const Text(''); // Return empty if out of bounds
@@ -1036,20 +1035,21 @@ class TopCoursesChart extends StatelessWidget {
             barGroups: sortedCourses
                 .asMap()
                 .map((index, course) {
-              return MapEntry(
-                index,
-                BarChartGroupData(
-                  x: index,
-                  barRods: [
-                    BarChartRodData(
-                      toY: course['value'].toDouble(), // Use the actual value from the database
-                      color: Color.fromARGB(255, 158, 39, 39),
-                      width: 20,
+                  return MapEntry(
+                    index,
+                    BarChartGroupData(
+                      x: index,
+                      barRods: [
+                        BarChartRodData(
+                          toY: course['value']
+                              .toDouble(), // Use the actual value from the database
+                          color: Color.fromARGB(255, 158, 39, 39),
+                          width: 20,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            })
+                  );
+                })
                 .values
                 .toList(),
           ),

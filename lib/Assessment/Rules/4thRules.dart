@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/4thIntro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/Home4th.dart';
+import 'package:educast/Assessment/Rules/4thIntro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/Home4th.dart';
 
 class FourthRules extends StatefulWidget {
   const FourthRules({super.key});
@@ -18,7 +18,8 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
   String animatedText = '';
   int _currentIndex = 0;
   late Timer _textTimer;
-  final String _message = "This assessment will guide you \nin choosing your next path.";
+  final String _message =
+      "This assessment will guide you \nin choosing your next path.";
 
   @override
   void initState() {
@@ -45,7 +46,8 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
           animatedText += _message[_currentIndex];
           _currentIndex++;
         } else {
-          timer.cancel(); // Stop the text animation when the full message is printed
+          timer
+              .cancel(); // Stop the text animation when the full message is printed
         }
       });
     });
@@ -263,12 +265,14 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const FourthIntro()),
+                        MaterialPageRoute(
+                            builder: (context) => const FourthIntro()),
                       );
                     }
                   }
@@ -287,7 +291,6 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
   }
 }
 
-
 class FourthRules2 extends StatefulWidget {
   const FourthRules2({super.key});
 
@@ -300,7 +303,8 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
   String animatedText2 = '';
   int _currentIndex2 = 0;
   late Timer _textTimer2;
-  final String _message2 = "Before you begin answering the EduQUEST, \nyou must follow the  rules...";
+  final String _message2 =
+      "Before you begin answering the EduQUEST, \nyou must follow the  rules...";
 
   @override
   void initState() {
@@ -327,7 +331,8 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
           animatedText2 += _message2[_currentIndex2];
           _currentIndex2++;
         } else {
-          timer.cancel(); // Stop the text animation when the full message is printed
+          timer
+              .cancel(); // Stop the text animation when the full message is printed
         }
       });
     });
@@ -545,12 +550,14 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const FourthIntro()),
+                        MaterialPageRoute(
+                            builder: (context) => const FourthIntro()),
                       );
                     }
                   }
@@ -568,6 +575,7 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
     );
   }
 }
+
 class FourthRules3 extends StatefulWidget {
   const FourthRules3({super.key});
 
@@ -619,7 +627,8 @@ class _FourthRules3 extends State<FourthRules3> {
               width: screenWidth * 0.80,
               height: 380,
               padding: const EdgeInsets.all(20),
-              margin: EdgeInsets.only(top: 100), // Adjust margin for overlap effect
+              margin:
+                  EdgeInsets.only(top: 100), // Adjust margin for overlap effect
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -636,15 +645,20 @@ class _FourthRules3 extends State<FourthRules3> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildRuleText('1. ', 'Answer Honestly', 'Assess your skills based on your actual knowledge and experience. You can take the test only once, so be prepared before starting.'),
+                    _buildRuleText('1. ', 'Answer Honestly',
+                        'Assess your skills based on your actual knowledge and experience. You can take the test only once, so be prepared before starting.'),
                     SizedBox(height: 10),
-                    _buildRuleText('2. ', 'Self-Evaluate Thoroughly', 'Consider both academic and practical experience in your ratings.'),
+                    _buildRuleText('2. ', 'Self-Evaluate Thoroughly',
+                        'Consider both academic and practical experience in your ratings.'),
                     SizedBox(height: 10),
-                    _buildRuleText('3. ', 'Use the Full Scale', 'Use the full range (5 = expert, 4 = Proficient, 3 = Competent, 2 = Advanced Beginner, and 1 = Beginner) to reflect your skills accurately.'),
+                    _buildRuleText('3. ', 'Use the Full Scale',
+                        'Use the full range (5 = expert, 4 = Proficient, 3 = Competent, 2 = Advanced Beginner, and 1 = Beginner) to reflect your skills accurately.'),
                     SizedBox(height: 10),
-                    _buildRuleText('4. ', 'Rate Each Statement Individually', 'Focus on each statement on its own, without comparison to others.'),
+                    _buildRuleText('4. ', 'Rate Each Statement Individually',
+                        'Focus on each statement on its own, without comparison to others.'),
                     SizedBox(height: 10),
-                    _buildRuleText('5. ', 'Avoid Overthinking', 'Trust your first instinct; it often reflects your true capability.'),
+                    _buildRuleText('5. ', 'Avoid Overthinking',
+                        'Trust your first instinct; it often reflects your true capability.'),
                   ],
                 ),
               ),
@@ -819,12 +833,14 @@ class _FourthRules3 extends State<FourthRules3> {
                     if (docSnapshot.exists) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                        MaterialPageRoute(
+                            builder: (context) => SubmissionConfirmation()),
                       );
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const FourthIntro()),
+                        MaterialPageRoute(
+                            builder: (context) => const FourthIntro()),
                       );
                     }
                   }

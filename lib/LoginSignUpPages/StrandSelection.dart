@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Home/homeg12.dart'; // Import Firebase Auth
+import 'package:educast/Home/homeg12.dart'; // Import Firebase Auth
 
 class StrandSelection extends StatefulWidget {
   const StrandSelection({super.key});
@@ -38,7 +38,10 @@ class _StrandSelection extends State<StrandSelection> {
   Future<void> _updateStrand() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null && _selectedInterest != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({
         'strand': _selectedInterest,
       });
       Navigator.of(context).pushReplacement(
@@ -74,7 +77,8 @@ class _StrandSelection extends State<StrandSelection> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 229, 228, 228),
                 borderRadius: BorderRadius.only(
@@ -101,7 +105,8 @@ class _StrandSelection extends State<StrandSelection> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 155, 15, 15),
                 borderRadius: BorderRadius.only(
@@ -150,7 +155,6 @@ class _StrandSelection extends State<StrandSelection> {
                     onPressed: () async {
                       // Update Firestore with the selected strand
                       await _updateStrand();
-
                     },
                     child: const Text(
                       'Ok',
@@ -206,14 +210,16 @@ class _StrandSelection extends State<StrandSelection> {
                       minWidth: _maxContainerWidth,
                     ),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12), // Adjusted padding
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 12), // Adjusted padding
                       decoration: BoxDecoration(
                         color: isSelected
                             ? const Color.fromARGB(255, 155, 15, 15)
                             : Colors.grey[300],
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Center( // Center the text
+                      child: Center(
+                        // Center the text
                         child: Text(
                           interest,
                           textAlign: TextAlign.center,
@@ -226,7 +232,8 @@ class _StrandSelection extends State<StrandSelection> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16), // Adjust the height for your desired spacing
+                const SizedBox(
+                    height: 16), // Adjust the height for your desired spacing
               ],
             );
           }).toList(),

@@ -10,10 +10,8 @@ class AuthServices {
 
   Future<DocumentSnapshot?> getUserData(String uid) async {
     try {
-      var userSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+      var userSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (userSnapshot.exists) {
         return userSnapshot;
@@ -26,10 +24,9 @@ class AuthServices {
     }
   }
 
-
-
   Future<String> loginWithGoogle(BuildContext context) async {
     try {
+      print("HELLOOO");
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
@@ -41,7 +38,8 @@ class AuthServices {
         return 'Please use your G-Suite account (@g.batstate-u.edu.ph).';
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final OAuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
@@ -50,14 +48,16 @@ class AuthServices {
 
       await FirebaseAuth.instance.signInWithCredential(credential);
 
-      if (context.mounted) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacementNamed(context, '/blankPage');
-        });
-      }
+      // if (context.mounted) {
+      //   // SchedulerBinding.instance.addPostFrameCallback((_) {
+      //   //   Navigator.pushReplacementNamed(context, '/blankPage');
+      //   // });
+
+      //   return "Success";
+      // }
 
       return 'Success';
-} on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'account-exists-with-different-credential':
           return 'An account already exists with a different credential.';
@@ -74,7 +74,7 @@ class AuthServices {
         default:
           return 'An unknown error occurred.';
       }
-    }catch (e) {
+    } catch (e) {
       return 'An error occurred: $e';
     }
   }
@@ -204,5 +204,41 @@ class AuthServices {
   void _showSnackbar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<bool> checkEmailExists(String email) async {
+    print(email);
+    print(" ");
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print('Email is registered: ${querySnapshot.docs.first['email']}');
+        return true;
+      } else {
+        print('Email is not registered.');
+        return false;
+      }
+    } on FirebaseAuthException catch (e) {
+      print('Error: ${e.message}');
+      return false;
+    }
+  }
+
+  bool checkIfUserIsSignedIn() {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      print('User is already signed in: ${user.email}');
+      return true;
+      // Handle user already signed in
+    } else {
+      print('No user is signed in.');
+      return false;
+      // Handle no user signed in
+    }
   }
 }

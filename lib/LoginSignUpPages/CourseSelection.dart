@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/LoginSignUpPages/Login.dart';
+import 'package:educast/LoginSignUpPages/Login.dart';
 
 class CourseSelection extends StatefulWidget {
   const CourseSelection({super.key});
@@ -50,7 +50,10 @@ class _CourseSelection extends State<CourseSelection> {
   Future<void> _updateCourse() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null && _selectedCourse != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({
         'course': _selectedCourse,
       });
       Navigator.of(context).pushReplacement(
@@ -86,7 +89,8 @@ class _CourseSelection extends State<CourseSelection> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 229, 228, 228),
                 borderRadius: BorderRadius.only(
@@ -113,7 +117,8 @@ class _CourseSelection extends State<CourseSelection> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 155, 15, 15),
                 borderRadius: BorderRadius.only(
@@ -143,12 +148,15 @@ class _CourseSelection extends State<CourseSelection> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ListView(
                     children: [
-                      _buildInterestSection('College of Arts and Sciences', _academicInterestsCAS),
+                      _buildInterestSection('College of Arts and Sciences',
+                          _academicInterestsCAS),
                       const SizedBox(height: 30),
-                      _buildInterestSection('College of Engineering Technology', _academicInterestsCET),
+                      _buildInterestSection('College of Engineering Technology',
+                          _academicInterestsCET),
                       const SizedBox(height: 30),
-                      _buildInterestSection('College of Informatics and Computing Sciences', _academicInterestsCICS),
-
+                      _buildInterestSection(
+                          'College of Informatics and Computing Sciences',
+                          _academicInterestsCICS),
                       Container(
                         height: 2,
                         color: Colors.black,
@@ -208,7 +216,7 @@ class _CourseSelection extends State<CourseSelection> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedCourse = interest;  // Selecting only one course
+                      _selectedCourse = interest; // Selecting only one course
                     });
                   },
                   child: ConstrainedBox(
@@ -216,14 +224,16 @@ class _CourseSelection extends State<CourseSelection> {
                       minWidth: _maxContainerWidth,
                     ),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12), // Adjusted padding
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 12), // Adjusted padding
                       decoration: BoxDecoration(
                         color: isSelected
                             ? const Color.fromARGB(255, 155, 15, 15)
                             : Colors.grey[300],
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Center( // Center the text
+                      child: Center(
+                        // Center the text
                         child: Text(
                           interest,
                           textAlign: TextAlign.center,
@@ -236,7 +246,8 @@ class _CourseSelection extends State<CourseSelection> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16), // Adjust the height for your desired spacing
+                const SizedBox(
+                    height: 16), // Adjust the height for your desired spacing
               ],
             );
           }).toList(),

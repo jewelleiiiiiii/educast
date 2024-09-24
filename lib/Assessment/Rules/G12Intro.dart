@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G12Rules.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg12.dart';
-import 'package:myapp/Search/searchg12.dart';
+import 'package:educast/Assessment/Rules/G12Rules.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg12.dart';
+import 'package:educast/Search/searchg12.dart';
 
 class G12Intro extends StatefulWidget {
   const G12Intro({super.key});
@@ -143,7 +143,8 @@ class _G12Intro extends State<G12Intro> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchG12()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchG12()),
                     );
                   },
                   icon: Image.asset(
@@ -203,12 +204,14 @@ class _G12Intro extends State<G12Intro> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const G12Intro()),
+                          MaterialPageRoute(
+                              builder: (context) => const G12Intro()),
                         );
                       }
                     }
@@ -227,5 +230,3 @@ class _G12Intro extends State<G12Intro> {
     );
   }
 }
-
-

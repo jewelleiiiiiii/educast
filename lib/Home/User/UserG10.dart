@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/Assessment/Rules/G10Intro.dart';
-import 'package:myapp/Assessment/assess4g10.dart';
-import 'package:myapp/Home/homeg10.dart';
-import 'package:myapp/Result/resultg10.dart';
-import 'package:myapp/Search/searchg10.dart';
+import 'package:educast/Assessment/Rules/G10Intro.dart';
+import 'package:educast/Assessment/assess4g10.dart';
+import 'package:educast/Home/homeg10.dart';
+import 'package:educast/Result/resultg10.dart';
+import 'package:educast/Search/searchg10.dart';
 
 class UserG10 extends StatefulWidget {
   const UserG10({super.key});
@@ -18,7 +18,8 @@ class _UserG10 extends State<UserG10> {
   String firstName = '';
   String lastName = '';
   String email = '';
-  String password = '********'; // Placeholder for the password, as it's not retrievable.
+  String password =
+      '********'; // Placeholder for the password, as it's not retrievable.
   String gradeLevel = '';
   String campus = '';
 
@@ -118,7 +119,8 @@ class _UserG10 extends State<UserG10> {
                 children: [
                   SizedBox(height: 40),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -156,7 +158,8 @@ class _UserG10 extends State<UserG10> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color.fromARGB(255, 158, 39, 39),
                               foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 10),
                             ),
                             child: Text('Reset Password'),
                           ),
@@ -222,8 +225,7 @@ class _UserG10 extends State<UserG10> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -272,7 +274,8 @@ class _UserG10 extends State<UserG10> {
                       if (docSnapshot.exists) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SubmissionConfirmation()),
+                          MaterialPageRoute(
+                              builder: (context) => SubmissionConfirmation()),
                         );
                       } else {
                         Navigator.push(
@@ -280,8 +283,7 @@ class _UserG10 extends State<UserG10> {
                           MaterialPageRoute(builder: (context) => G10Intro()),
                         );
                       }
-                    } else {
-                    }
+                    } else {}
                   },
                   icon: Image.asset(
                     'assets/main.png',
