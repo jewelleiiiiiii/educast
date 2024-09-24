@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/services/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:educast/Home/homeg10.dart';
@@ -22,6 +23,8 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+
+  final AuthServices _auth = AuthServices();
 
   bool isLoading = false;
 
@@ -84,14 +87,19 @@ class _SignupPageState extends State<SignupPage> {
 
     String fullEmail = '$email@g.batstate-u.edu.ph';
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => CreateAccountPage(
-          email: fullEmail,
-          password: _passwordController.text,
+    if (!(await _auth.checkEmailExists(email))) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => CreateAccountPage(
+            email: fullEmail,
+            password: _passwordController.text,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      showSnackBar(context, "This email is already in use.");
+      return;
+    }
   }
 
   Future<void> _handledGoogleSignIn() async {
