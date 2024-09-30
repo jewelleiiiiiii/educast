@@ -1,12 +1,11 @@
+import 'package:educast/Assessment/Rules/4thIntro.dart';
+import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Result/result4th.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:educast/Assessment/Rules/G12Intro.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/Home4th.dart';
 import 'package:educast/Home/homeg12.dart';
-import 'package:educast/Result/resultg10.dart';
-import 'package:educast/Search/searchg10.dart';
 
 class User4th extends StatefulWidget {
   const User4th({super.key});
@@ -162,11 +161,11 @@ class _User4th extends State<User4th> {
                           children: [
                             Center(
                               child: CircleAvatar(
-                                radius: screenHeight * 0.07,
+                                radius: screenHeight * 0.05,
                                 backgroundColor: Colors.black,
                                 child: Icon(
                                   Icons.person,
-                                  size: screenHeight * 0.07,
+                                  size: screenHeight * 0.05,
                                   color: Colors.white,
                                 ),
                               ),
@@ -250,10 +249,10 @@ class _User4th extends State<User4th> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SearchG10()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SearchG10()),
+                    // );
                   },
                   icon: Image.asset(
                     'assets/search.png',
@@ -274,7 +273,7 @@ class _User4th extends State<User4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
+                      MaterialPageRoute(builder: (context) => Result4th()),
                     );
                   },
                   icon: Image.asset(
@@ -304,7 +303,7 @@ class _User4th extends State<User4th> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResult4th')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -313,12 +312,12 @@ class _User4th extends State<User4th> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnswered4th()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => G12Intro()),
+                          MaterialPageRoute(builder: (context) => FourthIntro()),
                         );
                       }
                     } else {}

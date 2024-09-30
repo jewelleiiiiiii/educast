@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Assessment/assess1g12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Assessment/Rules/G12Intro.dart';
@@ -696,7 +697,7 @@ class _HomeG12State extends State<HomeG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const G12Intro()),
+                      MaterialPageRoute(builder: (context) => const QuestionnaireG12()),
                     );
                   },
                   icon: Image.asset(

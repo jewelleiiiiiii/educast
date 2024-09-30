@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:educast/Assessment/assess14th.dart';
+import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Result/result4th.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:educast/Assessment/Rules/4thIntro.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/Home4th.dart';
 
 class FourthRules extends StatefulWidget {
@@ -225,10 +227,10 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResultG10()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Result4th()),
+                  );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -257,7 +259,7 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     final userResultDoc = FirebaseFirestore.instance
-                        .collection('userResultG12')
+                        .collection('userResult4th')
                         .doc(user.uid);
 
                     final docSnapshot = await userResultDoc.get();
@@ -266,7 +268,7 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnswered4th()),
                       );
                     } else {
                       Navigator.push(
@@ -510,10 +512,10 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResultG10()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Result4th()),
+                  );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -542,7 +544,7 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     final userResultDoc = FirebaseFirestore.instance
-                        .collection('userResultG12')
+                        .collection('userResult4th')
                         .doc(user.uid);
 
                     final docSnapshot = await userResultDoc.get();
@@ -551,7 +553,7 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnswered4th()),
                       );
                     } else {
                       Navigator.push(
@@ -669,10 +671,10 @@ class _FourthRules3 extends State<FourthRules3> {
             bottom: 30.0,
             child: GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const Questionnaire1G12()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Questionnaire14th()),
+                );
               },
               child: const Text(
                 "Start",
@@ -793,10 +795,10 @@ class _FourthRules3 extends State<FourthRules3> {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResultG10()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Result4th()),
+                  );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -825,7 +827,7 @@ class _FourthRules3 extends State<FourthRules3> {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     final userResultDoc = FirebaseFirestore.instance
-                        .collection('userResultG12')
+                        .collection('userResult4th')
                         .doc(user.uid);
 
                     final docSnapshot = await userResultDoc.get();
@@ -834,7 +836,7 @@ class _FourthRules3 extends State<FourthRules3> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnswered4th()),
                       );
                     } else {
                       Navigator.push(

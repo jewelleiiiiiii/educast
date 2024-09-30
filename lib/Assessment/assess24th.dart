@@ -1,20 +1,19 @@
+import 'package:educast/Assessment/Rules/4thIntro.dart';
+import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Home/Home4th.dart';
+import 'package:educast/Result/result4th.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:educast/Assessment/assess2g10.dart';
-import 'package:educast/Assessment/assess4g10.dart';
-import 'package:educast/Home/homeg10.dart';
-import 'package:educast/Result/resultg10.dart';
-import 'package:educast/Search/searchg10.dart';
 
-class Questionnaire1G10 extends StatefulWidget {
-  const Questionnaire1G10({super.key});
+class Questionnaire24th extends StatefulWidget {
+  const Questionnaire24th({super.key});
 
   @override
-  _Questionnaire1G10 createState() => _Questionnaire1G10();
+  _Questionnaire24th createState() => _Questionnaire24th();
 }
 
-class _Questionnaire1G10 extends State<Questionnaire1G10> {
+class _Questionnaire24th extends State<Questionnaire24th> {
   List<String> _questions = List.generate(10, (index) => '');
   List<int?> _selectedOptions = List.generate(10, (index) => null);
 
@@ -26,45 +25,58 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
 
   Future<void> _fetchQuestions() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
+    print('Fetching questions for user: $uid');
     if (uid != null) {
       try {
-        // Fetch questions
-        final questionDocument = await FirebaseFirestore.instance
-            .collection('questions')
-            .doc('grade10')
-            .get();
-        if (questionDocument.exists) {
-          final questionData = questionDocument.data();
-          if (questionData != null) {
-            setState(() {
-              _questions = List.generate(
-                10,
-                (index) =>
-                    questionData[(index + 1).toString()] ?? 'No Question',
-              );
-            });
-          }
-        } else {
-          print('Questions document does not exist');
-        }
-
-        // Fetch user answers
-        final answerDocument = await FirebaseFirestore.instance
-            .collection('userAnswerG10')
+        final userDocument = await FirebaseFirestore.instance
+            .collection('users')
             .doc(uid)
             .get();
-        if (answerDocument.exists) {
-          final answerData = answerDocument.data();
-          if (answerData != null) {
-            setState(() {
-              _selectedOptions = List.generate(
-                10,
-                (index) => answerData[(index + 1).toString()] as int?,
-              );
-            });
+
+        if (userDocument.exists) {
+          final userData = userDocument.data();
+          final course = userData?['course'] ?? 'Unknown Course';
+          print('User course: $course');
+
+          final questionDocument = await FirebaseFirestore.instance
+              .collection('questions4th')
+              .doc(course)
+              .get();
+
+          if (questionDocument.exists) {
+            final questionData = questionDocument.data();
+            if (questionData != null) {
+              setState(() {
+                _questions = List.generate(
+                  10,
+                      (index) => questionData[(index + 11).toString()] ?? 'No Question', // Fetch questions 11-20
+                );
+              });
+            }
+          } else {
+            print('Questions document for course "$course" does not exist');
+          }
+
+          final answerDocument = await FirebaseFirestore.instance
+              .collection('userAnswer4th')
+              .doc(uid)
+              .get();
+
+          if (answerDocument.exists) {
+            final answerData = answerDocument.data();
+            if (answerData != null) {
+              setState(() {
+                _selectedOptions = List.generate(
+                  10,
+                      (index) => answerData[(index + 11).toString()] as int?, // Fetch answers for questions 11-20
+                );
+              });
+            }
+          } else {
+            print('User answers document does not exist');
           }
         } else {
-          print('User answers document does not exist');
+          print('User document does not exist');
         }
       } catch (e) {
         print('Error fetching data: $e');
@@ -72,15 +84,17 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
     }
   }
 
+
   Future<void> _updateAnswer(int index, int? value) async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
       try {
+        // Store the answer in Firestore with keys from 11 to 20
         await FirebaseFirestore.instance
-            .collection('userAnswerG10')
+            .collection('userAnswer4th')
             .doc(uid)
             .set({
-          (index + 1).toString(): value,
+          (index + 11).toString(): value, // Storing answers as 11 to 20
         }, SetOptions(merge: true));
       } catch (e) {
         print('Error updating answer: $e');
@@ -103,28 +117,23 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
 
       final userAnswers = <String, int>{};
       for (int i = 0; i < _selectedOptions.length; i++) {
-        userAnswers[(i + 1).toString()] = _selectedOptions[i] ?? -1;
+        // Store answers in fields 11 to 20
+        userAnswers[(i + 11).toString()] = _selectedOptions[i] ?? -1;
       }
 
       try {
         await FirebaseFirestore.instance
-            .collection('userAnswerG10')
+            .collection('userAnswer4th')
             .doc(uid)
             .set(userAnswers, SetOptions(merge: true));
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Questionnaire2G10(
-              previousAnswers: userAnswers,
-            ),
-          ),
-        );
+        print('Successful');
       } catch (e) {
         print('Error submitting answers: $e');
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +175,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
               ),
               child: Center(
                 child: Text(
-                  'Interest Assessment',
+                  'Skills Assessment',
                   style: TextStyle(
                     fontSize: 24.0,
                     color: Colors.white,
@@ -181,8 +190,8 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                      margin: EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 16.0),
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -210,21 +219,18 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                 ),
                                 SizedBox(width: 10.0),
                                 Container(
-                                  width: 300,
+                                  width: 350,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (String label in [
-                                        'AGREE',
-                                        'DISAGREE'
-                                      ])
+                                      for (int i = 5; i >= 1; i--) // Loop from 5 to 1
                                         Container(
-                                          width: 150.0,
+                                          width: 70.0,
                                           child: Center(
                                             child: Text(
-                                              label,
+                                              i.toString(),
                                               style: TextStyle(
-                                                fontSize: 18.0,
+                                                fontSize: 16.0,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -233,6 +239,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                     ],
                                   ),
                                 ),
+
                               ],
                             ),
                             SizedBox(height: 10.0),
@@ -261,42 +268,25 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                         SizedBox(width: 10.0),
                                         Row(
                                           children: [
-                                            Container(
-                                              width: 150.0,
-                                              child: Center(
-                                                child: Radio<int>(
-                                                  value: 0, // AGREE
-                                                  groupValue:
-                                                      _selectedOptions[index],
-                                                  onChanged: (int? value) {
-                                                    setState(() {
-                                                      _selectedOptions[index] =
-                                                          value;
-                                                    });
-                                                    _updateAnswer(index,
-                                                        value); // Update Firestore in real-time
-                                                  },
+                                            for (int i = 5; i >= 1; i--)
+                                              Container(
+                                                width: 70.0,
+                                                child: Center(
+                                                  child: Radio<int>(
+                                                    value: i, // Options 1 to 5
+                                                    groupValue:
+                                                    _selectedOptions[index],
+                                                    onChanged: (int? value) {
+                                                      setState(() {
+                                                        _selectedOptions[index] =
+                                                            value;
+                                                      });
+                                                      _updateAnswer(index,
+                                                          value); // Update Firestore in real-time
+                                                    },
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              width: 150.0,
-                                              child: Center(
-                                                child: Radio<int>(
-                                                  value: 1, // DISAGREE
-                                                  groupValue:
-                                                      _selectedOptions[index],
-                                                  onChanged: (int? value) {
-                                                    setState(() {
-                                                      _selectedOptions[index] =
-                                                          value;
-                                                    });
-                                                    _updateAnswer(index,
-                                                        value); // Update Firestore in real-time
-                                                  },
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ],
@@ -316,39 +306,68 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
             SizedBox(height: 10.0),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '10 out of 42 questions',
-                      style: TextStyle(
-                        fontSize: 13.0,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: _submitAnswers,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromARGB(255, 158, 39, 39),
-                        ),
-                      ),
+              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Container to ensure the text is aligned properly
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                          right: 20.0), // Space between text and buttons
                       child: Text(
-                        'Next',
+                        '20 out of 25 questions',
                         style: TextStyle(
-                          color: Colors.white,
+                          fontSize: 13.0,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.grey[200]!),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 16.0)),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.black.withOpacity(0.6)), // Semi-black text color
+                        ),
+                        child: Text('Previous'),
+                      ),
+                      SizedBox(width: 10.0),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await _submitAnswers();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Questionnaire34th()),
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Color.fromARGB(255, 158, 39, 39)),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 16.0)),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                              Colors.white), // Set font color to white
+                        ),
+                        child: Text('Next'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 20.0),
           ],
         ),
+
       ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
@@ -378,7 +397,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                      MaterialPageRoute(builder: (context) => const Home4th()),
                     );
                   },
                   icon: Image.asset(
@@ -389,11 +408,10 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchG10()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SearchG10()),
+                    // );
                   },
                   icon: Image.asset(
                     'assets/search.png',
@@ -414,7 +432,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
+                      MaterialPageRoute(builder: (context) => Result4th()),
                     );
                   },
                   icon: Image.asset(
@@ -444,7 +462,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResult4th')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -453,13 +471,13 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AlreadyAnswered()),
+                              builder: (context) => AlreadyAnswered4th()),
                         );
                       } else {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Questionnaire1G10()),
+                              builder: (context) => FourthIntro()),
                         );
                       }
                     } else {}

@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Result/result4th.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Assessment/Rules/4thIntro.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/Info/programsSelection.dart';
 import 'package:educast/Home/User/User4th.dart';
 import 'package:educast/LoginSignUpPages/Login.dart';
-import 'package:educast/Result/resultg10.dart';
 import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -53,7 +53,7 @@ class _Home4thState extends State<Home4th> {
       setState(() {
         relatedJobsText = "BSIT-related Jobs";
         jobs = [
-          "Software Developer/Engineer",
+          "Software Developer",
           "Network Administrator",
           "Database Administrator",
           "IT Support Specialist",
@@ -179,7 +179,7 @@ class _Home4thState extends State<Home4th> {
                                 Text(
                                   'Skill Exploration!',
                                   style: TextStyle(
-                                    fontSize: 25,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
@@ -188,7 +188,7 @@ class _Home4thState extends State<Home4th> {
                                 Text(
                                   'Discover your strengths and align with top career paths.',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.normal,
                                     color: Colors.white,
                                   ),
@@ -204,7 +204,30 @@ class _Home4thState extends State<Home4th> {
                             child: SizedBox(
                               width: 120,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final user = FirebaseAuth.instance.currentUser;
+                                  if (user != null) {
+                                    final userResultDoc = FirebaseFirestore.instance
+                                        .collection('userResult4th')
+                                        .doc(user.uid);
+
+                                    final docSnapshot = await userResultDoc.get();
+
+                                    if (docSnapshot.exists) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => AlreadyAnswered4th()),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => FourthIntro()),
+                                      );
+                                    }
+                                  } else {}
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
@@ -231,99 +254,83 @@ class _Home4thState extends State<Home4th> {
                 ],
               ),
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.zero,
-                padding: EdgeInsets.fromLTRB(
-                  screenWidth * 0.05,
-                  screenHeight * 0.05,
-                  screenWidth * 0.05,
-                  screenHeight * 0.01,
-                ),
-                height: screenHeight * .35,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          relatedJobsText,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Programs()),
-                              );
-                            },
-                            child: Text(
-                              "View All",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+      SliverToBoxAdapter(
+        child: Container(
+          margin: EdgeInsets.zero,
+          padding: EdgeInsets.fromLTRB(
+            screenWidth * 0.05,
+            screenHeight * 0.05,
+            screenWidth * 0.05,
+            screenHeight * 0.01,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    relatedJobsText,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
                     ),
-                    SizedBox(height: 8.0),
-                    SizedBox(
-                      height: 150.0,
-                      child: GridView.builder(
-                        padding: EdgeInsets.zero,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 8.0,
-                          mainAxisSpacing: 8.0,
-                          childAspectRatio: 2.5,
+                    textAlign: TextAlign.start,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Programs()),
+                        );
+                      },
+                      child: Text(
+                        "View All",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
                         ),
-                        itemCount: jobs.length > 4 ? 4 : jobs.length,
-                        itemBuilder: (context, index) {
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // First Column
+                  Expanded(
+                    child: Column(
+                      children: List.generate(
+                        2,
+                            (index) {
                           List<Gradient> gradients = [
                             LinearGradient(
-                              colors: [
-                                Colors.blueAccent,
-                                Colors.purpleAccent.shade100
-                              ],
+                              colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             LinearGradient(
-                              colors: [
-                                Colors.teal.shade300,
-                                Colors.cyan.shade100
-                              ],
+                              colors: [Colors.teal.shade300, Colors.cyan.shade100],
                               begin: Alignment.topRight,
                               end: Alignment.bottomLeft,
                             ),
                             LinearGradient(
-                              colors: [
-                                Colors.pink.shade600,
-                                Colors.orange.shade300
-                              ],
+                              colors: [Colors.pink.shade600, Colors.orange.shade300],
                               begin: Alignment.bottomLeft,
                               end: Alignment.topRight,
                             ),
                             LinearGradient(
-                              colors: [
-                                Colors.indigo.shade500,
-                                Colors.blueGrey.shade200
-                              ],
+                              colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
@@ -334,26 +341,23 @@ class _Home4thState extends State<Home4th> {
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Container(
+                              height: 60, // Fixed height for the container inside the card
                               decoration: BoxDecoration(
-                                gradient: gradients[index],
+                                gradient: gradients[index % gradients.length],
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      jobs[index],
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                                child: Text(
+                                  jobs[index],
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: null, // Allow unlimited lines
+                                  overflow: TextOverflow.visible, // Make text fully visible
                                 ),
                               ),
                             ),
@@ -361,11 +365,76 @@ class _Home4thState extends State<Home4th> {
                         },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(width: 8.0), // Space between two columns
+                  // Second Column
+                  Expanded(
+                    child: Column(
+                      children: List.generate(
+                        2, // Limit to 2 jobs in the second column
+                            (index) {
+                          List<Gradient> gradients = [
+                            LinearGradient(
+                              colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            LinearGradient(
+                              colors: [Colors.teal.shade300, Colors.cyan.shade100],
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                            ),
+                            LinearGradient(
+                              colors: [Colors.pink.shade600, Colors.orange.shade300],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                            ),
+                            LinearGradient(
+                              colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ];
+
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Container(
+                              height: 60, // Fixed height for the container inside the card
+                              decoration: BoxDecoration(
+                                gradient: gradients[(index + 2) % gradients.length],
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  jobs[index + 2],
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: null, // Allow unlimited lines
+                                  overflow: TextOverflow.visible, // Make text fully visible
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SliverToBoxAdapter(
+            ],
+          ),
+        ),
+      ),
+
+
+      SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -491,7 +560,7 @@ class _Home4thState extends State<Home4th> {
                                   title: const Text(
                                     'Settings',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   onTap: () {},
@@ -502,7 +571,7 @@ class _Home4thState extends State<Home4th> {
                                   title: const Text(
                                     'History',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   onTap: () {
@@ -515,7 +584,7 @@ class _Home4thState extends State<Home4th> {
                                   title: const Text(
                                     'About',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   onTap: () {
@@ -528,7 +597,7 @@ class _Home4thState extends State<Home4th> {
                                   title: const Text(
                                     'Feedback',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 14,
                                     ),
                                   ),
                                   onTap: () {
@@ -541,7 +610,7 @@ class _Home4thState extends State<Home4th> {
                                   title: const Text(
                                     'Logout',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   onTap: () {
@@ -628,7 +697,7 @@ class _Home4thState extends State<Home4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
+                      MaterialPageRoute(builder: (context) => Result4th()),
                     );
                   },
                   icon: Image.asset(
@@ -658,7 +727,7 @@ class _Home4thState extends State<Home4th> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResult4th')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -667,7 +736,7 @@ class _Home4thState extends State<Home4th> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnswered4th()),
                         );
                       } else {
                         Navigator.push(

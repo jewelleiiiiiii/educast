@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Result/result4th.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:educast/Assessment/Rules/4thRules.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/Home4th.dart';
 
 class FourthIntro extends StatefulWidget {
@@ -142,7 +143,7 @@ class _FourthIntro extends State<FourthIntro> {
                   onPressed: () {
                     // Navigator.push(
                     //   context,
-                    //   MaterialPageRoute(builder: (context) => const SearchG12()),
+                    //   MaterialPageRoute(builder: (context) => const SearchG10()),
                     // );
                   },
                   icon: Image.asset(
@@ -162,10 +163,10 @@ class _FourthIntro extends State<FourthIntro> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => ResultG12()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Result4th()),
+                    );
                   },
                   icon: Image.asset(
                     'assets/stats.png',
@@ -194,7 +195,7 @@ class _FourthIntro extends State<FourthIntro> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResult4th')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -203,7 +204,7 @@ class _FourthIntro extends State<FourthIntro> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnswered4th()),
                         );
                       } else {
                         Navigator.push(
