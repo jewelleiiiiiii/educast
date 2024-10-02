@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Result/resultG12.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/homeg12.dart';
 import 'package:educast/Search/searchg12.dart';
 
@@ -226,10 +227,10 @@ class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResultG10()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ResultG12()),
+                  );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -267,7 +268,7 @@ class _G12Rules extends State<G12Rules> with TickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnsweredG12()),
                       );
                     } else {
                       Navigator.push(
@@ -511,10 +512,10 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResultG10()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ResultG12()),
+                  );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -552,7 +553,7 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnsweredG12()),
                       );
                     } else {
                       Navigator.push(
@@ -792,10 +793,10 @@ class _G12Rules3 extends State<G12Rules3> {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => ResultG10()),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ResultG12()),
+                  );
                 },
                 icon: Image.asset(
                   'assets/stats.png',
@@ -833,7 +834,7 @@ class _G12Rules3 extends State<G12Rules3> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SubmissionConfirmation()),
+                            builder: (context) => AlreadyAnsweredG12()),
                       );
                     } else {
                       Navigator.push(

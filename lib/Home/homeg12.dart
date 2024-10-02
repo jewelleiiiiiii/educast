@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Assessment/Rules/G12Intro.dart';
 import 'package:educast/Assessment/assess1g12.dart';
+import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Home/Info/automotive.dart';
+import 'package:educast/Home/Info/civil.dart';
+import 'package:educast/Result/resultG12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
-import 'package:educast/Assessment/Rules/G12Intro.dart';
 import 'package:educast/Home/Info/programsSelection.dart';
 import 'package:educast/Home/User/UserG12.dart';
 import 'package:educast/LoginSignUpPages/Login.dart';
-import 'package:educast/Result/resultg10.dart';
 import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:educast/Search/searchg12.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -79,34 +82,34 @@ class _HomeG12State extends State<HomeG12> {
     if (strand == 'Science, Technology, Engineering, and Mathematics') {
       courses = [
         'BAET',
-        'BCET',
-        'BSCrim',
-        'BCET',
+        'BCivET',
+        'BCompET',
         'BDT',
-        'BEET',
-        'BEET',
+        'BElecET',
+        'BElectroET',
         'BFET',
+        'BMechET',
+        'BMechtronET',
+        'BSCrim',
         'BSIT',
-        'BMET',
-        'BMET',
         'BSPsych',
       ];
     } else if (strand == 'Accountancy, Business, and Management') {
-      courses = ['Criminology'];
+      courses = ['BSCrim'];
     } else if (strand == 'Humanities and Social Sciences') {
-      courses = ['Criminology', 'Psychology'];
+      courses = ['BSCrim', 'BSPsych'];
     } else if (strand == 'General Academic Strand') {
       courses = [
         'BAET',
-        'BCET',
-        'BSCrim',
-        'BCET',
+        'BCivET',
+        'BCompET',
         'BDT',
-        'BEET',
-        'BEET',
+        'BElecET',
+        'BElectroET',
         'BFET',
-        'BMET',
-        'BMET',
+        'BMechET',
+        'BMechtronET',
+        'BSCrim',
         'BSPsych',
       ];
     }
@@ -126,8 +129,14 @@ class _HomeG12State extends State<HomeG12> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
@@ -145,7 +154,10 @@ class _HomeG12State extends State<HomeG12> {
                 automaticallyImplyLeading: false,
                 flexibleSpace: Padding(
                   padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top,
+                    top: MediaQuery
+                        .of(context)
+                        .padding
+                        .top,
                     left: screenWidth * 0.03,
                     right: paddingHorizontal,
                   ),
@@ -198,7 +210,7 @@ class _HomeG12State extends State<HomeG12> {
                     Container(
                       height: screenHeight * 0.19,
                       margin:
-                          EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                      EdgeInsets.symmetric(horizontal: paddingHorizontal),
                       decoration: BoxDecoration(
                         image: const DecorationImage(
                           image: AssetImage('assets/1.png'),
@@ -212,7 +224,7 @@ class _HomeG12State extends State<HomeG12> {
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.only(right: 150.0, left: 20),
+                              const EdgeInsets.only(right: 150.0, left: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,8 +339,7 @@ class _HomeG12State extends State<HomeG12> {
                         height: 150.0,
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -375,28 +386,37 @@ class _HomeG12State extends State<HomeG12> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: gradients[index],
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        courses[index],
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
+                              child: InkWell( // Make the container clickable
+                                onTap: () {
+                                  // Add dynamic navigation logic here
+                                  navigateToCoursePage(context, courses[index]);
+                                },
+                                borderRadius: BorderRadius.circular(16.0),
+                                // Ripple effect follows the border radius
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: gradients[index],
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .center,
+                                      children: [
+                                        Text(
+                                          courses[index],
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -514,7 +534,8 @@ class _HomeG12State extends State<HomeG12> {
                               ),
                               child: Center(
                                 child: Image.asset(
-                                  'assets/logo.png', // Ensure this asset exists in your project
+                                  'assets/logo.png',
+                                  // Ensure this asset exists in your project
                                   width: 150, // Adjust size as needed
                                   height: 150,
                                 ),
@@ -588,7 +609,7 @@ class _HomeG12State extends State<HomeG12> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const LoginPage()),
+                                            const LoginPage()),
                                       );
                                     },
                                   ),
@@ -606,7 +627,10 @@ class _HomeG12State extends State<HomeG12> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -668,7 +692,7 @@ class _HomeG12State extends State<HomeG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
+                      MaterialPageRoute(builder: (context) => ResultG12()),
                     );
                   },
                   icon: Image.asset(
@@ -681,7 +705,10 @@ class _HomeG12State extends State<HomeG12> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -694,11 +721,28 @@ class _HomeG12State extends State<HomeG12> {
                   ),
                 ),
                 child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const QuestionnaireG12()),
-                    );
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final userResultDoc = FirebaseFirestore.instance
+                          .collection('userResultG12')
+                          .doc(user.uid);
+
+                      final docSnapshot = await userResultDoc.get();
+
+                      if (docSnapshot.exists) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AlreadyAnsweredG12()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => G12Intro()),
+                        );
+                      }
+                    } else {}
                   },
                   icon: Image.asset(
                     'assets/main.png',
@@ -712,5 +756,35 @@ class _HomeG12State extends State<HomeG12> {
         ),
       ),
     );
+  }
+
+  void navigateToCoursePage(BuildContext context, String course) {
+    switch (course) {
+      case 'BAET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Automotive()),
+        );
+        break;
+      case 'BCivET':
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Civil()),
+      );
+        break;
+      case 'Course 3':
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => Course3Page()),
+      // );
+        break;
+    // Add more cases for different courses
+      default:
+      // Handle default case or navigate to a generic page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeG12()),
+        );
+    }
   }
 }

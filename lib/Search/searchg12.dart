@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Result/resultG12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/homeg12.dart';
-import 'package:educast/Result/resultg10.dart';
 import '../Home/Info/Abm.dart';
 import '../Home/Info/GAS.dart';
 import '../Home/Info/HUMSS.dart';
 import '../Home/Info/STEM.dart';
-import '../Home/homeg10.dart';
 
 class SearchG12 extends StatefulWidget {
   const SearchG12({super.key});
@@ -144,7 +143,7 @@ class _SearchG12 extends State<SearchG12> {
         screen = GasInfo();
         break;
       default:
-        screen = const HomeG10();
+        screen = const HomeG12();
     }
 
     Navigator.push(
@@ -369,7 +368,7 @@ class _SearchG12 extends State<SearchG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
+                      MaterialPageRoute(builder: (context) => ResultG12()),
                     );
                   },
                   icon: Image.asset(
@@ -399,7 +398,7 @@ class _SearchG12 extends State<SearchG12> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResultG12')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -408,7 +407,7 @@ class _SearchG12 extends State<SearchG12> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnsweredG12()),
                         );
                       } else {
                         Navigator.push(

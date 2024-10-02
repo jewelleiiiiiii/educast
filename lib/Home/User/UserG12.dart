@@ -1,11 +1,11 @@
+import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Home/User/ResetPasswordG12.dart';
+import 'package:educast/Search/searchg12.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/homeg12.dart';
-import 'package:educast/Result/resultg10.dart';
-import 'package:educast/Search/searchg10.dart';
 
 class UserG12 extends StatefulWidget {
   const UserG12({super.key});
@@ -174,7 +174,12 @@ class _UserG12 extends State<UserG12> {
                         SizedBox(height: 25),
                         Center(
                           child: ElevatedButton(
-                            onPressed: _resetPassword,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ResetPasswordPage()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color.fromARGB(255, 158, 39, 39),
                               foregroundColor: Colors.white,
@@ -235,7 +240,7 @@ class _UserG12 extends State<UserG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SearchG10()),
+                      MaterialPageRoute(builder: (context) => SearchG12()),
                     );
                   },
                   icon: Image.asset(
@@ -255,10 +260,10 @@ class _UserG12 extends State<UserG12> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => ResultG12()),
+                    // );
                   },
                   icon: Image.asset(
                     'assets/stats.png',
@@ -287,7 +292,7 @@ class _UserG12 extends State<UserG12> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResultG12')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -296,7 +301,7 @@ class _UserG12 extends State<UserG12> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnsweredG12()),
                         );
                       } else {
                         Navigator.push(

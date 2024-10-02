@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Result/resultG12.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:educast/Assessment/Rules/G12Rules.dart';
-import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Home/homeg12.dart';
-import 'package:educast/Search/searchg12.dart';
 
 class G12Intro extends StatefulWidget {
   const G12Intro({super.key});
@@ -141,11 +141,10 @@ class _G12Intro extends State<G12Intro> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchG12()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SearchG12()),
+                    // );
                   },
                   icon: Image.asset(
                     'assets/search.png',
@@ -164,10 +163,10 @@ class _G12Intro extends State<G12Intro> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => ResultG12()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResultG12()),
+                    );
                   },
                   icon: Image.asset(
                     'assets/stats.png',
@@ -184,7 +183,7 @@ class _G12Intro extends State<G12Intro> {
                 width: iconSize * 2,
                 height: iconSize * 2,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF08080),
+                  color: Color(0xFFF08080),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.white.withOpacity(0.8),
@@ -196,7 +195,7 @@ class _G12Intro extends State<G12Intro> {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
+                          .collection('userResultG12')
                           .doc(user.uid);
 
                       final docSnapshot = await userResultDoc.get();
@@ -205,16 +204,15 @@ class _G12Intro extends State<G12Intro> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
+                              builder: (context) => AlreadyAnsweredG12()),
                         );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => const G12Intro()),
+                          MaterialPageRoute(builder: (context) => G12Intro()),
                         );
                       }
-                    }
+                    } else {}
                   },
                   icon: Image.asset(
                     'assets/main.png',

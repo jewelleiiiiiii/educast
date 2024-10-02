@@ -2,12 +2,12 @@ import 'package:educast/Home/homeg12.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Automotive extends StatefulWidget {
+class Civil extends StatefulWidget {
   @override
-  _Automotivee createState() => _Automotivee();
+  _Civil createState() => _Civil();
 }
 
-class _Automotivee extends State<Automotive> {
+class _Civil extends State<Civil> {
   final List<String> lessons = List.generate(
       4, (index) => "Lesson ${(index + 1).toString().padLeft(2, '0')}");
 
@@ -42,7 +42,7 @@ class _Automotivee extends State<Automotive> {
       '6.6': '',
     };
     try {
-      final doc = await _firestore.collection('programcontent').doc('Bachelor of Automotive Engineering Technology').get();
+      final doc = await _firestore.collection('programcontent').doc('Bachelor of Civil Engineering Technology').get();
       if (doc.exists) {
         lessonData['1'] =
             doc.data()?['1'] ?? 'No information available for Lesson 1';
@@ -134,7 +134,7 @@ class _Automotivee extends State<Automotive> {
         height: screenHeight, // Dynamically set height based on screen size
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/automotive.png'),
+            image: AssetImage('assets/civil.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -197,15 +197,15 @@ class _Automotivee extends State<Automotive> {
                               ),
                             ),
                             title: index == 0
-                                ? const Text('Introduction to BAET')
+                                ? const Text('Introduction to BCivET')
                                 : (index == 1
-                                ? const Text('Why Choose BAET?')
+                                ? const Text('Why Choose BCivET?')
                                 : (index == 2
                                 ? const Text(
-                                'Career Opportunities in BAET')
+                                'Career Opportunities in BCivET')
                                 : (index == 3
                                 ? const Text(
-                                'Skills Developed in BAET')
+                                'Skills Developed in BCivET')
                                 : const Text('')))),
                             children: [
                               Column(
@@ -233,7 +233,7 @@ class _Automotivee extends State<Automotive> {
                                               const SizedBox(height: 30),
                                               const Center(
                                                 child: Text(
-                                                  "What is BAET?",
+                                                  "What is BCivET?",
                                                   style: TextStyle(
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.bold,
@@ -332,7 +332,7 @@ class _Automotivee extends State<Automotive> {
                                             CrossAxisAlignment.center,
                                             children: [
                                               const Text(
-                                                "Professions Under BAET:",
+                                                "Professions Under BCivET:",
                                                 style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
@@ -362,25 +362,29 @@ class _Automotivee extends State<Automotive> {
                                                   Text("$career5_5",
                                                     style: const TextStyle(
                                                         fontSize: 16),textAlign: TextAlign.justify,),
-                                                  const SizedBox(height: 15),
-                                                  Text("$career5_6",
-                                                    style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
                                                 ],
                                               ),
                                               const SizedBox(height: 50),
+                                              Center( child:
                                               const Text(
-                                                "Top Jobs for BAET Graduates:",
+                                                "Top Jobs for BCivET Graduates:",
                                                 style: TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.bold,
+
                                                 ),
+                                                textAlign: TextAlign.center,
                                               ),
+                        ),
                                               const SizedBox(height: 10),
                                               Column(
                                                 crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                                 children: [
+                                                  Text("$career5_6",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                  const SizedBox(height: 15),
                                                   Text("$lesson5_7",
                                                     style: const TextStyle(
                                                         fontSize: 16),textAlign: TextAlign.justify,),
@@ -397,9 +401,7 @@ class _Automotivee extends State<Automotive> {
                                                     style: const TextStyle(
                                                         fontSize: 16), textAlign: TextAlign.justify,),
                                                   const SizedBox(height: 15),
-                                                  Text("$lesson5_11",
-                                                    style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+
                                                 ],
                                               ),
                                             ],
@@ -416,7 +418,7 @@ class _Automotivee extends State<Automotive> {
                                         children: [
                                           const Center(
                                             child: Text(
-                                              "Skills Developed in BAET",
+                                              "Skills Developed in BCivET",
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
@@ -448,11 +450,7 @@ class _Automotivee extends State<Automotive> {
                                             lesson6_5,
                                             style: const TextStyle(fontSize: 16),textAlign: TextAlign.justify,
                                           ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            lesson6_6,
-                                            style: const TextStyle(fontSize: 16),textAlign: TextAlign.justify,
-                                          ),
+
                                         ],
                                       ),
                                     ),

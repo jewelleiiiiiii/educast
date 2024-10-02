@@ -307,7 +307,6 @@ class _Home4thState extends State<Home4th> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // First Column
                   Expanded(
                     child: Column(
                       children: List.generate(
@@ -324,16 +323,7 @@ class _Home4thState extends State<Home4th> {
                               begin: Alignment.topRight,
                               end: Alignment.bottomLeft,
                             ),
-                            LinearGradient(
-                              colors: [Colors.pink.shade600, Colors.orange.shade300],
-                              begin: Alignment.bottomLeft,
-                              end: Alignment.topRight,
-                            ),
-                            LinearGradient(
-                              colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
+
                           ];
 
                           return Card(
@@ -341,28 +331,31 @@ class _Home4thState extends State<Home4th> {
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Container(
-                              height: 60, // Fixed height for the container inside the card
+                              height: 60,
+                              width: double.infinity, // Set the width to take up the full available space
                               decoration: BoxDecoration(
                                 gradient: gradients[index % gradients.length],
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  jobs[index],
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: null, // Allow unlimited lines
-                                  overflow: TextOverflow.visible, // Make text fully visible
+                                child: Center(
+                                  child:Text(
+                                          jobs[index],
+                                          style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          maxLines: null, // Allow unlimited lines
+                                          overflow: TextOverflow.visible, // Make text fully visible
+                                ),
                                 ),
                               ),
                             ),
                           );
-                        },
+                            },
                       ),
                     ),
                   ),
@@ -374,16 +367,7 @@ class _Home4thState extends State<Home4th> {
                         2, // Limit to 2 jobs in the second column
                             (index) {
                           List<Gradient> gradients = [
-                            LinearGradient(
-                              colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            LinearGradient(
-                              colors: [Colors.teal.shade300, Colors.cyan.shade100],
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                            ),
+
                             LinearGradient(
                               colors: [Colors.pink.shade600, Colors.orange.shade300],
                               begin: Alignment.bottomLeft,
@@ -401,23 +385,26 @@ class _Home4thState extends State<Home4th> {
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Container(
-                              height: 60, // Fixed height for the container inside the card
+                              height: 60,
+                              width: double.infinity, // Set the width to take up the full available space
                               decoration: BoxDecoration(
-                                gradient: gradients[(index + 2) % gradients.length],
+                                gradient: gradients[index % gradients.length],
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  jobs[index + 2],
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child:Text(
+                                    jobs[index + 2],
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: null, // Allow unlimited lines
+                                    overflow: TextOverflow.visible, // Make text fully visible
                                   ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: null, // Allow unlimited lines
-                                  overflow: TextOverflow.visible, // Make text fully visible
                                 ),
                               ),
                             ),
@@ -446,7 +433,7 @@ class _Home4thState extends State<Home4th> {
                       0,
                     ),
                     child: Text(
-                      'Explore BatStateU-IS',
+                      'Explore BatStateU-TNEU',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
