@@ -449,7 +449,7 @@ class _AlreadyAnsweredG12 extends State<AlreadyAnsweredG12> {
               ),
               child: Center(
                 child: Text(
-                  'Skills Assessment',
+                  'IQ Assessment',
                   style: TextStyle(
                     fontSize: 24.0,
                     color: Colors.white,
@@ -475,7 +475,7 @@ class _AlreadyAnsweredG12 extends State<AlreadyAnsweredG12> {
                       CircularProgressIndicator(),
                     SizedBox(height: 20.0),
                     Text(
-                      'You have successfully completed the Interest Assessment.',
+                      'You have successfully completed the IQ Assessment.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18.0,

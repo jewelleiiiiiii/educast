@@ -640,7 +640,7 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
               ),
               child: Center(
                 child: Text(
-                  'Interest Assessment',
+                  'Skills Assessment',
                   style: TextStyle(
                     fontSize: 24.0,
                     color: Colors.white,
@@ -953,7 +953,7 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
                       CircularProgressIndicator(),
                     SizedBox(height: 20.0),
                     Text(
-                      'You have successfully completed the Interest Assessment.',
+                      'You have successfully completed the Skills Assessment.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18.0,

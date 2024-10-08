@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Home/Drawer/Feedback.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Assessment/Rules/G10Intro.dart';
@@ -583,7 +584,12 @@ class _HomeG10 extends State<HomeG10> {
                                       ),
                                     ),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FeedbackPage()),
+                                      );
                                     },
                                   ),
                                   ListTile(

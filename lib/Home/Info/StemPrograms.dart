@@ -71,8 +71,8 @@ class _StemPrograms extends State<StemPrograms> {
         'BFET',
         'BMechET',
         'BMechtronET',
-        'BSCrim',
         'BSIT',
+        'BSCrim',
         'BSPsych',
       ];
     } else if (strand == 'Accountancy, Business, and Management') {

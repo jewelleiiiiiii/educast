@@ -1,5 +1,6 @@
 import 'package:educast/Assessment/Rules/4thIntro.dart';
 import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Home/User/ResetPasswordG12.dart';
 import 'package:educast/Result/result4th.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -190,7 +191,12 @@ class _User4th extends State<User4th> {
                         SizedBox(height: 25),
                         Center(
                           child: ElevatedButton(
-                            onPressed: _resetPassword,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ResetPasswordPage()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color.fromARGB(255, 158, 39, 39),
                               foregroundColor: Colors.white,

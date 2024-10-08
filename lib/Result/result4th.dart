@@ -3,6 +3,7 @@ import 'package:educast/Assessment/AssessmentHistory/AssessmentHistory4th.dart';
 import 'package:educast/Assessment/Rules/4thIntro.dart';
 import 'package:educast/Assessment/assess34th.dart';
 import 'package:educast/Home/Home4th.dart';
+import 'package:educast/Search/search4th.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -225,11 +226,11 @@ class _Result4th extends State<Result4th> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const SearchG10()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Search4th()),
+                    );
                   },
                   icon: Image.asset(
                     'assets/search.png',

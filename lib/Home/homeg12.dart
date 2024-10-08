@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
 import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Home/Drawer/Feedback.dart';
+import 'package:educast/Home/Info/Criminology.dart';
 import 'package:educast/Home/Info/GasPrograms.dart';
 import 'package:educast/Home/Info/StemPrograms.dart';
 import 'package:educast/Home/Info/automotive.dart';
@@ -12,6 +14,7 @@ import 'package:educast/Home/Info/electronics.dart';
 import 'package:educast/Home/Info/food.dart';
 import 'package:educast/Home/Info/mechanical.dart';
 import 'package:educast/Home/Info/mechatronics.dart';
+import 'package:educast/Home/Info/psychology.dart';
 import 'package:educast/Result/resultG12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
@@ -132,6 +135,10 @@ class _HomeG12State extends State<HomeG12> {
     setState(() {
       _isDrawerOpen = false;
     });
+  }
+// Method to check if the "View All" text should be visible based on the user's strand.
+  bool _shouldShowViewAll(String strand) {
+    return strand == 'Science, Technology, Engineering, and Mathematics' || strand == 'General Academic Strand';
   }
 
   @override
@@ -341,49 +348,38 @@ class _HomeG12State extends State<HomeG12> {
                             ),
                             textAlign: TextAlign.start,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: GestureDetector(
-                              onTap: () async {
-
-                                if (userStrand == "General Academic Strand") {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => GasPrograms()),
-                                  );
-                                } else if (userStrand == "Science, Technology, Engineering, and Mathematics") {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => StemPrograms()),
-                                  );
-                                } else if (userStrand == "Accountancy, Business, and Management") {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context) => AbmPrograms()),
-                                  // );
-                                } else if (userStrand == "Humanities and Social Sciences") {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context) => HumssPrograms()),
-                                  // );
-                                } else {
-                                  // Handle other strands or show a default page
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => HomeG12()),
-                                  );
-                                }
-                              },
-                              child: Text(
-                                "View All",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                          if (_shouldShowViewAll(userStrand!))
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  if (userStrand == "General Academic Strand") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => GasPrograms()),
+                                    );
+                                  } else if (userStrand == "Science, Technology, Engineering, and Mathematics") {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => StemPrograms()),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => HomeG12()),
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                       SizedBox(height: 8.0),
@@ -644,7 +640,12 @@ class _HomeG12State extends State<HomeG12> {
                                       ),
                                     ),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                             FeedbackPage()),
+                                      );
                                     },
                                   ),
                                   ListTile(
@@ -819,16 +820,16 @@ class _HomeG12State extends State<HomeG12> {
         );
         break;
       case 'BCivET':
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Civil()),
-      );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Civil()),
+        );
         break;
       case 'BCompET':
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Computer()),
-      );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Computer()),
+        );
         break;
       case 'BDT':
         Navigator.push(
@@ -866,7 +867,18 @@ class _HomeG12State extends State<HomeG12> {
           MaterialPageRoute(builder: (context) => Mechatronics()),
         );
         break;
-
+      case 'BSCrim':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Criminology()),
+        );
+        break;
+      case 'BSPsych':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Psychology()),
+        );
+        break;
       default:
       // Handle default case or navigate to a generic page
         Navigator.push(

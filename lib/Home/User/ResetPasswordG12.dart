@@ -14,7 +14,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   String? _errorMessage;
 
   Future<void> _resetPassword() async {
-    // Get the current user
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       setState(() {
@@ -23,12 +22,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       return;
     }
 
-    // Check if the current password is correct
     String email = user.email!;
     String currentPassword = _currentPasswordController.text.trim();
 
     try {
-      // Re-authenticate the user
       AuthCredential credential = EmailAuthProvider.credential(
         email: email,
         password: currentPassword,
@@ -36,7 +33,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
       await user.reauthenticateWithCredential(credential);
 
-      // Validate new password
       String newPassword = _newPasswordController.text.trim();
       String confirmPassword = _confirmPasswordController.text.trim();
 
@@ -47,22 +43,48 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         return;
       }
 
-      // Update the password
       await user.updatePassword(newPassword);
       setState(() {
-        _errorMessage = null; // Clear any previous error messages
+        _errorMessage = null;
       });
 
-      // Optionally, navigate to another page or show success message
-      Navigator.of(context).pop(); // Close the reset password page
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Password reset successful.")),
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message; // Show specific Firebase error message
+        _errorMessage = e.message;
       });
     }
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a new password.';
+    }
+
+    // Check if password length is at least 8 characters.
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+
+    // Check if password contains at least one uppercase letter.
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return 'Password must contain at least one uppercase letter.';
+    }
+
+    // Check if password contains at least one number.
+    if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return 'Password must contain at least one number.';
+    }
+
+    // Check if password contains at least one special character.
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+      return 'Password must contain at least one special character.';
+    }
+
+    return null;
   }
 
   @override
@@ -99,13 +121,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 controller: _newPasswordController,
                 obscureText: true,
                 decoration: InputDecoration(labelText: "New Password"),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a new password.';
-                  }
-                  // Add additional password validation if needed
-                  return null;
-                },
+                validator: _validatePassword,
               ),
               TextFormField(
                 controller: _confirmPasswordController,
