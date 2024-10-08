@@ -619,18 +619,27 @@ class YouMayLikeTile extends StatelessWidget {
     for (final doc in querySnapshot.docs) {
       final courseData = doc.data();
       for (var field in specificFields) {
-        final value =
-            courseData[field] as num? ?? 0;
-        if (courseMap.containsKey(field)) {
-          courseMap[field] =
-              (courseMap[field] ?? 0) + value;
-        } else {
-          courseMap[field] = value;
+        final value = courseData[field];
+        if (value is num) {
+          if (courseMap.containsKey(field)) {
+            courseMap[field] = (courseMap[field] ?? 0) + value;
+          } else {
+            courseMap[field] = value;
+          }
+        } else if (value is String) {
+          // If it's a string, you might want to parse it to a number
+          final numValue = num.tryParse(value);
+          if (numValue != null) {
+            if (courseMap.containsKey(field)) {
+              courseMap[field] = (courseMap[field] ?? 0) + numValue;
+            } else {
+              courseMap[field] = numValue;
+            }
+          }
         }
       }
     }
 
-    // Create a list of course names and their values
     final courseList = <Map<String, dynamic>>[];
     for (var field in specificFields) {
       final value = courseMap[field] ?? 0;
