@@ -1,13 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
-import 'package:educast/Assessment/assess1g12.dart';
 import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Home/Info/GasPrograms.dart';
+import 'package:educast/Home/Info/StemPrograms.dart';
 import 'package:educast/Home/Info/automotive.dart';
 import 'package:educast/Home/Info/civil.dart';
+import 'package:educast/Home/Info/computer.dart';
+import 'package:educast/Home/Info/drafting.dart';
+import 'package:educast/Home/Info/electrical.dart';
+import 'package:educast/Home/Info/electronics.dart';
+import 'package:educast/Home/Info/food.dart';
+import 'package:educast/Home/Info/mechanical.dart';
+import 'package:educast/Home/Info/mechatronics.dart';
 import 'package:educast/Result/resultG12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
-import 'package:educast/Home/Info/programsSelection.dart';
 import 'package:educast/Home/User/UserG12.dart';
 import 'package:educast/LoginSignUpPages/Login.dart';
 import 'package:carousel_slider/carousel_slider.dart' as slider;
@@ -257,7 +264,29 @@ class _HomeG12State extends State<HomeG12> {
                               child: SizedBox(
                                 width: 120,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    final user = FirebaseAuth.instance.currentUser;
+                                    if (user != null) {
+                                      final userResultDoc = FirebaseFirestore.instance
+                                          .collection('userResultG12')
+                                          .doc(user.uid);
+
+                                      final docSnapshot = await userResultDoc.get();
+
+                                      if (docSnapshot.exists) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => AlreadyAnsweredG12()),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => G12Intro()),
+                                        );
+                                      }
+                                    } else {}
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     padding: const EdgeInsets.symmetric(
@@ -315,12 +344,35 @@ class _HomeG12State extends State<HomeG12> {
                           Padding(
                             padding: EdgeInsets.only(right: 10.0),
                             child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Programs()),
-                                );
+                              onTap: () async {
+
+                                if (userStrand == "General Academic Strand") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => GasPrograms()),
+                                  );
+                                } else if (userStrand == "Science, Technology, Engineering, and Mathematics") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => StemPrograms()),
+                                  );
+                                } else if (userStrand == "Accountancy, Business, and Management") {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) => AbmPrograms()),
+                                  // );
+                                } else if (userStrand == "Humanities and Social Sciences") {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) => HumssPrograms()),
+                                  // );
+                                } else {
+                                  // Handle other strands or show a default page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => HomeG12()),
+                                  );
+                                }
                               },
                               child: Text(
                                 "View All",
@@ -551,7 +603,7 @@ class _HomeG12State extends State<HomeG12> {
                                     title: const Text(
                                       'Settings',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {},
@@ -562,7 +614,7 @@ class _HomeG12State extends State<HomeG12> {
                                     title: const Text(
                                       'History',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {
@@ -575,7 +627,7 @@ class _HomeG12State extends State<HomeG12> {
                                     title: const Text(
                                       'About',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {
@@ -588,7 +640,7 @@ class _HomeG12State extends State<HomeG12> {
                                     title: const Text(
                                       'Feedback',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 14,
                                       ),
                                     ),
                                     onTap: () {
@@ -601,7 +653,7 @@ class _HomeG12State extends State<HomeG12> {
                                     title: const Text(
                                       'Logout',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     onTap: () {
@@ -772,13 +824,49 @@ class _HomeG12State extends State<HomeG12> {
         MaterialPageRoute(builder: (context) => Civil()),
       );
         break;
-      case 'Course 3':
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Course3Page()),
-      // );
+      case 'BCompET':
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Computer()),
+      );
         break;
-    // Add more cases for different courses
+      case 'BDT':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Drafting()),
+        );
+        break;
+      case 'BElecET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Electrical()),
+        );
+        break;
+      case 'BElectoET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Electronics()),
+        );
+        break;
+      case 'BFET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Food()),
+        );
+        break;
+      case 'BMechET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Mechanical()),
+        );
+        break;
+      case 'BMechtronET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Mechatronics()),
+        );
+        break;
+
       default:
       // Handle default case or navigate to a generic page
         Navigator.push(

@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Home/Info/SoftwareDev.dart';
 import 'package:educast/Result/result4th.dart';
+import 'package:educast/Search/search4th.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Assessment/Rules/4thIntro.dart';
-import 'package:educast/Home/Info/programsSelection.dart';
 import 'package:educast/Home/User/User4th.dart';
 import 'package:educast/LoginSignUpPages/Login.dart';
 import 'package:carousel_slider/carousel_slider.dart' as slider;
@@ -60,7 +61,20 @@ class _Home4thState extends State<Home4th> {
           "Web Developer",
         ];
       });
-    } else {
+    } else if (course == "Bachelor of Automotive Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BAET-related Jobs";
+        jobs = [
+          "Automotive Engineer",
+          "Automotive Design Engineer",
+          "Product Development Engineer",
+          "Manufacturing Engineer",
+          "Vehicle Testing Engineer",
+        ];
+      });
+    }
+
+    else {
       // Handle other courses or default case if needed
       setState(() {
         relatedJobsText = "Related Jobs";
@@ -285,10 +299,10 @@ class _Home4thState extends State<Home4th> {
                     padding: EdgeInsets.only(right: 10.0),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Programs()),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => const Programs()),
+                        // );
                       },
                       child: Text(
                         "View All",
@@ -330,8 +344,13 @@ class _Home4thState extends State<Home4th> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
+                            child: InkWell( // Make the container clickable
+                              onTap: () {
+                                // Add dynamic navigation logic here
+                                navigateToCoursePage(context, jobs[index]);
+                              },
                             child: Container(
-                              height: 60,
+                              height: 80,
                               width: double.infinity, // Set the width to take up the full available space
                               decoration: BoxDecoration(
                                 gradient: gradients[index % gradients.length],
@@ -354,6 +373,7 @@ class _Home4thState extends State<Home4th> {
                                 ),
                               ),
                             ),
+                          ),
                           );
                             },
                       ),
@@ -385,8 +405,8 @@ class _Home4thState extends State<Home4th> {
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Container(
-                              height: 60,
-                              width: double.infinity, // Set the width to take up the full available space
+                              height: 80,
+                              width: double.infinity,
                               decoration: BoxDecoration(
                                 gradient: gradients[index % gradients.length],
                                 borderRadius: BorderRadius.circular(16.0),
@@ -660,10 +680,10 @@ class _Home4thState extends State<Home4th> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SearchG10()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Search4th()),
+                    );
                   },
                   icon: Image.asset(
                     'assets/search.png',
@@ -746,5 +766,21 @@ class _Home4thState extends State<Home4th> {
         ),
       ),
     );
+  }
+  void navigateToCoursePage(BuildContext context, String course) {
+    switch (course) {
+      case 'Software Developer':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
+      default:
+      // Handle default case or navigate to a generic page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home4th()),
+        );
+    }
   }
 }

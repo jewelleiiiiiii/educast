@@ -10,6 +10,10 @@ import 'package:educast/LoginSignUpPages/StrandSelection.dart';
 import 'package:educast/services/snackbar.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Ensure this import is correct\
 // import 'package:logger/logger.dart';
+import 'dart:math';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -21,19 +25,32 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final AuthServices _auth = AuthServices();
-
   bool isLoading = false;
+  String _verificationCode = '';
 
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+  String generateCode() {
+    var rng = Random();
+    String code = (100000 + rng.nextInt(900000)).toString(); // Generates a 6-digit code
+    return code;
+  }
+
+  Future<void> sendVerificationEmail(String email, String code) async {
+    final smtpServer = gmail('batstateu.tneu.educast@gmail.com', 'cfop qmzk ckxu ngln');
+
+    final message = Message()
+      ..from = Address('batstateu.tneu.educast@gmail.com', 'EduCAST')
+      ..recipients.add(email)
+      ..subject = 'Email Verification Code'
+      ..text = 'Your verification code is: $code';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent. ${e.toString()}');
+    }
   }
 
   bool _isPasswordValid(String password) {
@@ -56,9 +73,9 @@ class _SignupPageState extends State<SignupPage> {
       isLoading = true;
     });
 
-    String email = _emailController.text.trim();
+    String email = _emailController.text.trim().toLowerCase();
+    String fullemail = '$email@g.batstate-u.edu.ph';
 
-    // Ensure the email number is exactly 7 digits
     if (!_isEmailValid(email)) {
       setState(() {
         isLoading = false;
@@ -67,7 +84,6 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
 
-    // Ensure the passwords match
     if (_passwordController.text != _confirmPasswordController.text) {
       setState(() {
         isLoading = false;
@@ -80,27 +96,56 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context,
-          "Password must be at least 8 characters long, and include 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character.");
+      showSnackBar(context, "Password must be valid.");
       return;
     }
 
-    String fullEmail = '$email@g.batstate-u.edu.ph';
+    try {
+      // Query Firestore to check if email already exists
+      var existingUser = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: fullemail)
+          .get();
 
-    if (!(await _auth.checkEmailExists(email))) {
-      Navigator.of(context).push(
+      if (existingUser.docs.isNotEmpty) {
+        // Email already exists
+        setState(() {
+          isLoading = false;
+        });
+        showSnackBar(context, "This email is already in use.");
+        return;
+      }
+
+      // Proceed with verification and signup if the email is not registered
+      _verificationCode = generateCode();
+      await sendVerificationEmail(fullemail, _verificationCode);
+      print('Verification email sent to: $fullemail');
+
+      // Navigate to the verification page after sending the code
+      Navigator.push(
+        context,
         MaterialPageRoute(
-          builder: (context) => CreateAccountPage(
-            email: fullEmail,
+          builder: (context) => CodeVerificationPage(
+            email: fullemail,
+            verificationCode: _verificationCode,
             password: _passwordController.text,
           ),
         ),
       );
-    } else {
-      showSnackBar(context, "This email is already in use.");
-      return;
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(context, "Error: ${e}");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
+
+
+
 
   Future<void> _handledGoogleSignIn() async {
     try {
@@ -415,64 +460,41 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
   void storeUserData() async {
     if (_validateInput()) {
       try {
-        // Create user in Firebase Auth
-        if (widget.password != "") {
-          userCredential =
-              await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: widget.email,
-            password: widget.password,
-          );
-        } else {
-          userCredential = widget.userCredential!;
-        }
+        // Get the current user's UID
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          // Update additional information in Firestore
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+            'firstName': _firstnameController.text,
+            'lastName': _lastnameController.text,
+            'campus': _selectedCampus!,
+            'gradeLevel': _selectedGradeLevel!,
+            'email': widget.email,
+          });
 
-        // Store additional information in Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'firstName': _firstnameController.text,
-          'lastName': _lastnameController.text,
-          'campus': _selectedCampus!,
-          'gradeLevel': _selectedGradeLevel!,
-          'email': widget.email,
-        });
-
-        // Navigate to different pages based on selected grade level
-        if (_selectedGradeLevel == 'Grade 10') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const HomeG10(),
-            ),
-          );
-        } else if (_selectedGradeLevel == 'Grade 12') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const StrandSelection(),
-            ),
-          );
-        } else if (_selectedGradeLevel == 'Fourth-year College') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => CourseSelection(),
-            ),
-          );
-        }
-
-        showSnackBar(context, "Account Created Successfully");
-      } on FirebaseAuthException catch (e) {
-        print(e);
-        if (e.code == 'email-already-in-use') {
-          showSnackBar(context, "This email is already in use.");
-        } else {
-          showSnackBar(context, "An error occurred. Please try again.");
+          // Navigate based on selected grade level
+          if (_selectedGradeLevel == 'Grade 10') {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const HomeG10(),
+              ),
+            );
+          } else if (_selectedGradeLevel == 'Grade 12') {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const StrandSelection(),
+              ),
+            );
+          } else if (_selectedGradeLevel == 'Fourth-year College') {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => CourseSelection(),
+              ),
+            );
+          }
         }
       } catch (e) {
-        // Handle other exceptions
-        print(e);
-
-        showSnackBar(
-            context, "An unexpected error occurred. Please try again.");
+        showSnackBar(context, "An error occurred. Please try again.");
       }
     }
   }
@@ -847,6 +869,101 @@ class _PasswordFieldState extends State<PasswordField> {
               color: const Color.fromARGB(255, 3, 3, 3),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CodeVerificationPage extends StatefulWidget {
+  final String email;
+  final String verificationCode;
+  final String password;
+
+  CodeVerificationPage({required this.email, required this.verificationCode, required this.password});
+
+  @override
+  _CodeVerificationPageState createState() => _CodeVerificationPageState();
+}
+
+class _CodeVerificationPageState extends State<CodeVerificationPage> {
+  final TextEditingController _codeController = TextEditingController();
+  bool isLoading = false;
+
+  // Create Firestore entry after verification
+  Future<void> createFirestoreUser(String uid) async {
+    try {
+      // Store user data in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'email': widget.email,
+        // Add other necessary user data here
+      });
+
+      // Navigate to the CreateAccountPage to update user info
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateAccountPage(email: widget.email, password: widget.password),
+        ),
+      );
+    } catch (e) {
+      showSnackBar(context, "Failed to create Firestore document.");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void verifyCode() {
+    if (_codeController.text == widget.verificationCode) {
+      setState(() {
+        isLoading = true;
+      });
+      // Use an empty call to create a user in Firebase Auth without password
+      FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: widget.email,
+        password: widget.password,
+      ).then((userCredential) {
+        createFirestoreUser(userCredential.user!.uid);
+      }).catchError((e) {
+        showSnackBar(context, e.message ?? "Failed to create user.");
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } else {
+      // Code is incorrect, show an error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Incorrect verification code')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Enter Verification Code')),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('A verification code has been sent to your email.'),
+            TextField(
+              controller: _codeController,
+              decoration: InputDecoration(
+                labelText: 'Enter Code',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: isLoading ? null : verifyCode,
+              child: isLoading
+                  ? CircularProgressIndicator()
+                  : Text('Verify Code'),
+            ),
+          ],
         ),
       ),
     );

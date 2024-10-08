@@ -11,16 +11,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Search/searchg12.dart';
 
-class tryy extends StatefulWidget {
-  const tryy({
+class StemPrograms extends StatefulWidget {
+  const StemPrograms({
     super.key,
   });
 
   @override
-  _try createState() => _try();
+  _StemPrograms createState() => _StemPrograms();
 }
 
-class _try extends State<tryy> {
+class _StemPrograms extends State<StemPrograms> {
   String? userStrand;
   List<String> courses = [];
   String relatedProgramsText = '';
@@ -114,8 +114,9 @@ class _try extends State<tryy> {
               SliverAppBar(
                 pinned: true,
                 elevation: 0,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.white,
                 automaticallyImplyLeading: false,
+
                 leading: IconButton(
                   icon: Image.asset(
                     'assets/back.png',  // Path to your back.png
@@ -180,7 +181,7 @@ class _try extends State<tryy> {
                             mainAxisSpacing: 8.0,
                             childAspectRatio: 2.5,
                           ),
-                          itemCount: userStrand == 'General Academic Strand'
+                          itemCount: userStrand == 'Science, Technology, Engineering, and Mathematics'
                               ? 9
                               : courses.length > 4
                               ? 4
@@ -313,7 +314,7 @@ class _try extends State<tryy> {
 
                       // Second Courses Grid (Last 2 courses)
                       Container(
-                        height: 80.0,
+                        height: 65.0,
                         color: Colors.transparent,
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
@@ -385,7 +386,83 @@ class _try extends State<tryy> {
                           },
                         ),
                       ),
-                    ],
+                      SizedBox(height: 16.0),
+                      Text(
+                        'College of Informatics and Computing Sciences',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+
+                      // Second Courses Grid (Last 2 courses)
+                  Container(
+                    height: 80.0,
+                    color: Colors.transparent,
+                    child: GridView.builder(
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                        childAspectRatio: 2.5,
+                      ),
+                      // Set itemCount to 1 to show only the 10th course
+                      itemCount: courses.length >= 10 ? 1 : 0,
+                      itemBuilder: (context, index) {
+                        int courseIndex = 9; // 10th element in the list (0-based index)
+
+                        List<Gradient> gradients = [
+                          LinearGradient(
+                            colors: [
+                              Colors.blueAccent,
+                              Colors.purpleAccent.shade100
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ];
+
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              navigateToCoursePage(context, courses[courseIndex]);
+                            },
+                            borderRadius: BorderRadius.circular(16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: gradients[index],
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      courses[courseIndex], // Display the 10th course
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  ],
                   ),
                 ),
               ),
@@ -393,7 +470,7 @@ class _try extends State<tryy> {
           ),
         ],
       ),
-  bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         height: MediaQuery
             .of(context)
             .size

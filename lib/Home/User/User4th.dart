@@ -64,24 +64,24 @@ class _User4th extends State<User4th> {
         return 'BSCrim';
       case 'Bachelor of Science in Psychology':
         return 'BSPsych';
-      case 'Bachelor of in Automotive Engineering Technology':
+      case 'Bachelor of Automotive Engineering Technology':
         return 'BAET';
-      case 'Bachelor of in Civil Engineering Technology':
-        return 'BCET';
-      case 'Bachelor of in Computer Engineering Technology':
+      case 'Bachelor of Civil Engineering Technology':
+        return 'BCivET';
+      case 'Bachelor of Computer Engineering Technology':
         return 'BCompET';
-      case 'Bachelor of in Drafting Engineering Technology':
+      case 'Bachelor of Drafting Engineering Technology':
         return 'BDT';
-      case 'Bachelor of in Electrical Engineering Technology':
-        return 'BEET';
-      case 'Bachelor of in Electronics Engineering Technology':
-        return 'BElET';
-      case 'Bachelor of in Food Engineering Technology':
+      case 'Bachelor of Electrical Engineering Technology':
+        return 'BElecET';
+      case 'Bachelor of Electronics Engineering Technology':
+        return 'BElectoET';
+      case 'Bachelor of Food Engineering Technology':
         return 'BFET';
-      case 'Bachelor of in Mechanical Engineering Technology':
-        return 'BMET';
-      case 'Bachelor of in Mechatronics Engineering Technology':
-        return 'BMTET';
+      case 'Bachelor of Mechanical Engineering Technology':
+        return 'BMechET';
+      case 'Bachelor of Mechatronics Engineering Technology':
+        return 'BMechtronET';
       default:
         return course;
     }

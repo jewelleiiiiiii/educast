@@ -5,22 +5,27 @@ import 'package:educast/Home/Info/automotive.dart';
 import 'package:educast/Home/Info/civil.dart';
 import 'package:educast/Home/Info/computer.dart';
 import 'package:educast/Home/Info/drafting.dart';
+import 'package:educast/Home/Info/electrical.dart';
+import 'package:educast/Home/Info/electronics.dart';
+import 'package:educast/Home/Info/food.dart';
+import 'package:educast/Home/Info/mechanical.dart';
+import 'package:educast/Home/Info/mechatronics.dart';
 import 'package:educast/Home/homeg12.dart';
 import 'package:educast/Result/resultG12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Search/searchg12.dart';
 
-class tryy extends StatefulWidget {
-  const tryy({
+class GasPrograms extends StatefulWidget {
+  const GasPrograms({
     super.key,
   });
 
   @override
-  _try createState() => _try();
+  _GasPrograms createState() => _GasPrograms();
 }
 
-class _try extends State<tryy> {
+class _GasPrograms extends State<GasPrograms> {
   String? userStrand;
   List<String> courses = [];
   String relatedProgramsText = '';
@@ -97,10 +102,17 @@ class _try extends State<tryy> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
@@ -118,12 +130,13 @@ class _try extends State<tryy> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                   icon: Image.asset(
-                    'assets/back.png',  // Path to your back.png
-                    width: 24,          // Adjust the size as needed
+                    'assets/back.png', // Path to your back.png
+                    width: 24, // Adjust the size as needed
                     height: 24,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);  // Navigates back to the previous page
+                    Navigator.pop(
+                        context); // Navigates back to the previous page
                   },
                 ),
               ),
@@ -278,8 +291,10 @@ class _try extends State<tryy> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .center,
                                       children: [
                                         Text(
                                           courses[index],
@@ -364,8 +379,10 @@ class _try extends State<tryy> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .center,
                                       children: [
                                         Text(
                                           courses[courseIndex],
@@ -393,7 +410,7 @@ class _try extends State<tryy> {
           ),
         ],
       ),
-  bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         height: MediaQuery
             .of(context)
             .size
@@ -551,6 +568,36 @@ class _try extends State<tryy> {
           MaterialPageRoute(builder: (context) => Drafting()),
         );
         break;
+      case 'BElecET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Electrical()),
+        );
+        break;
+      case 'BElectroET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Electronics()),
+        );
+        break;
+      case 'BFET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Food()),
+        );
+        break;
+      case 'BMechET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Mechanical()),
+        );
+        break;
+      case 'BMechtronET':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Mechatronics()),
+        );
+        break;
       default:
         Navigator.push(
           context,
@@ -559,3 +606,4 @@ class _try extends State<tryy> {
     }
   }
 }
+
