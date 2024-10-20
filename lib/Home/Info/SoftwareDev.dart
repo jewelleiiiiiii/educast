@@ -119,7 +119,7 @@ class _Softwaredev extends State<Softwaredev> {
         height: screenHeight, // Dynamically set height based on screen size
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/automotive.png'),
+            image: AssetImage('assets/SoftwareDev.png'),
             fit: BoxFit.cover,
           ),
         ),

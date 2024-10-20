@@ -572,27 +572,15 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           backgroundColor: const Color.fromARGB(255, 158, 39, 39),
           elevation: 0,
-          leading: IconButton(
-            icon: Image.asset(
-              'assets/back.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomeG10()),
-              );
-            },
-          ),
         ),
       ),
       body: SafeArea(
@@ -801,6 +789,7 @@ class _SubmissionConfirmationState extends State<SubmissionConfirmation> {
           ],
         ),
       ),
+    ),
     );
   }
 }
@@ -905,7 +894,6 @@ class _AlreadyAnswered extends State<AlreadyAnswered> {
     // Evaluate the answers
     for (int i = 1; i <= 42; i++) {
       if (userAnswersSnapshot.get('$i') == 0) {
-        // Updated to access field as "1", "2", etc.
         results[fieldMapping[i]!] = results[fieldMapping[i]!]! + 1;
       }
     }
@@ -931,8 +919,9 @@ class _AlreadyAnswered extends State<AlreadyAnswered> {
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
@@ -1152,6 +1141,7 @@ class _AlreadyAnswered extends State<AlreadyAnswered> {
           ],
         ),
       ),
+    ),
     );
   }
 }

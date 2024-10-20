@@ -93,10 +93,7 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
               height: 24.0,
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ResultG10()),
-              );
+              Navigator.of(context).pop();
             },
           ),
         ),

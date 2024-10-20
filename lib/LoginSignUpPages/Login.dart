@@ -290,7 +290,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       backgroundColor: const Color.fromARGB(255, 159, 41, 33),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -456,6 +458,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -496,6 +499,7 @@ class _LoginPageState extends State<LoginPage> {
         inputFormatters: [EmailInputFormatter()],
       ),
     );
+
   }
 }
 

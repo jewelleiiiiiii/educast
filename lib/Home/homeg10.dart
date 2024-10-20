@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Home/Drawer/About.dart';
 import 'package:educast/Home/Drawer/Feedback.dart';
+import 'package:educast/Home/Drawer/History.dart';
+import 'package:educast/Home/Drawer/Settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:educast/Assessment/Rules/G10Intro.dart';
@@ -68,8 +71,9 @@ class _HomeG10 extends State<HomeG10> {
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -546,7 +550,14 @@ class _HomeG10 extends State<HomeG10> {
                                         fontSize: 16,
                                       ),
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SettingsPage()),
+                                      );
+                                    },
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.history,
@@ -558,7 +569,12 @@ class _HomeG10 extends State<HomeG10> {
                                       ),
                                     ),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                HistoryPageG10()),
+                                      );
                                     },
                                   ),
                                   ListTile(
@@ -571,7 +587,12 @@ class _HomeG10 extends State<HomeG10> {
                                       ),
                                     ),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AboutPage()),
+                                      );
                                     },
                                   ),
                                   ListTile(
@@ -746,6 +767,7 @@ class _HomeG10 extends State<HomeG10> {
           ],
         ),
       ),
+    ),
     );
   }
 }

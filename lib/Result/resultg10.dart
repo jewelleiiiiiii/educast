@@ -31,8 +31,9 @@ class _ResultG10State extends State<ResultG10> {
       statusBarBrightness:
           Brightness.light, // Ensure the status bar text is readable (white)
     ));
-
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       body: Stack(
         children: [
           // Background Image
@@ -262,6 +263,7 @@ class _ResultG10State extends State<ResultG10> {
           ],
         ),
       ),
+    ),
     );
   }
 

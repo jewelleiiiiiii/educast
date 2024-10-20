@@ -321,12 +321,30 @@ class _Result4th extends State<Result4th> {
 // Method to get jobs based on the user's course
   List<String> _getJobsBasedOnCourse(String course) {
     switch (course) {
-      case 'Bachelor of Automotive Engineering Technology':
-        return ["Robotics Engineer", "Automation Engineer", "Control Systems Engineer","Job4 Engineer","Control Systems Engineer"];
-      case 'Electrical Engineering':
-        return ["Electrical Engineer", "Power Systems Engineer", "Electronics Engineer"];
       case 'Bachelor of Science in Information Technology':
-        return ["Software Developer", "Network Administrator", "Web Developer", "Web Developer", "Web Developer",];
+        return ["Software Developer", "Network Administrator", "Database Administrator", "IT Support Specialist", "Web Developer",];
+      case "Bachelor of Automotive Engineering Technology":
+      return ['Automotive Engineer', 'Automotive Design Engineer', 'Product Development Engineer', 'Manufacturing Engineer', 'Vehicle Testing Engineer',];
+      case "Bachelor of Civil Engineering Technology":
+        return ['Civil Engineering Technologist', 'Construction Manager', 'Structural Designer', 'Project Coordinator', 'Site Inspector',];
+      case "Bachelor of Computer Engineering Technology":
+        return ['Computer Engineering Technologist','Network Administrator','Systems Analyst','Embedded Systems Developer','Software Developer',];
+      case "Bachelor of Drafting Engineering Technology":
+        return ['Drafting Technician', 'Mechanical Drafter', 'Architectural Drafter', 'CAD Operator', 'Drafting Engineer',];
+      case "Bachelor of Electrical Engineering Technology":
+        return ['Electrical Engineering Technician', 'Electrical Maintenance Technician', 'Electrical CAD Drafter', 'Electrical Project Coordinator', 'Automation Technician',];
+      case "Bachelor of Electronics Engineering Technology":
+        return ['Electronics Engineering Technician', 'Electronics Test Technician', 'PCB (Printed Circuit Board) Designer', 'Electronics Maintenance Technician', 'Broadcast Engineering Technician',];
+      case "Bachelor of Food Engineering Technology":
+        return ['Food Process Engineer', 'Quality Control/Assurance Specialist', 'Product Development Specialist', 'Food Safety Officer', 'Operations Supervisor in Food Manufacturing',];
+      case "Bachelor of Mechanical Engineering Technology":
+        return ['Mechanical Design Engineer', 'Maintenance Engineer', 'Manufacturing Engineer', 'Automation Engineer', 'Project Engineer',];
+      case "Bachelor of Mechatronics Engineering Technology":
+        return ['Automation Engineer', 'Control Systems Engineer', 'Robotics Engineer', 'Mechatronics Specialist in Manufacturing', 'Instrumentation Engineer',];
+      case "Bachelor of Science in Psychology":
+        return ['Human Resources Officer', 'Recruitment Specialist', 'Guidance Counselor', 'Training and Development Officer', 'Behavioral Therapist',];
+      case "Bachelor of Science in Criminology":
+        return ['Police Officer', 'Crime Scene Investigator', 'Forensic Specialist', 'Criminal Investigator', 'Security Officer',];
     default:
         return ["Job 1", "Job 2", "Job 3", "Job 4", "Job 5"];
     }
@@ -383,9 +401,37 @@ class _Result4th extends State<Result4th> {
 
 
     jobResults.sort((a, b) => b['score'].compareTo(a['score'])); // Sort by score
+    // Calculate the maximum score and its frequency
+    double maxScore = jobResults[0]['score']; // Top score
+    List<Map<String, dynamic>> topJobs = jobResults.where((job) => job['score'] == maxScore).toList();
 
-    // Calculate the maximum score and the percentage of the top job
-    double maxScore = jobResults[0]['score']; // Assuming the first job is the top job
+    // Check if there's only one top job
+    if (topJobs.length == 1) {
+      likelyToChooseText = "More likely to choose";
+      likelyToChooseJobs = topJobs[0]['label']; // Get the top job's label
+
+    } else if (topJobs.length == 2) {
+      likelyToChooseText = "You excelled in two jobs!";
+      likelyToChooseJobs = "Check the details below.";
+      isBold = false;
+    } else if (topJobs.length == 3) {
+      likelyToChooseText = "You excelled in three jobs!";
+      likelyToChooseJobs = "Check the details below.";
+      isBold = false;
+    } else if (topJobs.length == 4) {
+      likelyToChooseText = "You excelled in four jobs!";
+      likelyToChooseJobs = "Check the details below.";
+      isBold = false;
+    } else if (topJobs.length == 5) {
+      likelyToChooseText = "You are a good fit in all jobs!";
+      likelyToChooseJobs = "Check the details below.";
+      isBold = false;
+    } else {
+      likelyToChooseText = "Please take the assessment";
+      likelyToChooseJobs = "to know the suitable job for you!";
+      isBold = false;
+    }
+
     double calculatedProgressPercentage = totalMaxScore > 0 ? (maxScore /
         totalMaxScore) * 100 : 0;
 
@@ -441,23 +487,19 @@ class _Result4th extends State<Result4th> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Text(
-                        likelyToChooseText,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                      Text(
+                      Text(likelyToChooseText, style: TextStyle(
+                        fontSize: 15,
+                      ),), SizedBox(height: 5),
+                      topJobs.length == 1
+                          ? Text(
                         likelyToChooseJobs,
                         style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: isBold ? FontWeight.bold : FontWeight
-                              .normal,
-                          color: Colors.black,
+                          fontWeight: FontWeight.bold, // Make the text bold if condition is met
+                          fontSize: 20,
                         ),
-                      ),
-                      SizedBox(height: 20),
+                      )
+                          : Text(likelyToChooseJobs), // Regular text if condition is not met
+                      SizedBox(height: 15),
                       Container(
                         padding: EdgeInsets.all(20),
                         margin: EdgeInsets.all(20),

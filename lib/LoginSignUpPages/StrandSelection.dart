@@ -54,7 +54,9 @@ class _StrandSelection extends State<StrandSelection> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 155, 15, 15),
@@ -167,6 +169,7 @@ class _StrandSelection extends State<StrandSelection> {
           ),
         ],
       ),
+    ),
     );
   }
 

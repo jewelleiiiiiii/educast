@@ -564,11 +564,10 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
         print(average11to15);
         print(average16to20);
         print(average21to25);
-        // Navigate to the results page or display a success message
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => ResultsScreen()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Result4th()),
+        );
       } else {
         print('No answers found for the user.');
       }
@@ -876,7 +875,7 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
       context,
       MaterialPageRoute(
           builder: (context) =>
-              Result4th()), // Replace with your actual results page widget
+              Result4th()),
     );
   }
 
