@@ -45,17 +45,48 @@ class _Result4th extends State<Result4th> {
   }
 
 
+  Future<List<String>> _getJobsBasedOnCourse(String course) async {
+    List<String> jobs = [];
+
+    try {
+      // Retrieve the document from Firestore
+      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+          .collection('JobsperProgram')
+          .doc(course)
+          .get();
+
+      // Check if the document exists
+      if (docSnapshot.exists) {
+        Map<String, dynamic>? data = docSnapshot.data() as Map<String, dynamic>?;
+
+        // Ensure data is not null and iterate through the fields (1-5)
+        if (data != null) {
+          for (int i = 1; i <= 5; i++) {
+            String job = data['$i'] as String? ?? '';  // Safely cast and check for null
+            jobs.add(job);
+          }
+        }
+      }
+
+      print("Jobs fetched for course $course: $jobs");
+    } catch (e) {
+      print("Error fetching jobs for course $course: $e");
+    }
+
+    // If jobs are empty, populate it with default job titles
+    if (jobs.isEmpty) {
+      jobs = ['Job Title 1', 'Job Title 2', 'Job Title 3', 'Job Title 4', 'Job Title 5'];
+    }
+
+    return jobs;
+  }
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Make the status bar transparent
-      statusBarBrightness:
-      Brightness.light, // Ensure the status bar text is readable (white)
+      statusBarBrightness: Brightness.light,
     ));
 
     return Scaffold(
@@ -70,7 +101,7 @@ class _Result4th extends State<Result4th> {
           ),
           SafeArea(
             child: FutureBuilder<DocumentSnapshot>(
-              future: _getUserResult(),
+              future: _userResult,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -80,38 +111,9 @@ class _Result4th extends State<Result4th> {
                   return Center(child: Text("Something went wrong"));
                 }
 
+                // User result document does not exist
                 if (!snapshot.hasData || !snapshot.data!.exists) {
-                  // Scores default to 0.000 already set in Firestore, so we can use them directly
-                  return _buildResultPage(
-                    context,
-                    firstjob: 0.000,
-                    secondjob: 0.000,
-                    thirdjob: 0.000,
-                    fourthjob: 0.000,
-                    fifthjob: 0.000,
-                    progressPercentage: 0,
-                    likelyToChooseText: "Take the assessment",
-                    likelyToChooseJobs: "to know the suitable job for you",
-                    isBold: false,
-                    jobs: [],
-                  );
-                } else {
-                  var data = snapshot.data!.data() as Map<String, dynamic>;
-                  double firstjob = (data['1'] as num).toDouble();
-                  double secondjob = (data['2'] as num).toDouble();
-                  double thirdjob = (data['3'] as num).toDouble();
-                  double fourthjob = (data['4'] as num).toDouble();
-                  double fifthjob = (data['5'] as num).toDouble();
-
-                  List<double> scores = [
-                    firstjob,
-                    secondjob,
-                    thirdjob,
-                    fourthjob,
-                    fifthjob
-                  ];
-
-// Fetch user's course to get dynamic job list
+                  // Fetch user's course first
                   return FutureBuilder<String>(
                     future: _userCourse,
                     builder: (context, courseSnapshot) {
@@ -125,60 +127,105 @@ class _Result4th extends State<Result4th> {
 
                       String course = courseSnapshot.data ?? '';
 
-                      // Define job lists based on the user's course
-                      List<String> jobs = _getJobsBasedOnCourse(course);
+                      // Fetch jobs based on course since user result does not exist
+                      return FutureBuilder<List<String>>(
+                        future: _getJobsBasedOnCourse(course),
+                        builder: (context, jobSnapshot) {
+                          if (jobSnapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
 
-                      double maxScore = scores.reduce((a, b) => a > b ? a : b);
-                      List<String> topJobs = [];
-                      print(topJobs);
+                          if (jobSnapshot.hasError) {
+                            return Center(child: Text("Could not fetch jobs"));
+                          }
 
-                      String likelyToChooseText;
-                      String likelyToChooseJobs;
-                      bool isBold = true;
+                          List<String> jobs = jobSnapshot.data ?? [];
 
+                          // Create a dummy score list for job scores
+                          double firstjob = 0.0;
+                          double secondjob = 0.0;
+                          double thirdjob = 0.0;
+                          double fourthjob = 0.0;
+                          double fifthjob = 0.0;
 
-                      if (topJobs.length == 1) {
-                        likelyToChooseText = "More likely to choose";
-                        likelyToChooseJobs = topJobs[0];
-                      } else if (topJobs.length == 2) {
-                        likelyToChooseText = "You excelled in two jobs!";
-                        likelyToChooseJobs = "Check the details below.";
-                        isBold = false;
-                      } else if (topJobs.length == 3) {
-                        likelyToChooseText = "You excelled in three jobs!";
-                        likelyToChooseJobs = "Check the details below.";
-                        isBold = false;
-                      }
-                      else if (topJobs.length == 4) {
-                        likelyToChooseText = "You excelled in four jobs!";
-                        likelyToChooseJobs = "Check the details below.";
-                        isBold = false;
-                      } else if (topJobs.length == 5) {
-                        likelyToChooseText = "You are a good fit in all jobs!";
-                        likelyToChooseJobs = "Check the details below.";
-                        isBold = false;
-                      } else{
-                        likelyToChooseText = "Please take the assessment";
-                        likelyToChooseJobs = "to know the suitable job for you!";
-                        isBold = false;
-                      }
+                          double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob + fifthjob;
+                          double maxScore = 0; // No scores available
+                          double progressPercentage = totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
 
-                      return _buildResultPage(
-                        context,
-                        firstjob: firstjob,
-                        secondjob: secondjob,
-                        thirdjob: thirdjob,
-                        fourthjob: fourthjob,
-                        fifthjob: fifthjob,
-                        progressPercentage: 80,
-                        likelyToChooseText: likelyToChooseText,
-                        likelyToChooseJobs: likelyToChooseJobs,
-                        isBold: isBold,
-                        jobs: jobs, // Pass dynamic jobs here
+                          return _buildResultPage(
+                            context,
+                            firstjob: firstjob,
+                            secondjob: secondjob,
+                            thirdjob: thirdjob,
+                            fourthjob: fourthjob,
+                            fifthjob: fifthjob,
+                            progressPercentage: progressPercentage.toInt(),
+                            likelyToChooseText: "Take the assessment",
+                            likelyToChooseJobs: "to know the suitable job for you",
+                            isBold: false,
+                            jobs: jobs,
+                          );
+                        },
                       );
                     },
                   );
                 }
+
+                var data = snapshot.data!.data() as Map<String, dynamic>;
+                double firstjob = (data['1'] as num?)?.toDouble() ?? 0.0;
+                double secondjob = (data['2'] as num?)?.toDouble() ?? 0.0;
+                double thirdjob = (data['3'] as num?)?.toDouble() ?? 0.0;
+                double fourthjob = (data['4'] as num?)?.toDouble() ?? 0.0;
+                double fifthjob = (data['5'] as num?)?.toDouble() ?? 0.0;
+
+                return FutureBuilder<String>(
+                  future: _userCourse,
+                  builder: (context, courseSnapshot) {
+                    if (courseSnapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (courseSnapshot.hasError) {
+                      return Center(child: Text("Could not fetch course"));
+                    }
+
+                    String course = courseSnapshot.data ?? '';
+
+                    // Fetch jobs based on course
+                    return FutureBuilder<List<String>>(
+                      future: _getJobsBasedOnCourse(course),
+                      builder: (context, jobSnapshot) {
+                        if (jobSnapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+
+                        if (jobSnapshot.hasError) {
+                          return Center(child: Text("Could not fetch jobs"));
+                        }
+
+                        List<String> jobs = jobSnapshot.data ?? [];
+
+                        double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob + fifthjob;
+                        double maxScore = [firstjob, secondjob, thirdjob, fourthjob, fifthjob].reduce((a, b) => a > b ? a : b);
+                        double progressPercentage = totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
+
+                        return _buildResultPage(
+                          context,
+                          firstjob: firstjob,
+                          secondjob: secondjob,
+                          thirdjob: thirdjob,
+                          fourthjob: fourthjob,
+                          fifthjob: fifthjob,
+                          progressPercentage: progressPercentage.toInt(),
+                          likelyToChooseText: "More likely to choose",
+                          likelyToChooseJobs: jobs.isNotEmpty ? jobs.first : 'No job available',
+                          isBold: true,
+                          jobs: jobs,
+                        );
+                      },
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -317,38 +364,6 @@ class _Result4th extends State<Result4th> {
       ),
     );
   }
-
-// Method to get jobs based on the user's course
-  List<String> _getJobsBasedOnCourse(String course) {
-    switch (course) {
-      case 'Bachelor of Science in Information Technology':
-        return ["Software Developer", "Network Administrator", "Database Administrator", "IT Support Specialist", "Web Developer",];
-      case "Bachelor of Automotive Engineering Technology":
-      return ['Automotive Engineer', 'Automotive Design Engineer', 'Product Development Engineer', 'Manufacturing Engineer', 'Vehicle Testing Engineer',];
-      case "Bachelor of Civil Engineering Technology":
-        return ['Civil Engineering Technologist', 'Construction Manager', 'Structural Designer', 'Project Coordinator', 'Site Inspector',];
-      case "Bachelor of Computer Engineering Technology":
-        return ['Computer Engineering Technologist','Network Administrator','Systems Analyst','Embedded Systems Developer','Software Developer',];
-      case "Bachelor of Drafting Engineering Technology":
-        return ['Drafting Technician', 'Mechanical Drafter', 'Architectural Drafter', 'CAD Operator', 'Drafting Engineer',];
-      case "Bachelor of Electrical Engineering Technology":
-        return ['Electrical Engineering Technician', 'Electrical Maintenance Technician', 'Electrical CAD Drafter', 'Electrical Project Coordinator', 'Automation Technician',];
-      case "Bachelor of Electronics Engineering Technology":
-        return ['Electronics Engineering Technician', 'Electronics Test Technician', 'PCB (Printed Circuit Board) Designer', 'Electronics Maintenance Technician', 'Broadcast Engineering Technician',];
-      case "Bachelor of Food Engineering Technology":
-        return ['Food Process Engineer', 'Quality Control/Assurance Specialist', 'Product Development Specialist', 'Food Safety Officer', 'Operations Supervisor in Food Manufacturing',];
-      case "Bachelor of Mechanical Engineering Technology":
-        return ['Mechanical Design Engineer', 'Maintenance Engineer', 'Manufacturing Engineer', 'Automation Engineer', 'Project Engineer',];
-      case "Bachelor of Mechatronics Engineering Technology":
-        return ['Automation Engineer', 'Control Systems Engineer', 'Robotics Engineer', 'Mechatronics Specialist in Manufacturing', 'Instrumentation Engineer',];
-      case "Bachelor of Science in Psychology":
-        return ['Human Resources Officer', 'Recruitment Specialist', 'Guidance Counselor', 'Training and Development Officer', 'Behavioral Therapist',];
-      case "Bachelor of Science in Criminology":
-        return ['Police Officer', 'Crime Scene Investigator', 'Forensic Specialist', 'Criminal Investigator', 'Security Officer',];
-    default:
-        return ["Job 1", "Job 2", "Job 3", "Job 4", "Job 5"];
-    }
-  }
   Future<DocumentSnapshot> _getUserResult() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -360,21 +375,8 @@ class _Result4th extends State<Result4th> {
         .doc(user.uid)
         .get();
 
-    // If the document does not exist, create a default document with scores set to 0.000
-    if (!userResultDoc.exists) {
-      await userResultDoc.reference.set({
-        '1': 0.000,
-        '2': 0.000,
-        '3': 0.000,
-        '4': 0.000,
-        '5': 0.000,
-      });
-    }
-
     return userResultDoc; // Return the document
   }
-
-
 
   Widget _buildResultPage(BuildContext context, {
     required double firstjob,
@@ -388,24 +390,22 @@ class _Result4th extends State<Result4th> {
     required int progressPercentage,
     required List<String> jobs,
   }) {
-    double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob +
-        fifthjob;
-
     List<Map<String, dynamic>> jobResults = [
-      {"label": jobs[0], "score": firstjob},
-      {"label": jobs[1], "score": secondjob},
-      {"label": jobs[2], "score": thirdjob},
-      {"label": jobs[3], "score": fourthjob},
-      {"label": jobs[4], "score": fifthjob},
+      {"label": jobs.length > 0 ? jobs[0] : 'No job available', "score": firstjob},
+      {"label": jobs.length > 1 ? jobs[1] : 'No job available', "score": secondjob},
+      {"label": jobs.length > 2 ? jobs[2] : 'No job available', "score": thirdjob},
+      {"label": jobs.length > 3 ? jobs[3] : 'No job available', "score": fourthjob},
+      {"label": jobs.length > 4 ? jobs[4] : 'No job available', "score": fifthjob},
     ];
 
 
-    jobResults.sort((a, b) => b['score'].compareTo(a['score'])); // Sort by score
+    double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob +
+        fifthjob;
+    jobResults.sort((a, b) => b['score'].compareTo(a['score']));
     // Calculate the maximum score and its frequency
     double maxScore = jobResults[0]['score']; // Top score
     List<Map<String, dynamic>> topJobs = jobResults.where((job) => job['score'] == maxScore).toList();
-
-    // Check if there's only one top job
+if (maxScore != 0.000){
     if (topJobs.length == 1) {
       likelyToChooseText = "More likely to choose";
       likelyToChooseJobs = topJobs[0]['label']; // Get the top job's label
@@ -430,7 +430,13 @@ class _Result4th extends State<Result4th> {
       likelyToChooseText = "Please take the assessment";
       likelyToChooseJobs = "to know the suitable job for you!";
       isBold = false;
-    }
+    }}
+else
+  {
+    likelyToChooseText = "Please take the assessment";
+    likelyToChooseJobs = "to know the suitable job for you!";
+    isBold = false;
+  }
 
     double calculatedProgressPercentage = totalMaxScore > 0 ? (maxScore /
         totalMaxScore) * 100 : 0;

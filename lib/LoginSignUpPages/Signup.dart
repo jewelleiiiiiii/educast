@@ -80,7 +80,7 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, "INVALID EMAIL");
+      showSnackBar(context, "Invalid Email");
       return;
     }
 
@@ -96,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, "Password must be valid.");
+      showSnackBar(context, "Password must be at least 8 characters long with one uppercase, and one lowercase letter, one number, and one special character.");
       return;
     }
 
@@ -544,7 +544,7 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
           Container(
             margin: const EdgeInsets.only(
               left: 20.0,
-              top: 10.0,
+              top: 70.0,
               bottom: 10,
             ),
             child: const Column(

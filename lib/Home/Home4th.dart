@@ -945,8 +945,13 @@ class _Home4thState extends State<Home4th> {
           MaterialPageRoute(builder: (context) => Softwaredev()),
         );
         break;
+      case 'Web Developer':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
       default:
-      // Handle default case or navigate to a generic page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Home4th()),
