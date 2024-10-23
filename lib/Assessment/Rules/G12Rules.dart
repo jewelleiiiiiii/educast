@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:educast/Assessment/assess1g12.dart';
 import 'package:educast/Assessment/assess2g12.dart';
 import 'package:educast/Result/resultG12.dart';
 import 'package:flutter/material.dart';
@@ -669,10 +670,10 @@ class _G12Rules3 extends State<G12Rules3> {
             bottom: 30.0,
             child: GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const Questionnaire1G12()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QuestionnaireG12()),
+                );
               },
               child: const Text(
                 "Start",
