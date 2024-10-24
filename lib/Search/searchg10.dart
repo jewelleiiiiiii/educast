@@ -99,7 +99,7 @@ class _SearchG10 extends State<SearchG10> {
                 label = "BAET";
                 break;
               case "Bachelor of Civil Engineering Technology":
-                label = "BCET";
+                label = "BCivET";
                 break;
               case "Bachelor of Computer Engineering Technology":
                 label = "BCompET";
@@ -108,19 +108,19 @@ class _SearchG10 extends State<SearchG10> {
                 label = "BDT";
                 break;
               case "Bachelor of Electrical Engineering Technology":
-                label = "BEET";
+                label = "BElecET";
                 break;
               case "Bachelor of Electronics Engineering Technology":
-                label = "BElET";
+                label = "BElectroET";
                 break;
               case "Bachelor of Food Engineering Technology":
                 label = "BFET";
                 break;
               case "Bachelor of Mechanical Engineering Technology":
-                label = "BMET";
+                label = "BMechET";
                 break;
               case "Bachelor of Mechatronics Engineering Technology":
-                label = "BMTET";
+                label = "BMechtronET";
                 break;
               case "Bachelor of Science in Criminology":
                 label = "BSCrim";
@@ -149,7 +149,7 @@ class _SearchG10 extends State<SearchG10> {
                   label = "BAET";
                   break;
                 case "Bachelor of Civil Engineering Technology":
-                  label = "BCET";
+                  label = "BCivET";
                   break;
                 case "Bachelor of Computer Engineering Technology":
                   label = "BCompET";
@@ -158,19 +158,19 @@ class _SearchG10 extends State<SearchG10> {
                   label = "BDT";
                   break;
                 case "Bachelor of Electrical Engineering Technology":
-                  label = "BEET";
+                  label = "BElecET";
                   break;
                 case "Bachelor of Electronics Engineering Technology":
-                  label = "BElET";
+                  label = "BElectroET";
                   break;
                 case "Bachelor of Food Engineering Technology":
                   label = "BFET";
                   break;
                 case "Bachelor of Mechanical Engineering Technology":
-                  label = "BMET";
+                  label = "BMechET";
                   break;
                 case "Bachelor of Mechatronics Engineering Technology":
-                  label = "BMTET";
+                  label = "BMechtronET";
                   break;
                 case "Bachelor of Science in Criminology":
                   label = "BSCrim";
@@ -324,8 +324,9 @@ class _SearchG10 extends State<SearchG10> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
-
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -611,6 +612,7 @@ class _SearchG10 extends State<SearchG10> {
           ],
         ),
       ),
+    ),
     );
   }
 }

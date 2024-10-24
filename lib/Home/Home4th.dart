@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/Assessment/assess34th.dart';
+import 'package:educast/Home/Drawer/About.dart';
+import 'package:educast/Home/Drawer/Feedback.dart';
+import 'package:educast/Home/Drawer/History.dart';
+import 'package:educast/Home/Drawer/Settings.dart';
 import 'package:educast/Home/Info/SoftwareDev.dart';
 import 'package:educast/Result/result4th.dart';
 import 'package:educast/Search/search4th.dart';
@@ -72,17 +76,130 @@ class _Home4thState extends State<Home4th> {
           "Vehicle Testing Engineer",
         ];
       });
+    } else if (course == "Bachelor of Civil Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BCivET-related Jobs";
+        jobs = [
+          "Civil Engineering Technologist",
+          "Construction Manager",
+          "Structural Designer",
+          "Project Coordinator",
+          "Site Inspector",
+        ];
+      });
+    } else if (course == "Bachelor of Computer Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BCompET-related Jobs";
+        jobs = [
+          "Computer Engineering Technologist",
+          "Network Administrator",
+          "Systems Analyst",
+          "Embedded Systems Developer",
+          "Software Developer",
+        ];
+      });
+    } else if (course == "Bachelor of Drafting Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BDT-related Jobs";
+        jobs = [
+          "Drafting Technician",
+          "Mechanical Drafter",
+          "Architectural Drafter",
+          "CAD Operator",
+          "Drafting Engineer",
+        ];
+      });
+    } else if (course == "Bachelor of Electrical Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BElecET-related Jobs";
+        jobs = [
+          "Electrical Engineering Technician",
+          "Electrical Maintenance Technician",
+          "Electrical CAD Drafter",
+          "Electrical Project Coordinator",
+          "Automation Technician",
+        ];
+      });
     }
-
+    else if (course == "Bachelor of Electronics Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BElectroET-related Jobs";
+        jobs = [
+          "Electronics Engineering Technician",
+          "Electronics Test Technician",
+          "PCB (Printed Circuit Board) Designer",
+          "Electronics Maintenance Technician",
+          "Broadcast Engineering Technician",
+        ];
+      });
+    }
+    else if (course == "Bachelor of Food Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BFET-related Jobs";
+        jobs = [
+          "Food Process Engineer",
+          "Quality Control",
+          "Product Development Specialist",
+          "Food Safety Officer",
+          "Operations Supervisor in Food Manufacturing",
+        ];
+      });
+    }
+    else if (course == "Bachelor of Mechanical Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BMechET-related Jobs";
+        jobs = [
+          "Mechanical Design Engineer",
+          "Maintenance Engineer",
+          "Manufacturing Engineer",
+          "Automation Engineer",
+          "Project Engineer",
+        ];
+      });
+    }
+    else if (course == "Bachelor of Mechatronics Engineering Technology") {
+      setState(() {
+        relatedJobsText = "BMechtronET-related Jobs";
+        jobs = [
+          "Automation Engineer",
+          "Control Systems Engineer",
+          "Robotics Engineer",
+          "Mechatronics Specialist in Manufacturing",
+          "Instrumentation Engineer",
+        ];
+      });
+    }
+    else if (course == "Bachelor of Science in Criminology") {
+      setState(() {
+        relatedJobsText = "BSCrim-related Jobs";
+        jobs = [
+          "Police Officer",
+          "Crime Scene Investigator",
+          "Forensic Specialist",
+          "Criminal Investigator",
+          "Security Officer",
+        ];
+      });
+    }
+    else if (course == "Bachelor of Science in Psychology") {
+      setState(() {
+        relatedJobsText = "BSPsych-related Jobs";
+        jobs = [
+          "Human Resources Officer",
+          "Recruitment Specialist",
+          "Guidance Counselor",
+          "Training and Development Officer",
+          "Behavioral Therapist",
+        ];
+      });
+    }
     else {
-      // Handle other courses or default case if needed
       setState(() {
         relatedJobsText = "Related Jobs";
-        jobs = [];
+        jobs = []; // Clear jobs if course is not matched
       });
     }
   }
-
   void _toggleDrawer() {
     setState(() {
       _isDrawerOpen = !_isDrawerOpen;
@@ -324,7 +441,8 @@ class _Home4thState extends State<Home4th> {
                   Expanded(
                     child: Column(
                       children: List.generate(
-                        2,
+                        // Ensure we only generate cards based on the length of jobs
+                        jobs.length >= 2 ? 2 : jobs.length, // Limit to 2 or the actual number of jobs available
                             (index) {
                           List<Gradient> gradients = [
                             LinearGradient(
@@ -337,57 +455,54 @@ class _Home4thState extends State<Home4th> {
                               begin: Alignment.topRight,
                               end: Alignment.bottomLeft,
                             ),
-
                           ];
 
                           return Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
-                            child: InkWell( // Make the container clickable
+                            child: InkWell(
                               onTap: () {
-                                // Add dynamic navigation logic here
                                 navigateToCoursePage(context, jobs[index]);
                               },
-                            child: Container(
-                              height: 80,
-                              width: double.infinity, // Set the width to take up the full available space
-                              decoration: BoxDecoration(
-                                gradient: gradients[index % gradients.length],
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child:Text(
-                                          jobs[index],
-                                          style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                          maxLines: null, // Allow unlimited lines
-                                          overflow: TextOverflow.visible, // Make text fully visible
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  gradient: gradients[index % gradients.length],
+                                  borderRadius: BorderRadius.circular(16.0),
                                 ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      jobs[index],
+                                      style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      maxLines: null,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                           );
-                            },
+                        },
                       ),
                     ),
                   ),
                   SizedBox(width: 8.0), // Space between two columns
-                  // Second Column
                   Expanded(
                     child: Column(
                       children: List.generate(
-                        2, // Limit to 2 jobs in the second column
+                        // Ensure we only generate cards based on the remaining jobs
+                        jobs.length > 2 ? 2 : (jobs.length > 2 ? jobs.length - 2 : 0), // Limit to 2 or the remaining jobs
                             (index) {
                           List<Gradient> gradients = [
-
                             LinearGradient(
                               colors: [Colors.pink.shade600, Colors.orange.shade300],
                               begin: Alignment.bottomLeft,
@@ -400,10 +515,17 @@ class _Home4thState extends State<Home4th> {
                             ),
                           ];
 
-                          return Card(
+                          // Calculate the actual index for the jobs list
+                          int jobIndex = index + 2;
+
+                          return jobIndex < jobs.length // Check if index is within range
+                              ? Card(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
-                            ),
+                            ),child: InkWell(
+                            onTap: () {
+                              navigateToCoursePage(context, jobs[index]);
+                            },
                             child: Container(
                               height: 80,
                               width: double.infinity,
@@ -414,27 +536,30 @@ class _Home4thState extends State<Home4th> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Center(
-                                  child:Text(
-                                    jobs[index + 2],
+                                  child: Text(
+                                    jobs[jobIndex],
                                     style: TextStyle(
                                       fontSize: 14.0,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textAlign: TextAlign.center,
-                                    maxLines: null, // Allow unlimited lines
-                                    overflow: TextOverflow.visible, // Make text fully visible
+                                    maxLines: null,
+                                    overflow: TextOverflow.visible,
                                   ),
                                 ),
                               ),
                             ),
-                          );
+                          ),
+                          )
+                              : SizedBox(); // Return an empty box if no job is available
                         },
                       ),
                     ),
                   ),
                 ],
               ),
+
             ],
           ),
         ),
@@ -570,7 +695,14 @@ class _Home4thState extends State<Home4th> {
                                       fontSize: 16,
                                     ),
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                           SettingsPage()),
+                                    );
+                                  },
                                 ),
                                 ListTile(
                                   leading: const Icon(Icons.history,
@@ -582,7 +714,11 @@ class _Home4thState extends State<Home4th> {
                                     ),
                                   ),
                                   onTap: () {
-                                    // Handle menu item tap
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HistoryPage4th()),
+                                    );
                                   },
                                 ),
                                 ListTile(
@@ -595,7 +731,12 @@ class _Home4thState extends State<Home4th> {
                                     ),
                                   ),
                                   onTap: () {
-                                    // Handle menu item tap
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                           AboutPage()),
+                                    );
                                   },
                                 ),
                                 ListTile(
@@ -608,7 +749,12 @@ class _Home4thState extends State<Home4th> {
                                     ),
                                   ),
                                   onTap: () {
-                                    // Handle menu item tap
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                           FeedbackPage()),
+                                    );
                                   },
                                 ),
                                 ListTile(
@@ -775,8 +921,37 @@ class _Home4thState extends State<Home4th> {
           MaterialPageRoute(builder: (context) => Softwaredev()),
         );
         break;
+      case 'Database Administrator':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
+      case 'Network Administrator':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
+      case 'IT Support Specialist':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
+      case 'Web Developer':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
+      case 'Web Developer':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Softwaredev()),
+        );
+        break;
       default:
-      // Handle default case or navigate to a generic page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Home4th()),

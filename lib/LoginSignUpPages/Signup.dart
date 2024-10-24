@@ -80,7 +80,7 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, "INVALID EMAIL");
+      showSnackBar(context, "Invalid Email");
       return;
     }
 
@@ -96,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, "Password must be valid.");
+      showSnackBar(context, "Password must be at least 8 characters long with one uppercase, and one lowercase letter, one number, and one special character.");
       return;
     }
 
@@ -538,26 +538,13 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 159, 41, 33),
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: SizedBox(
-            width: 20,
-            height: 20,
-            child: Image.asset('assets/back.png'),
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.only(
               left: 20.0,
-              top: 10.0,
+              top: 70.0,
               bottom: 10,
             ),
             child: const Column(

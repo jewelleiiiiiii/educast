@@ -15,8 +15,9 @@ class AssessmentHistory4th extends StatefulWidget {
 }
 
 class _AssessmentHistory4th extends State<AssessmentHistory4th> {
-  List<String> _questions = List.generate(10, (index) => '');
-  List<int?> _selectedOptions = List.generate(10, (index) => null);
+  List<String> _questions = List.generate(25, (index) => ''); // Adjusted to 25
+  List<int?> _selectedOptions = List.generate(25, (index) => null); // Adjusted to 25
+
 
   @override
   void initState() {

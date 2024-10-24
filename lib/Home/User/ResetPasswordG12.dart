@@ -13,6 +13,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   String? _errorMessage;
 
+  bool _currentPasswordVisible = false;
+  bool _newPasswordVisible = false;
+  bool _confirmPasswordVisible = false;
+
   Future<void> _resetPassword() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -31,6 +35,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         password: currentPassword,
       );
 
+      // Re-authenticate the user with the current password
       await user.reauthenticateWithCredential(credential);
 
       String newPassword = _newPasswordController.text.trim();
@@ -43,21 +48,37 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         return;
       }
 
+      // Update password after re-authentication
       await user.updatePassword(newPassword);
       setState(() {
         _errorMessage = null;
       });
 
-      Navigator.of(context).pop();
+      // Display the SnackBar at the top using an overlay
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Password reset successful.")),
+        SnackBar(
+          content: Text("Password reset successful."),
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.symmetric(horizontal: 10).copyWith(top: 10),
+          duration: Duration(seconds: 2),
+        ),
       );
+
+      // Navigate back after showing the SnackBar
+      Navigator.of(context).pop();
+
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message;
+        // Check if the error is due to an incorrect current password
+        if (e.code == 'wrong-password') {
+          _errorMessage = "The current password entered is incorrect.";
+        } else {
+          _errorMessage = e.message; // For other types of FirebaseAuth exceptions
+        }
       });
     }
   }
+
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
@@ -80,7 +101,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     }
 
     // Check if password contains at least one special character.
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>_]').hasMatch(value)) {
       return 'Password must contain at least one special character.';
     }
 
@@ -106,10 +127,25 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 SizedBox(height: 16),
               ],
+              // Current Password Field
               TextFormField(
                 controller: _currentPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Current Password"),
+                obscureText: !_currentPasswordVisible,  // Toggle visibility
+                decoration: InputDecoration(
+                  labelText: "Current Password",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _currentPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _currentPasswordVisible = !_currentPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your current password.';
@@ -117,16 +153,46 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   return null;
                 },
               ),
+              // New Password Field
               TextFormField(
                 controller: _newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: "New Password"),
+                obscureText: !_newPasswordVisible,  // Toggle visibility
+                decoration: InputDecoration(
+                  labelText: "New Password",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _newPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _newPasswordVisible = !_newPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
                 validator: _validatePassword,
               ),
+              // Confirm Password Field
               TextFormField(
                 controller: _confirmPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Confirm New Password"),
+                obscureText: !_confirmPasswordVisible,  // Toggle visibility
+                decoration: InputDecoration(
+                  labelText: "Confirm New Password",
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _confirmPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _confirmPasswordVisible = !_confirmPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please confirm your new password.';

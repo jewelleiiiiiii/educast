@@ -1,3 +1,4 @@
+import 'package:educast/Home/User/ResetPasswordG12.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,30 +55,15 @@ class _UserG10 extends State<UserG10> {
     }
   }
 
-  void _resetPassword() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        await user.sendEmailVerification();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password reset email sent!')),
-        );
-      } catch (e) {
-        print('Error sending password reset email: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send password reset email.')),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false, // Disable back button
+    child: Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
@@ -154,7 +140,12 @@ class _UserG10 extends State<UserG10> {
                         SizedBox(height: 25),
                         Center(
                           child: ElevatedButton(
-                            onPressed: _resetPassword,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ResetPasswordPage()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color.fromARGB(255, 158, 39, 39),
                               foregroundColor: Colors.white,
@@ -296,6 +287,7 @@ class _UserG10 extends State<UserG10> {
           ],
         ),
       ),
+    ),
     );
   }
 
