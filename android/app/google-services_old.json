@@ -39,14 +39,6 @@
           }
         },
         {
-          "client_id": "112945444377-c0u44d42q428vmd44u5m83qseslti7sa.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.educast",
-            "certificate_hash": "8fbcae841ef7e02069c69ec854778ace4fc84566"
-          }
-        },
-        {
           "client_id": "112945444377-6sioo9d6sososb8qpmj06qom11ggsocm.apps.googleusercontent.com",
           "client_type": 3
         }
