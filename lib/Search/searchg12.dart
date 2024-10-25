@@ -69,12 +69,23 @@ class _SearchG12 extends State<SearchG12> {
 
     try {
       // Only search within specific documents
-      List<String> documentIds = ['abm', 'stem', 'humss', 'gas'];
+      List<String> documentIds = ['Bachelor of Science in Information Technology',
+        'Bachelor of Automotive Engineering Technology',
+        'Bachelor of Civil Engineering Technology',
+        'Bachelor of Computer Engineering Technology',
+        'Bachelor of Drafting Engineering Technology',
+        'Bachelor of Electrical Engineering Technology',
+        'Bachelor of Electronics Engineering Technology',
+        'Bachelor of Food Engineering Technology',
+        'Bachelor of Mechanical Engineering Technology',
+        'Bachelor of Mechatronics Engineering Technology',
+        'Bachelor of Science in Criminology',
+        'Bachelor of Science in Psychology'];
       Set<String> uniqueResults = Set<String>();
 
       for (String docId in documentIds) {
         DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-            .collection('strandcontent')
+            .collection('programcontent')
             .doc(docId)
             .get();
 

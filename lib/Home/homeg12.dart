@@ -244,9 +244,9 @@ class _HomeG12State extends State<HomeG12> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
                                   Text(
-                                    '15 MINUTES!',
+                                    'ACHIEVE MORE!',
                                     style: TextStyle(
-                                      fontSize: 25,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
@@ -348,7 +348,7 @@ class _HomeG12State extends State<HomeG12> {
                             ),
                             textAlign: TextAlign.start,
                           ),
-                          if (_shouldShowViewAll(userStrand!))
+                          if (userStrand != null && _shouldShowViewAll(userStrand!)) // Safely check for null
                             Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: GestureDetector(
@@ -380,6 +380,7 @@ class _HomeG12State extends State<HomeG12> {
                                 ),
                               ),
                             ),
+
                         ],
                       ),
                       SizedBox(height: 8.0),

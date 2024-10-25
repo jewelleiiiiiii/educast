@@ -253,7 +253,6 @@ class _ResultG12 extends State<ResultG12> {
       ),
     );
   }
-
   Future<Map<String, dynamic>> _fetchUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -267,7 +266,12 @@ class _ResultG12 extends State<ResultG12> {
         .get();
 
     if (!userDoc.exists) {
-      throw Exception("User document does not exist.");
+      // If the user document does not exist, set default messages
+      // Return an empty result or handle as needed
+      return {
+        'strand': null,
+        'userResult': null,
+      };
     }
 
     // Fetch user result from 'userResultG12' collection
@@ -276,13 +280,28 @@ class _ResultG12 extends State<ResultG12> {
         .doc(user.uid)
         .get();
 
-    if (!resultDoc.exists) {
-      throw Exception("User result document does not exist.");
-    }
+    // If resultDoc does not exist, set userResult to default scores
+    var userResult = resultDoc.exists ? resultDoc.data() : {
+      'Mechanical Reasoning': 0,
+      'Spatial Reasoning': 0,
+      'Verbal Reasoning': 0,
+      'Numerical Ability': 0,
+      'Language Usage': 0,
+      'Word Knowledge': 0,
+      'Perceptual Speed and Accuracy': 0,
+      'Analytical Ability': 0,
+      'Basic Operations': 0,
+      'Word Problems': 0,
+      'Word Association': 0,
+      'Logic': 0,
+      'Grammar and Correct Usage': 0,
+      'Vocabulary': 0,
+      'Data Interpretation': 0,
+    };
 
     // Combine the fetched data
     final userStrand = userDoc['strand'];
-    final userResult = resultDoc.data();
+
     // Set assessmentLabels based on the strand
     if (userStrand == "Science, Technology, Engineering, and Mathematics") {
       assessmentLabels = [
@@ -307,10 +326,26 @@ class _ResultG12 extends State<ResultG12> {
       'userResult': userResult,
     };
   }
-
   Map<String, dynamic> _calculateTopPrograms(List<int> userScores, String userStrand) {
     Map<String, double> totalScores = {};
     double grandTotalScore = 0;
+
+    // Default values for likelyToChooseText and likelyToChoosePrograms
+    String likelyToChooseText = "Take the assessment to know the ";
+    String likelyToChoosePrograms = "suitable programs available for you!";
+    bool isBold = false;
+
+    // Check if userScores is empty or all scores are zero
+    if (userScores.isEmpty || userScores.every((score) => score == 0)) {
+      return {
+        'likelyToChooseText': likelyToChooseText,
+        'likelyToChoosePrograms': likelyToChoosePrograms,
+        'isBold': isBold,
+        'totalScores': totalScores, // Correct type
+        'programPercentages': <String, double>{}, // Correct type
+        'topProgram': '',
+      };
+    }
 
     // Calculate total scores for each program
     programWeights.forEach((program, weights) {
@@ -334,7 +369,10 @@ class _ResultG12 extends State<ResultG12> {
     List<String> allowedPrograms;
     switch (userStrand) {
       case "Science, Technology, Engineering, and Mathematics":
-        allowedPrograms = ["BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET", "BFET", "BMechET", "BMechtronET", "BSCrim", "BSIT", "BSPsych"];
+        allowedPrograms = [
+          "BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET",
+          "BFET", "BMechET", "BMechtronET", "BSCrim", "BSIT", "BSPsych"
+        ];
         break;
       case "Accountancy, Business, and Management":
         allowedPrograms = ["BSCrim"];
@@ -343,7 +381,10 @@ class _ResultG12 extends State<ResultG12> {
         allowedPrograms = ["BSCrim", "BSPsych"];
         break;
       case "General Academic Strand":
-        allowedPrograms = ["BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET", "BFET", "BMechET", "BMechtronET", "BSCrim", "BSPsych"];
+        allowedPrograms = [
+          "BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET",
+          "BFET", "BMechET", "BMechtronET", "BSCrim", "BSPsych"
+        ];
         break;
       default:
         allowedPrograms = []; // No allowed programs if strand is unknown
@@ -361,14 +402,11 @@ class _ResultG12 extends State<ResultG12> {
       topProgram = allowedProgramPercentages.entries.reduce((a, b) => a.value > b.value ? a : b).key;
     }
 
-    String likelyToChooseText;
-    String likelyToChoosePrograms;
-    bool isBold = true;
-
-    // Determine the likelyToChoose text based on top programs
+    // Update likelyToChooseText and likelyToChoosePrograms based on conditions
     if (topProgram.isNotEmpty) {
       likelyToChooseText = "More likely to choose";
       likelyToChoosePrograms = topProgram;
+      isBold = true;
     } else if (allowedProgramPercentages.length == 2) {
       likelyToChooseText = "You excelled in two programs!";
       likelyToChoosePrograms = "Check the details below.";
@@ -386,6 +424,7 @@ class _ResultG12 extends State<ResultG12> {
       likelyToChoosePrograms = "Check the details below.";
       isBold = false;
     }
+
     print("User Scores: $userScores");
     print("User Strand: $userStrand");
 
@@ -393,8 +432,8 @@ class _ResultG12 extends State<ResultG12> {
       'likelyToChooseText': likelyToChooseText,
       'likelyToChoosePrograms': likelyToChoosePrograms,
       'isBold': isBold,
-      'totalScores': totalScores,
-      'programPercentages': programPercentages,
+      'totalScores': totalScores as Map<String, double>, // Explicit cast
+      'programPercentages': programPercentages, // Explicitly typed
       'topProgram': topProgram, // Include the top program in the return data
     };
   }
@@ -436,7 +475,7 @@ class _ResultG12 extends State<ResultG12> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 110),
+            padding: const EdgeInsets.only(top: 150),
             child: SingleChildScrollView(
               child: Center(
                 child: SizedBox(

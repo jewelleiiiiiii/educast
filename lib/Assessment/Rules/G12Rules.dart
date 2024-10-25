@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:educast/Assessment/assess1g12.dart';
 import 'package:educast/Assessment/assess2g12.dart';
 import 'package:educast/Result/resultG12.dart';
 import 'package:flutter/material.dart';
@@ -577,7 +578,6 @@ class _G12Rules2 extends State<G12Rules2> with TickerProviderStateMixin {
     );
   }
 }
-
 class G12Rules3 extends StatefulWidget {
   const G12Rules3({super.key});
 
@@ -623,44 +623,45 @@ class _G12Rules3 extends State<G12Rules3> {
               ),
             ),
           ),
-          // Centered 3D white container
+          // Centered 3D white container with scrollable content
           Center(
-            child: Container(
-              width: screenWidth * 0.80,
-              height: 380,
-              padding: const EdgeInsets.all(20),
-              margin:
-                  EdgeInsets.only(top: 100), // Adjust margin for overlap effect
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildRuleText('1. ', 'One Attempt Only',
-                      'You can take the test only once, so be prepared before starting.'),
-                  SizedBox(height: 10),
-                  _buildRuleText('2. ', 'Time-Limited',
-                      'This is a speed test, so each question will have a strict time limit. Pay attention to the timer and answer as quickly and accurately as possible.'),
-                  SizedBox(height: 10),
-                  _buildRuleText('3. ', 'No Pausing',
-                      "Since it is a speed test, pauses aren't allowed."),
-                  SizedBox(height: 10),
-                  _buildRuleText('4. ', 'No Help Allowed',
-                      'Complete the assessment independently, without external resources.'),
-                  SizedBox(height: 10),
-                  _buildRuleText('5. ', 'Result',
-                      'Your results are final once submitted.'),
-                ],
+            child: SingleChildScrollView(
+              child: Container(
+                width: screenWidth * 0.80,
+                // Set height to null to allow scrolling
+                padding: const EdgeInsets.all(20),
+                margin: EdgeInsets.only(top: 100), // Adjust margin for overlap effect
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildRuleText('1. ', 'One Attempt Only',
+                        'You can take the test only once, so be prepared before starting.'),
+                    SizedBox(height: 10),
+                    _buildRuleText('2. ', 'Time-Limited',
+                        'This is a speed test, so each question will have a strict time limit. Pay attention to the timer and answer as quickly and accurately as possible.'),
+                    SizedBox(height: 10),
+                    _buildRuleText('3. ', 'No Pausing',
+                        "Since it is a speed test, pauses aren't allowed."),
+                    SizedBox(height: 10),
+                    _buildRuleText('4. ', 'No Help Allowed',
+                        'Complete the assessment independently, without external resources.'),
+                    SizedBox(height: 10),
+                    _buildRuleText('5. ', 'Result',
+                        'Your results are final once submitted.'),
+                  ],
+                ),
               ),
             ),
           ),
@@ -669,10 +670,10 @@ class _G12Rules3 extends State<G12Rules3> {
             bottom: 30.0,
             child: GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const Questionnaire1G12()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const QuestionnaireG12()),
+                );
               },
               child: const Text(
                 "Start",

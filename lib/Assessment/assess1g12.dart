@@ -34,7 +34,7 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Timer? _timer; // Timer variable
-  int _remainingTime = 900; // 15 minutes = 900 seconds
+  int _remainingTime = 4500; // 15 minutes = 900 seconds
 
   @override
   void initState() {
