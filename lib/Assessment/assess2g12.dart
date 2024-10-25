@@ -150,27 +150,18 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        return false; // Prevents back navigation
+      },
+      child: Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           backgroundColor: const Color.fromARGB(255, 158, 39, 39),
           elevation: 0,
-          leading: IconButton(
-            icon: Image.asset(
-              'assets/back.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const HomeG12(gradeLevel: "12")),
-              );
-            },
-          ),
+          automaticallyImplyLeading: false,
         ),
       ),
       body: SafeArea(
@@ -381,6 +372,7 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
           ],
         ),
       ),
+    ),
     );
   }
 }
@@ -530,131 +522,6 @@ class _AlreadyAnsweredG12 extends State<AlreadyAnsweredG12> {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: const Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 0.2,
-            ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0, -2),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const HomeG12(gradeLevel: "12")),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/home.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SearchG12()),
-                    // );
-                  },
-                  icon: Image.asset(
-                    'assets/search.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                SizedBox(width: iconSize),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/notif.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResultG12()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/stats.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
-              child: Container(
-                width: iconSize * 2,
-                height: iconSize * 2,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF08080),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.8),
-                    width: 10,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG12')
-                          .doc(user.uid);
-
-                      final docSnapshot = await userResultDoc.get();
-
-                      if (docSnapshot.exists) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlreadyAnsweredG12()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => G12Intro()),
-                        );
-                      }
-                    } else {}
-                  },
-                  icon: Image.asset(
-                    'assets/main.png',
-                    width: iconSize * 1.3,
-                    height: iconSize * 1.3,
-                  ),
                 ),
               ),
             ),

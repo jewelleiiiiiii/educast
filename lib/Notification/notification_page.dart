@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/Home/homeg12.dart';
 import 'package:educast/Notification/panel_widget.dart';
@@ -42,7 +40,9 @@ class _NotificationPageState extends State<NotificationPage>
         curve: Curves.easeInOut,
       ),
     );
-    _fetchDevices();
+
+    _fetchGradeLevel(); // Fetch the grade level
+    _fetchDevices();    // Fetch devices
   }
 
   @override
@@ -51,24 +51,39 @@ class _NotificationPageState extends State<NotificationPage>
     super.dispose();
   }
 
+  Future<void> _fetchGradeLevel() async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uuid)
+          .get();
+
+      if (userDoc.exists) {
+        setState(() {
+          GradeLevel.gradeLevel = userDoc['gradeLevel'] as String;
+        });
+      } else {
+        print("User document not found");
+      }
+    } catch (e) {
+      print("Error fetching grade level: $e");
+    }
+  }
+
   Future<void> _fetchDevices() async {
     try {
-      // Fetch devices from Firestore
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection(
-              'users-device') // Change this if your collection name is different
-          .doc(widget.uuid) // Use the UUID to get user-specific devices
+          .collection('users-device')
+          .doc(widget.uuid)
           .collection('devices')
           .get();
 
-      // Map the documents to a list of device info
       setState(() {
         _devices = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
       });
     } catch (e) {
-      // Handle errors
       print("Error fetching devices: $e");
     }
   }
@@ -103,9 +118,8 @@ class _NotificationPageState extends State<NotificationPage>
               ),
               // Animated circle
               Positioned(
-                top: 180, // Adjust as needed
+                top: 180,
                 left: (_width * 0.5) - 40,
-
                 child: AnimatedBuilder(
                   animation: _animation,
                   builder: (context, child) {
@@ -126,7 +140,7 @@ class _NotificationPageState extends State<NotificationPage>
             ],
           ),
           Positioned(
-            top: 300, // Adjust based on your layout
+            top: 300,
             left: 10,
             right: 10,
             child: SizedBox(
@@ -161,11 +175,11 @@ class _NotificationPageState extends State<NotificationPage>
             ),
           ],
         ),
-        child: GradeLevel.gradeLevel == "10"
+        child: GradeLevel.gradeLevel == "Grade 10"
             ? BottomNavigationHome10(iconSize: iconSize)
-            : GradeLevel.gradeLevel == "12"
-                ? BottomNavigationHome12(iconSize: iconSize)
-                : BottomNavitation4th(iconSize: iconSize),
+            : GradeLevel.gradeLevel == "Grade 12"
+            ? BottomNavigationHome12(iconSize: iconSize)
+            : BottomNavitation4th(iconSize: iconSize),
       ),
     );
   }

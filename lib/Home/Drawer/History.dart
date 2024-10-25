@@ -1,5 +1,6 @@
 import 'package:educast/Assessment/AssessmentHistory/AssessmentHistory4th.dart';
 import 'package:educast/Assessment/AssessmentHistory/AssessmentHistoryG10.dart';
+import 'package:educast/Assessment/AssessmentHistory/AssessmentHistoryG12.dart';
 import 'package:educast/Home/Drawer/FeedbackHistory.dart';
 import 'package:flutter/material.dart';
 
@@ -65,7 +66,7 @@ class HistoryPageG12 extends StatelessWidget {
               // Navigate to Assessment Page
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AssessmentHistoryG10()),
+                MaterialPageRoute(builder: (context) => AssessmentHistoryG12()),
               );
             },
           ),

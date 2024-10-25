@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
 import 'package:educast/Assessment/assess2g12.dart';
+import 'package:educast/Home/Drawer/About.dart';
 import 'package:educast/Home/Drawer/Feedback.dart';
+import 'package:educast/Home/Drawer/History.dart';
+import 'package:educast/Home/Drawer/Settings.dart';
 import 'package:educast/Home/Info/Criminology.dart';
 import 'package:educast/Home/Info/GasPrograms.dart';
 import 'package:educast/Home/Info/StemPrograms.dart';
@@ -347,30 +350,27 @@ class _HomeG12State extends State<HomeG12> {
                             ),
                             textAlign: TextAlign.start,
                           ),
-                          if (_shouldShowViewAll(userStrand!))
+                          if (userStrand != null && _shouldShowViewAll(userStrand!))
                             Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: GestureDetector(
                                 onTap: () async {
-                                  if (userStrand == "General Academic Strand") {
+                                  // Ensure userStrand is not null before using it
+                                  String currentStrand = userStrand ?? ""; // Use a default if needed
+                                  if (currentStrand == "General Academic Strand") {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => GasPrograms()),
+                                      MaterialPageRoute(builder: (context) => GasPrograms()),
                                     );
-                                  } else if (userStrand ==
-                                      "Science, Technology, Engineering, and Mathematics") {
+                                  } else if (currentStrand == "Science, Technology, Engineering, and Mathematics") {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => StemPrograms()),
+                                      MaterialPageRoute(builder: (context) => StemPrograms()),
                                     );
                                   } else {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomeG12(gradeLevel: "12")),
+                                      MaterialPageRoute(builder: (context) => HomeG12(gradeLevel: "12")),
                                     );
                                   }
                                 },
@@ -615,7 +615,14 @@ class _HomeG12State extends State<HomeG12> {
                                         fontSize: 16,
                                       ),
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SettingsPage()),
+                                      );
+                                    },
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.history,
@@ -627,7 +634,12 @@ class _HomeG12State extends State<HomeG12> {
                                       ),
                                     ),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                HistoryPageG12()),
+                                      );
                                     },
                                   ),
                                   ListTile(
@@ -640,7 +652,12 @@ class _HomeG12State extends State<HomeG12> {
                                       ),
                                     ),
                                     onTap: () {
-                                      // Handle menu item tap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AboutPage()),
+                                      );
                                     },
                                   ),
                                   ListTile(
@@ -838,13 +855,28 @@ class BottomNavigationHome12 extends StatelessWidget {
             ),
             SizedBox(width: iconSize),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return NotificationPage(uuid: user.uid);
+                  }));
+                } else {
+                  // Handle the case where the user is not logged in
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()), // or a different page
+                  );
+                }
+              },
               icon: Image.asset(
                 'assets/notif.png',
                 width: iconSize,
                 height: iconSize,
               ),
             ),
+
             IconButton(
               onPressed: () {
                 Navigator.push(

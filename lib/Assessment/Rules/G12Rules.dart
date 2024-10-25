@@ -630,7 +630,7 @@ class _G12Rules3 extends State<G12Rules3> {
           Center(
             child: Container(
               width: screenWidth * 0.80,
-              height: 380,
+              height: 410,
               padding: const EdgeInsets.all(20),
               margin:
                   EdgeInsets.only(top: 100), // Adjust margin for overlap effect

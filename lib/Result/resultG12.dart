@@ -89,22 +89,22 @@ class _ResultG12 extends State<ResultG12> {
                 print(strand);
                 print(userResult);
 
-                List<int> userScores = [
-                  userResult['Mechanical Reasoning'] ?? 0,
-                  userResult['Spatial Reasoning'] ?? 0,
-                  userResult['Verbal Reasoning'] ?? 0,
-                  userResult['Numerical Ability'] ?? 0,
-                  userResult['Language Usage'] ?? 0,
-                  userResult['Word Knowledge'] ?? 0,
-                  userResult['Perceptual Speed and Accuracy'] ?? 0,
-                  userResult['Analytical Ability'] ?? 0,
-                  userResult['Basic Operations'] ?? 0,
-                  userResult['Word Problems'] ?? 0,
-                  userResult['Word Association'] ?? 0,
-                  userResult['Logic'] ?? 0,
-                  userResult['Grammar and Correct Usage'] ?? 0,
-                  userResult['Vocabulary'] ?? 0,
-                  userResult['Data Interpretation'] ?? 0
+                List<double> userScores = [
+                  userResult['Mechanical Reasoning'] ?? 0.00,
+                  userResult['Spatial Reasoning'] ?? 0.00,
+                  userResult['Verbal Reasoning'] ?? 0.00,
+                  userResult['Numerical Ability'] ?? 0.00,
+                  userResult['Language Usage'] ?? 0.00,
+                  userResult['Word Knowledge'] ?? 0.00,
+                  userResult['Perceptual Speed and Accuracy'] ?? 0.00,
+                  userResult['Analytical Ability'] ?? 0.00,
+                  userResult['Basic Operations'] ?? 0.00,
+                  userResult['Word Problems'] ?? 0.00,
+                  userResult['Word Association'] ?? 0.00,
+                  userResult['Logic'] ?? 0.00,
+                  userResult['Grammar and Correct Usage'] ?? 0.00,
+                  userResult['Vocabulary'] ?? 0.00,
+                  userResult['Data Interpretation'] ?? 0.00
                 ];
 
                 final topProgramInfo =
@@ -283,34 +283,36 @@ class _ResultG12 extends State<ResultG12> {
       throw Exception("User document does not exist.");
     }
 
-    // Fetch user result from 'userResultG12' collection
+    // Attempt to fetch user result from 'userResultG12' collection
     DocumentSnapshot resultDoc = await FirebaseFirestore.instance
         .collection('userResultG12')
         .doc(user.uid)
         .get();
 
-    if (!resultDoc.exists) {
-      throw Exception("User result document does not exist.");
-    }
-
-    // Combine the fetched data
     final userStrand = userDoc['strand'];
-    final userResult = resultDoc.data();
+    final userResult = resultDoc.exists ? resultDoc.data() : {
+      'Mechanical Reasoning': 0.00,
+      'Spatial Reasoning': 0.00,
+      'Verbal Reasoning': 0.00,
+      'Numerical Ability': 0.00,
+      'Language Usage': 0.00,
+      'Word Knowledge': 0.00,
+      'Perceptual Speed and Accuracy': 0.00,
+      'Analytical Ability': 0.00,
+      'Basic Operations': 0.00,
+      'Word Problems': 0.00,
+      'Word Association': 0.00,
+      'Logic': 0.00,
+      'Grammar and Correct Usage': 0.00,
+      'Vocabulary': 0.00,
+      'Data Interpretation': 0.00
+    };
+
     // Set assessmentLabels based on the strand
     if (userStrand == "Science, Technology, Engineering, and Mathematics") {
       assessmentLabels = [
-        'BAET',
-        'BCivET',
-        'BCompET',
-        'BDT',
-        'BElecET',
-        'BElectroET',
-        'BFET',
-        'BMechET',
-        'BMechtronET',
-        'BSCrim',
-        'BSIT',
-        'BSPsych'
+        'BAET', 'BCivET', 'BCompET', 'BDT', 'BElecET', 'BElectroET',
+        'BFET', 'BMechET', 'BMechtronET', 'BSCrim', 'BSIT', 'BSPsych'
       ];
     } else if (userStrand == "Accountancy, Business, and Management") {
       assessmentLabels = ['BSCrim'];
@@ -318,20 +320,11 @@ class _ResultG12 extends State<ResultG12> {
       assessmentLabels = ['BSCrim', 'BSPsych'];
     } else if (userStrand == "General Academic Strand") {
       assessmentLabels = [
-        'BAET',
-        'BCivET',
-        'BCompET',
-        'BDT',
-        'BElecET',
-        'BElectroET',
-        'BFET',
-        'BMechET',
-        'BMechtronET',
-        'BSCrim',
-        'BSPsych'
+        'BAET', 'BCivET', 'BCompET', 'BDT', 'BElecET', 'BElectroET',
+        'BFET', 'BMechET', 'BMechtronET', 'BSCrim', 'BSPsych'
       ];
     } else {
-      assessmentLabels = []; // Handle unknown strand case
+      assessmentLabels = [];
     }
 
     return {
@@ -340,10 +333,14 @@ class _ResultG12 extends State<ResultG12> {
     };
   }
 
+
   Map<String, dynamic> _calculateTopPrograms(
-      List<int> userScores, String userStrand) {
+      List<double> userScores, String userStrand) {
     Map<String, double> totalScores = {};
     double grandTotalScore = 0;
+
+    // Check if all userScores are 0.00
+    bool allScoresZero = userScores.every((score) => score == 0.00);
 
     // Calculate total scores for each program
     programWeights.forEach((program, weights) {
@@ -425,8 +422,12 @@ class _ResultG12 extends State<ResultG12> {
     String likelyToChoosePrograms;
     bool isBold = true;
 
-    // Determine the likelyToChoose text based on top programs
-    if (topProgram.isNotEmpty) {
+    // Determine the likelyToChoose text based on top programs or all scores being zero
+    if (allScoresZero) {
+      likelyToChooseText = "Take the assessment to know";
+      likelyToChoosePrograms = "the suitable program for you";
+      isBold = false;
+    } else if (topProgram.isNotEmpty) {
       likelyToChooseText = "More likely to choose";
       likelyToChoosePrograms = topProgram;
     } else if (allowedProgramPercentages.length == 2) {
@@ -442,23 +443,20 @@ class _ResultG12 extends State<ResultG12> {
       likelyToChoosePrograms = "Please check the details below.";
       isBold = false;
     } else {
-      likelyToChooseText = "You are a good fit in all programs!";
-      likelyToChoosePrograms = "Check the details below.";
+      likelyToChooseText = "Check the details below.";
+      likelyToChoosePrograms = "No programs available.";
       isBold = false;
     }
-    print("User Scores: $userScores");
-    print("User Strand: $userStrand");
 
     return {
+      'topProgram': topProgram,
       'likelyToChooseText': likelyToChooseText,
       'likelyToChoosePrograms': likelyToChoosePrograms,
       'isBold': isBold,
       'totalScores': totalScores,
       'programPercentages': programPercentages,
-      'topProgram': topProgram, // Include the top program in the return data
     };
   }
-
   Widget _buildResultPage(
     BuildContext context, {
     required List<String> assessmentLabels,

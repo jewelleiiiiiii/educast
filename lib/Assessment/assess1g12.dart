@@ -34,7 +34,7 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Timer? _timer; // Timer variable
-  int _remainingTime = 900; // 15 minutes = 900 seconds
+  int _remainingTime = 4500; // 15 minutes = 900 seconds
 
   @override
   void initState() {
@@ -313,28 +313,28 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+          return false; // Prevents back navigation
+        },
+    child: Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           backgroundColor: const Color.fromARGB(255, 158, 39, 39),
           elevation: 0,
-          leading: IconButton(
-            icon: Image.asset(
-              'assets/back.png',
-              width: 24.0,
-              height: 24.0,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          automaticallyImplyLeading: false, // Removes the back button
         ),
       ),
       body: SafeArea(
@@ -353,7 +353,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
               ),
               child: Center(
                 child: Text(
-                  'IQ Assessment | Time Remaining: ${_remainingTime ~/ 60}:${(_remainingTime % 60).toString().padLeft(2, '0')}',
+                  'IQ Assessment | Time Remaining: ${_remainingTime ~/
+                      60}:${(_remainingTime % 60).toString().padLeft(2, '0')}',
                   style: const TextStyle(
                     fontSize: 14.0,
                     color: Colors.white,
@@ -382,7 +383,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                           Text(
                             _isLoading
                                 ? 'Loading...'
-                                : 'Question #${_selectedIndex + 1} out of $_totalQuestions',
+                                : 'Question #${_selectedIndex +
+                                1} out of $_totalQuestions',
                             style: const TextStyle(
                               fontSize: 12.0,
                               fontWeight: FontWeight.bold,
@@ -393,9 +395,9 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                             _isLoading
                                 ? 'Loading question...'
                                 : _questions.isNotEmpty &&
-                                        _selectedIndex < _questions.length
-                                    ? _questions[_selectedIndex].questionTextG12
-                                    : 'No question available',
+                                _selectedIndex < _questions.length
+                                ? _questions[_selectedIndex].questionTextG12
+                                : 'No question available',
                             style: const TextStyle(fontSize: 14.0),
                           ),
                         ],
@@ -408,7 +410,7 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16.0,
                           mainAxisSpacing: 16.0,
@@ -464,8 +466,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                               onPressed: _previousQuestionG12,
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.grey[200]!),
+                                MaterialStateProperty.all<Color>(
+                                    Colors.grey[200]!),
                               ),
                               child: const Text(
                                 'Previous',
@@ -494,7 +496,10 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -523,7 +528,7 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              const HomeG12(gradeLevel: "12")),
+                          const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -571,7 +576,10 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -618,6 +626,7 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
           ],
         ),
       ),
+    ),
     );
   }
 }

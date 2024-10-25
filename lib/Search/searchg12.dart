@@ -184,7 +184,7 @@ class _SearchG12 extends State<SearchG12> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 170),
+            padding: const EdgeInsets.only(top: 190),
             child: SingleChildScrollView(
               child: Container(
                 // Wrap Column in Container
@@ -946,14 +946,14 @@ class TopCoursesChart extends StatelessWidget {
     Map<String, String> courseNameMap = {
       "Bachelor of Science in Information Technology": "BSIT",
       "Bachelor of Automotive Engineering Technology": "BAET",
-      "Bachelor of Civil Engineering Technology": "BCET",
+      "Bachelor of Civil Engineering Technology": "BCvET",
       "Bachelor of Computer Engineering Technology": "BCompET",
       "Bachelor of Drafting Engineering Technology": "BDT",
-      "Bachelor of Electrical Engineering Technology": "BEET",
-      "Bachelor of Electronics Engineering Technology": "BElET",
+      "Bachelor of Electrical Engineering Technology": "BElecET",
+      "Bachelor of Electronics Engineering Technology": "BElectroET",
       "Bachelor of Food Engineering Technology": "BFET",
-      "Bachelor of Mechanical Engineering Technology": "BMET",
-      "Bachelor of Mechatronics Engineering Technology": "BMTET",
+      "Bachelor of Mechanical Engineering Technology": "BMechET",
+      "Bachelor of Mechatronics Engineering Technology": "BMechtronET",
       "Bachelor of Science in Criminology": "BSCrim",
       "Bachelor of Science in Psychology": "BSPsych",
     };
