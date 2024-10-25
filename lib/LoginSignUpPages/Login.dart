@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:educast/LoginSignUpPages/CustomAlertDialog.dart';
+import 'package:educast/common/grade_level.dart';
 import 'package:educast/services/notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,10 @@ import 'package:educast/LoginSignUpPages/Signup.dart';
 import 'package:educast/services/authentication.dart';
 import 'package:educast/services/snackbar.dart';
 import 'package:educast/Home/homeg10.dart';
+import 'package:logger/logger.dart';
 import 'package:vibration/vibration.dart';
+
+import '../services/device_info.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthServices _auth = AuthServices();
   bool isLoading = false;
+  final logger = Logger();
 
   void loginUsers() async {
     if (_emailController.text != "") {
@@ -58,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                 title: "Location Alert",
                 body:
                     "User ${user!.email} is already signed in to other account.",
-                payload: "jawara.poge");
+                payload: "educast.poge");
             if (await Vibration.hasVibrator() == true) {
               Vibration.vibrate(duration: 1000);
               await Future.delayed(const Duration(milliseconds: 2000));
@@ -86,21 +91,21 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomeG10(),
+                    builder: (context) => const HomeG10(gradeLevel: "10"),
                   ),
                 );
               } else if (gradeLevel == 'Grade 12') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeG12(),
+                    builder: (context) => HomeG12(gradeLevel: "12"),
                   ),
                 );
               } else if (gradeLevel == 'Fourth-year College') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Home4th(),
+                    builder: (context) => Home4th(gradeLevel: "4th"),
                   ),
                 );
               } else {
@@ -159,24 +164,33 @@ class _LoginPageState extends State<LoginPage> {
 
           // Redirect based on grade level
           if (gradeLevel == 'Grade 10') {
+            setState(() {
+              GradeLevel.gradeLevel = "10";
+            });
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomeG10(),
+                builder: (context) => const HomeG10(gradeLevel: "10"),
               ),
             );
           } else if (gradeLevel == 'Grade 12') {
+            setState(() {
+              GradeLevel.gradeLevel = "12";
+            });
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomeG12(),
+                builder: (context) => HomeG12(gradeLevel: "12"),
               ),
             );
           } else if (gradeLevel == 'Fourth-year College') {
+            setState(() {
+              GradeLevel.gradeLevel = "4th";
+            });
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => Home4th(),
+                builder: (context) => Home4th(gradeLevel: "4th"),
               ),
             );
           } else {
@@ -191,6 +205,7 @@ class _LoginPageState extends State<LoginPage> {
         showSnackBar(context, 'User not authenticated.');
       }
     } else {
+      logger.e(res);
       showSnackBar(context, res);
     }
   }
@@ -288,36 +303,53 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> saveDeviceInfo(String userId) async {
-    var deviceInfo = DeviceInfoPlugin();
-    String? deviceId;
+  // Future<void> saveDeviceInfo(String userId) async {
+  //   var deviceInfo = DeviceInfoPlugin();
+  //   String? deviceId;
+  //   String? deviceName;
+  //   String? brandName;
+  //   String? model;
+  //   String? product;
 
-    // Assuming the app is running on Android or iOS
-    if (Platform.isAndroid) {
-      var androidInfo = await deviceInfo.androidInfo;
-      deviceId = androidInfo.id;
-    } else if (Platform.isIOS) {
-      var iosInfo = await deviceInfo.iosInfo;
-      deviceId = iosInfo.identifierForVendor;
-    }
+  //   // Assuming the app is running on Android or iOS
+  //   if (Platform.isAndroid) {
+  //     var androidInfo = await deviceInfo.androidInfo;
+  //     deviceId = androidInfo.id;
+  //     deviceName = androidInfo.device;
+  //     brandName = androidInfo.brand;
+  //     model = androidInfo.model;
+  //     product = androidInfo.product;
+  //   } else if (Platform.isIOS) {
+  //     var iosInfo = await deviceInfo.iosInfo;
+  //     deviceId = iosInfo.identifierForVendor;
+  //     deviceName = iosInfo.name;
+  //     brandName = "None";
+  //     model = iosInfo.model;
+  //     product = "IOS";
+  //   }
+  //   logger.d(deviceId);
 
-    // Get the current time for `lastLogin`
-    var lastLogin = Timestamp.now();
+  //   // Get the current time for `lastLogin`
+  //   var lastLogin = Timestamp.now();
 
-    // Reference to Firestore document
-    var deviceDoc = FirebaseFirestore.instance
-        .collection('users-device')
-        .doc(userId)
-        .collection('devices')
-        .doc(deviceId);
+  //   // Reference to Firestore document
+  //   var deviceDoc = FirebaseFirestore.instance
+  //       .collection('users-device')
+  //       .doc(userId)
+  //       .collection('devices')
+  //       .doc(deviceId ?? "None");
 
-    // Save device information
-    await deviceDoc.set({
-      'deviceName': deviceId, // You can replace this with more descriptive info
-      'osVersion': Platform.operatingSystemVersion,
-      'lastLogin': lastLogin,
-    }, SetOptions(merge: true));
-  }
+  //   // Save device information
+  //   await deviceDoc.set({
+  //     'deviceName': deviceId, // You can replace this with more descriptive info
+  //     'osVersion': Platform.operatingSystemVersion,
+  //     'lastLogin': lastLogin,
+  //     "name": deviceName ?? "None",
+  //     "brand": brandName,
+  //     "model": model,
+  //     "product": product,
+  //   }, SetOptions(merge: true));
+  // }
 
   @override
   void dispose() {

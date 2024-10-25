@@ -127,7 +127,8 @@ class _User4th extends State<User4th> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home4th()),
+                MaterialPageRoute(
+                    builder: (context) => const Home4th(gradeLevel: "4th")),
               );
             },
           ),
@@ -194,7 +195,8 @@ class _User4th extends State<User4th> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ResetPasswordPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => ResetPasswordPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -244,7 +246,9 @@ class _User4th extends State<User4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -323,7 +327,8 @@ class _User4th extends State<User4th> {
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FourthIntro()),
+                          MaterialPageRoute(
+                              builder: (context) => FourthIntro()),
                         );
                       }
                     } else {}

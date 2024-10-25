@@ -8,7 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../Notification/notification_page.dart';
+
 class Result4th extends StatefulWidget {
+  const Result4th({super.key});
   @override
   _Result4th createState() => _Result4th();
 }
@@ -16,7 +19,6 @@ class Result4th extends StatefulWidget {
 class _Result4th extends State<Result4th> {
   late Future<DocumentSnapshot> _userResult;
   late Future<String> _userCourse;
-
 
   @override
   void initState() {
@@ -44,7 +46,6 @@ class _Result4th extends State<Result4th> {
     }
   }
 
-
   Future<List<String>> _getJobsBasedOnCourse(String course) async {
     List<String> jobs = [];
 
@@ -57,12 +58,14 @@ class _Result4th extends State<Result4th> {
 
       // Check if the document exists
       if (docSnapshot.exists) {
-        Map<String, dynamic>? data = docSnapshot.data() as Map<String, dynamic>?;
+        Map<String, dynamic>? data =
+            docSnapshot.data() as Map<String, dynamic>?;
 
         // Ensure data is not null and iterate through the fields (1-5)
         if (data != null) {
           for (int i = 1; i <= 5; i++) {
-            String job = data['$i'] as String? ?? '';  // Safely cast and check for null
+            String job =
+                data['$i'] as String? ?? ''; // Safely cast and check for null
             jobs.add(job);
           }
         }
@@ -75,11 +78,18 @@ class _Result4th extends State<Result4th> {
 
     // If jobs are empty, populate it with default job titles
     if (jobs.isEmpty) {
-      jobs = ['Job Title 1', 'Job Title 2', 'Job Title 3', 'Job Title 4', 'Job Title 5'];
+      jobs = [
+        'Job Title 1',
+        'Job Title 2',
+        'Job Title 3',
+        'Job Title 4',
+        'Job Title 5'
+      ];
     }
 
     return jobs;
   }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -117,7 +127,8 @@ class _Result4th extends State<Result4th> {
                   return FutureBuilder<String>(
                     future: _userCourse,
                     builder: (context, courseSnapshot) {
-                      if (courseSnapshot.connectionState == ConnectionState.waiting) {
+                      if (courseSnapshot.connectionState ==
+                          ConnectionState.waiting) {
                         return Center(child: CircularProgressIndicator());
                       }
 
@@ -131,7 +142,8 @@ class _Result4th extends State<Result4th> {
                       return FutureBuilder<List<String>>(
                         future: _getJobsBasedOnCourse(course),
                         builder: (context, jobSnapshot) {
-                          if (jobSnapshot.connectionState == ConnectionState.waiting) {
+                          if (jobSnapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
                           }
 
@@ -148,9 +160,15 @@ class _Result4th extends State<Result4th> {
                           double fourthjob = 0.0;
                           double fifthjob = 0.0;
 
-                          double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob + fifthjob;
+                          double totalMaxScore = firstjob +
+                              secondjob +
+                              thirdjob +
+                              fourthjob +
+                              fifthjob;
                           double maxScore = 0; // No scores available
-                          double progressPercentage = totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
+                          double progressPercentage = totalMaxScore > 0
+                              ? (maxScore / totalMaxScore) * 100
+                              : 0;
 
                           return _buildResultPage(
                             context,
@@ -161,7 +179,8 @@ class _Result4th extends State<Result4th> {
                             fifthjob: fifthjob,
                             progressPercentage: progressPercentage.toInt(),
                             likelyToChooseText: "Take the assessment",
-                            likelyToChooseJobs: "to know the suitable job for you",
+                            likelyToChooseJobs:
+                                "to know the suitable job for you",
                             isBold: false,
                             jobs: jobs,
                           );
@@ -181,7 +200,8 @@ class _Result4th extends State<Result4th> {
                 return FutureBuilder<String>(
                   future: _userCourse,
                   builder: (context, courseSnapshot) {
-                    if (courseSnapshot.connectionState == ConnectionState.waiting) {
+                    if (courseSnapshot.connectionState ==
+                        ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     }
 
@@ -195,7 +215,8 @@ class _Result4th extends State<Result4th> {
                     return FutureBuilder<List<String>>(
                       future: _getJobsBasedOnCourse(course),
                       builder: (context, jobSnapshot) {
-                        if (jobSnapshot.connectionState == ConnectionState.waiting) {
+                        if (jobSnapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         }
 
@@ -205,9 +226,21 @@ class _Result4th extends State<Result4th> {
 
                         List<String> jobs = jobSnapshot.data ?? [];
 
-                        double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob + fifthjob;
-                        double maxScore = [firstjob, secondjob, thirdjob, fourthjob, fifthjob].reduce((a, b) => a > b ? a : b);
-                        double progressPercentage = totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
+                        double totalMaxScore = firstjob +
+                            secondjob +
+                            thirdjob +
+                            fourthjob +
+                            fifthjob;
+                        double maxScore = [
+                          firstjob,
+                          secondjob,
+                          thirdjob,
+                          fourthjob,
+                          fifthjob
+                        ].reduce((a, b) => a > b ? a : b);
+                        double progressPercentage = totalMaxScore > 0
+                            ? (maxScore / totalMaxScore) * 100
+                            : 0;
 
                         return _buildResultPage(
                           context,
@@ -218,7 +251,8 @@ class _Result4th extends State<Result4th> {
                           fifthjob: fifthjob,
                           progressPercentage: progressPercentage.toInt(),
                           likelyToChooseText: "More likely to choose",
-                          likelyToChooseJobs: jobs.isNotEmpty ? jobs.first : 'No job available',
+                          likelyToChooseJobs:
+                              jobs.isNotEmpty ? jobs.first : 'No job available',
                           isBold: true,
                           jobs: jobs,
                         );
@@ -232,10 +266,7 @@ class _Result4th extends State<Result4th> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -262,7 +293,9 @@ class _Result4th extends State<Result4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(
@@ -275,8 +308,7 @@ class _Result4th extends State<Result4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const Search4th()),
+                      MaterialPageRoute(builder: (context) => Search4th()),
                     );
                   },
                   icon: Image.asset(
@@ -287,7 +319,16 @@ class _Result4th extends State<Result4th> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      return NotificationPage(
+                        uuid: user!.uid,
+                      );
+                    }));
+                  },
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -311,10 +352,7 @@ class _Result4th extends State<Result4th> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -364,6 +402,7 @@ class _Result4th extends State<Result4th> {
       ),
     );
   }
+
   Future<DocumentSnapshot> _getUserResult() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -378,7 +417,8 @@ class _Result4th extends State<Result4th> {
     return userResultDoc; // Return the document
   }
 
-  Widget _buildResultPage(BuildContext context, {
+  Widget _buildResultPage(
+    BuildContext context, {
     required double firstjob,
     required double secondjob,
     required double thirdjob,
@@ -391,55 +431,68 @@ class _Result4th extends State<Result4th> {
     required List<String> jobs,
   }) {
     List<Map<String, dynamic>> jobResults = [
-      {"label": jobs.length > 0 ? jobs[0] : 'No job available', "score": firstjob},
-      {"label": jobs.length > 1 ? jobs[1] : 'No job available', "score": secondjob},
-      {"label": jobs.length > 2 ? jobs[2] : 'No job available', "score": thirdjob},
-      {"label": jobs.length > 3 ? jobs[3] : 'No job available', "score": fourthjob},
-      {"label": jobs.length > 4 ? jobs[4] : 'No job available', "score": fifthjob},
+      {
+        "label": jobs.length > 0 ? jobs[0] : 'No job available',
+        "score": firstjob
+      },
+      {
+        "label": jobs.length > 1 ? jobs[1] : 'No job available',
+        "score": secondjob
+      },
+      {
+        "label": jobs.length > 2 ? jobs[2] : 'No job available',
+        "score": thirdjob
+      },
+      {
+        "label": jobs.length > 3 ? jobs[3] : 'No job available',
+        "score": fourthjob
+      },
+      {
+        "label": jobs.length > 4 ? jobs[4] : 'No job available',
+        "score": fifthjob
+      },
     ];
 
-
-    double totalMaxScore = firstjob + secondjob + thirdjob + fourthjob +
-        fifthjob;
+    double totalMaxScore =
+        firstjob + secondjob + thirdjob + fourthjob + fifthjob;
     jobResults.sort((a, b) => b['score'].compareTo(a['score']));
     // Calculate the maximum score and its frequency
     double maxScore = jobResults[0]['score']; // Top score
-    List<Map<String, dynamic>> topJobs = jobResults.where((job) => job['score'] == maxScore).toList();
-if (maxScore != 0.000){
-    if (topJobs.length == 1) {
-      likelyToChooseText = "More likely to choose";
-      likelyToChooseJobs = topJobs[0]['label']; // Get the top job's label
-
-    } else if (topJobs.length == 2) {
-      likelyToChooseText = "You excelled in two jobs!";
-      likelyToChooseJobs = "Check the details below.";
-      isBold = false;
-    } else if (topJobs.length == 3) {
-      likelyToChooseText = "You excelled in three jobs!";
-      likelyToChooseJobs = "Check the details below.";
-      isBold = false;
-    } else if (topJobs.length == 4) {
-      likelyToChooseText = "You excelled in four jobs!";
-      likelyToChooseJobs = "Check the details below.";
-      isBold = false;
-    } else if (topJobs.length == 5) {
-      likelyToChooseText = "You are a good fit in all jobs!";
-      likelyToChooseJobs = "Check the details below.";
-      isBold = false;
+    List<Map<String, dynamic>> topJobs =
+        jobResults.where((job) => job['score'] == maxScore).toList();
+    if (maxScore != 0.000) {
+      if (topJobs.length == 1) {
+        likelyToChooseText = "More likely to choose";
+        likelyToChooseJobs = topJobs[0]['label']; // Get the top job's label
+      } else if (topJobs.length == 2) {
+        likelyToChooseText = "You excelled in two jobs!";
+        likelyToChooseJobs = "Check the details below.";
+        isBold = false;
+      } else if (topJobs.length == 3) {
+        likelyToChooseText = "You excelled in three jobs!";
+        likelyToChooseJobs = "Check the details below.";
+        isBold = false;
+      } else if (topJobs.length == 4) {
+        likelyToChooseText = "You excelled in four jobs!";
+        likelyToChooseJobs = "Check the details below.";
+        isBold = false;
+      } else if (topJobs.length == 5) {
+        likelyToChooseText = "You are a good fit in all jobs!";
+        likelyToChooseJobs = "Check the details below.";
+        isBold = false;
+      } else {
+        likelyToChooseText = "Please take the assessment";
+        likelyToChooseJobs = "to know the suitable job for you!";
+        isBold = false;
+      }
     } else {
       likelyToChooseText = "Please take the assessment";
       likelyToChooseJobs = "to know the suitable job for you!";
       isBold = false;
-    }}
-else
-  {
-    likelyToChooseText = "Please take the assessment";
-    likelyToChooseJobs = "to know the suitable job for you!";
-    isBold = false;
-  }
+    }
 
-    double calculatedProgressPercentage = totalMaxScore > 0 ? (maxScore /
-        totalMaxScore) * 100 : 0;
+    double calculatedProgressPercentage =
+        totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,8 +518,8 @@ else
                               child: CircularProgressIndicator(
                                 value: calculatedProgressPercentage / 100,
                                 strokeWidth: 10,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.red),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
                                 backgroundColor: Colors.red.shade100,
                               ),
                             ),
@@ -479,8 +532,7 @@ else
                               ),
                               child: Center(
                                 child: Text(
-                                  '${calculatedProgressPercentage
-                                      .toStringAsFixed(2)}%',
+                                  '${calculatedProgressPercentage.toStringAsFixed(2)}%',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -493,18 +545,24 @@ else
                         ),
                       ),
                       SizedBox(height: 20),
-                      Text(likelyToChooseText, style: TextStyle(
-                        fontSize: 15,
-                      ),), SizedBox(height: 5),
+                      Text(
+                        likelyToChooseText,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      SizedBox(height: 5),
                       topJobs.length == 1
                           ? Text(
-                        likelyToChooseJobs,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold, // Make the text bold if condition is met
-                          fontSize: 20,
-                        ),
-                      )
-                          : Text(likelyToChooseJobs), // Regular text if condition is not met
+                              likelyToChooseJobs,
+                              style: TextStyle(
+                                fontWeight: FontWeight
+                                    .bold, // Make the text bold if condition is met
+                                fontSize: 20,
+                              ),
+                            )
+                          : Text(
+                              likelyToChooseJobs), // Regular text if condition is not met
                       SizedBox(height: 15),
                       Container(
                         padding: EdgeInsets.all(20),
@@ -561,12 +619,12 @@ else
                               ],
                             ),
                             SizedBox(height: 10),
-                          for (var job in jobResults) // Change here
-                            AssessmentContainer(
-                            label: job['label'],
-                            score: job['score'],
-                            totalMaxScore: totalMaxScore,
-                          ),
+                            for (var job in jobResults) // Change here
+                              AssessmentContainer(
+                                label: job['label'],
+                                score: job['score'],
+                                totalMaxScore: totalMaxScore,
+                              ),
                           ],
                         ),
                       ),
@@ -583,7 +641,7 @@ else
   }
 }
 
-  class AssessmentContainer extends StatelessWidget {
+class AssessmentContainer extends StatelessWidget {
   final String label;
   final double score;
   final double totalMaxScore;

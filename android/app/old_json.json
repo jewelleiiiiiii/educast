@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "112945444377-0i68soc12i8q9685ps5uiecb4oi1m75l.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.educast",
-            "certificate_hash": "ac1619d855da0385640ca534770d872f0f2d8b32"
-          }
-        },
-        {
           "client_id": "112945444377-51805ea8isjbfbvstvqvf6n2h453h8cu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

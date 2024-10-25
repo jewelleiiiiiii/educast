@@ -110,7 +110,8 @@ class _UserG12 extends State<UserG12> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeG12()),
+                MaterialPageRoute(
+                    builder: (context) => const HomeG12(gradeLevel: "12")),
               );
             },
           ),
@@ -177,7 +178,8 @@ class _UserG12 extends State<UserG12> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => ResetPasswordPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => ResetPasswordPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -227,7 +229,9 @@ class _UserG12 extends State<UserG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(

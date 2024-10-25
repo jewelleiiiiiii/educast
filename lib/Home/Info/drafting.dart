@@ -42,7 +42,10 @@ class _Drafting extends State<Drafting> {
       '6.6': '',
     };
     try {
-      final doc = await _firestore.collection('programcontent').doc('Bachelor of Drafting Engineering Technology').get();
+      final doc = await _firestore
+          .collection('programcontent')
+          .doc('Bachelor of Drafting Engineering Technology')
+          .get();
       if (doc.exists) {
         lessonData['1'] =
             doc.data()?['1'] ?? 'No information available for Lesson 1';
@@ -109,7 +112,6 @@ class _Drafting extends State<Drafting> {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -123,13 +125,13 @@ class _Drafting extends State<Drafting> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomeG12()),
+              MaterialPageRoute(
+                  builder: (context) => const HomeG12(gradeLevel: "12")),
             );
           },
         ),
       ),
-      body:
-      Container(
+      body: Container(
         width: screenWidth, // Dynamically set width based on screen size
         height: screenHeight, // Dynamically set height based on screen size
         decoration: BoxDecoration(
@@ -139,9 +141,7 @@ class _Drafting extends State<Drafting> {
           ),
         ),
         child: Stack(
-
           children: [
-
             Padding(
               padding: const EdgeInsets.only(top: 250),
               child: FutureBuilder<Map<String, String>>(
@@ -181,10 +181,12 @@ class _Drafting extends State<Drafting> {
                     String lesson6_6 = snapshot.data!['6.6']!;
 
                     return ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 20),
                       itemCount: lessons.length,
                       itemBuilder: (context, index) {
-                        final lessonNum = (index + 1).toString().padLeft(2, '0');
+                        final lessonNum =
+                            (index + 1).toString().padLeft(2, '0');
                         return Card(
                           elevation: 3,
                           margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -199,14 +201,14 @@ class _Drafting extends State<Drafting> {
                             title: index == 0
                                 ? const Text('Introduction to BDT')
                                 : (index == 1
-                                ? const Text('Why Choose BDT?')
-                                : (index == 2
-                                ? const Text(
-                                'Career Opportunities in BDT')
-                                : (index == 3
-                                ? const Text(
-                                'Skills Developed in BDT')
-                                : const Text('')))),
+                                    ? const Text('Why Choose BDT?')
+                                    : (index == 2
+                                        ? const Text(
+                                            'Career Opportunities in BDT')
+                                        : (index == 3
+                                            ? const Text(
+                                                'Skills Developed in BDT')
+                                            : const Text('')))),
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,7 +216,7 @@ class _Drafting extends State<Drafting> {
                                   if (index == 0)
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Image.asset(
                                             'assets/abmm.png'), // Image for the first tile
@@ -222,13 +224,13 @@ class _Drafting extends State<Drafting> {
                                           padding: const EdgeInsets.all(15.0),
                                           child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 lesson1Data,
                                                 textAlign: TextAlign.justify,
-                                                style:
-                                                const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                    fontSize: 16),
                                               ),
                                               const SizedBox(height: 30),
                                               const Center(
@@ -244,8 +246,8 @@ class _Drafting extends State<Drafting> {
                                               Text(
                                                 lesson2Data,
                                                 textAlign: TextAlign.justify,
-                                                style:
-                                                const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                    fontSize: 16),
                                               ),
                                             ],
                                           ),
@@ -255,7 +257,7 @@ class _Drafting extends State<Drafting> {
                                   if (index == 1)
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Image.asset(
                                             'assets/abmm.png'), // Image for the second tile
@@ -263,57 +265,62 @@ class _Drafting extends State<Drafting> {
                                           padding: const EdgeInsets.all(15.0),
                                           child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 lesson3Data,
                                                 textAlign: TextAlign.justify,
-                                                style:
-                                                const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                    fontSize: 16),
                                               ),
                                               const SizedBox(height: 30),
                                               Padding(
                                                 padding:
-                                                EdgeInsets.only(left: 16),
+                                                    EdgeInsets.only(left: 16),
                                                 child: Text("○ $lesson3_1",
-                                                    textAlign: TextAlign.justify,
+                                                    textAlign:
+                                                        TextAlign.justify,
                                                     style: const TextStyle(
                                                         fontSize: 16)),
                                               ),
                                               const SizedBox(height: 15),
                                               Padding(
                                                 padding:
-                                                EdgeInsets.only(left: 16),
+                                                    EdgeInsets.only(left: 16),
                                                 child: Text("○ $lesson3_2",
-                                                    textAlign: TextAlign.justify,
+                                                    textAlign:
+                                                        TextAlign.justify,
                                                     style: const TextStyle(
                                                         fontSize: 16)),
                                               ),
                                               const SizedBox(height: 15),
                                               Padding(
                                                 padding:
-                                                EdgeInsets.only(left: 16),
+                                                    EdgeInsets.only(left: 16),
                                                 child: Text("○ $lesson3_3",
-                                                    textAlign: TextAlign.justify,
+                                                    textAlign:
+                                                        TextAlign.justify,
                                                     style: const TextStyle(
                                                         fontSize: 16)),
                                               ),
                                               const SizedBox(height: 15),
                                               Padding(
                                                 padding:
-                                                EdgeInsets.only(left: 16),
-                                                child: Text("○ $lesson3_4",
+                                                    EdgeInsets.only(left: 16),
+                                                child: Text(
+                                                  "○ $lesson3_4",
                                                   textAlign: TextAlign.justify,
                                                   style: const TextStyle(
-                                                      fontSize: 16),),
+                                                      fontSize: 16),
+                                                ),
                                               ),
                                               const SizedBox(height: 15),
                                               const SizedBox(height: 10),
                                               Text(
                                                 lesson4Data,
                                                 textAlign: TextAlign.justify,
-                                                style:
-                                                const TextStyle(fontSize: 16),
+                                                style: const TextStyle(
+                                                    fontSize: 16),
                                               ),
                                             ],
                                           ),
@@ -323,13 +330,13 @@ class _Drafting extends State<Drafting> {
                                   if (index == 2)
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.all(15.0),
                                           child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                                CrossAxisAlignment.center,
                                             children: [
                                               const Text(
                                                 "Professions Under BDT:",
@@ -341,29 +348,47 @@ class _Drafting extends State<Drafting> {
                                               const SizedBox(height: 10),
                                               Column(
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Text("$career5_1",
+                                                  Text(
+                                                    "$career5_1",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$career5_2",
+                                                  Text(
+                                                    "$career5_2",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$career5_3",
+                                                  Text(
+                                                    "$career5_3",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$career5_4",
+                                                  Text(
+                                                    "$career5_4",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$career5_5",
+                                                  Text(
+                                                    "$career5_5",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
-
-
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                 ],
                                               ),
                                               const SizedBox(height: 50),
@@ -377,28 +402,47 @@ class _Drafting extends State<Drafting> {
                                               const SizedBox(height: 10),
                                               Column(
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Text("$career5_6",
+                                                  Text(
+                                                    "$career5_6",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$lesson5_7",
+                                                  Text(
+                                                    "$lesson5_7",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$lesson5_8",
+                                                  Text(
+                                                    "$lesson5_8",
                                                     style: const TextStyle(
-                                                        fontSize: 16),textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$lesson5_9",
+                                                  Text(
+                                                    "$lesson5_9",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                   const SizedBox(height: 15),
-                                                  Text("$lesson5_10",
+                                                  Text(
+                                                    "$lesson5_10",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
                                                 ],
                                               ),
                                             ],
@@ -411,7 +455,7 @@ class _Drafting extends State<Drafting> {
                                       padding: const EdgeInsets.all(15.0),
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const Center(
                                             child: Text(
@@ -425,32 +469,45 @@ class _Drafting extends State<Drafting> {
                                           const SizedBox(height: 10),
                                           Text(
                                             lesson6_1,
-                                            style: const TextStyle(fontSize: 16,),textAlign: TextAlign.justify,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                            textAlign: TextAlign.justify,
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             lesson6_2,
-                                            style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             lesson6_3,
-                                            style: const TextStyle(fontSize: 16),textAlign: TextAlign.justify,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             lesson6_4,
-                                            style: const TextStyle(fontSize: 16),textAlign: TextAlign.justify,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             lesson6_5,
-                                            style: const TextStyle(fontSize: 16),textAlign: TextAlign.justify,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             lesson6_6,
-                                            style: const TextStyle(fontSize: 16),textAlign: TextAlign.justify,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
                                           ),
                                         ],
                                       ),

@@ -194,7 +194,8 @@ class _FourthRules extends State<FourthRules> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Home4th()),
+                    MaterialPageRoute(
+                        builder: (context) => const Home4th(gradeLevel: "4th")),
                   );
                 },
                 icon: Image.asset(
@@ -479,7 +480,8 @@ class _FourthRules2 extends State<FourthRules2> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Home4th()),
+                    MaterialPageRoute(
+                        builder: (context) => const Home4th(gradeLevel: "4th")),
                   );
                 },
                 icon: Image.asset(
@@ -673,7 +675,8 @@ class _FourthRules3 extends State<FourthRules3> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Questionnaire14th()),
+                  MaterialPageRoute(
+                      builder: (context) => const Questionnaire14th()),
                 );
               },
               child: const Text(
@@ -762,7 +765,8 @@ class _FourthRules3 extends State<FourthRules3> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Home4th()),
+                    MaterialPageRoute(
+                        builder: (context) => const Home4th(gradeLevel: "4th")),
                   );
                 },
                 icon: Image.asset(

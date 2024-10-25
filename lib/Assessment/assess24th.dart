@@ -28,10 +28,8 @@ class _Questionnaire24th extends State<Questionnaire24th> {
     print('Fetching questions for user: $uid');
     if (uid != null) {
       try {
-        final userDocument = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        final userDocument =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (userDocument.exists) {
           final userData = userDocument.data();
@@ -49,7 +47,9 @@ class _Questionnaire24th extends State<Questionnaire24th> {
               setState(() {
                 _questions = List.generate(
                   10,
-                      (index) => questionData[(index + 11).toString()] ?? 'No Question', // Fetch questions 11-20
+                  (index) =>
+                      questionData[(index + 11).toString()] ??
+                      'No Question', // Fetch questions 11-20
                 );
               });
             }
@@ -68,7 +68,8 @@ class _Questionnaire24th extends State<Questionnaire24th> {
               setState(() {
                 _selectedOptions = List.generate(
                   10,
-                      (index) => answerData[(index + 11).toString()] as int?, // Fetch answers for questions 11-20
+                  (index) => answerData[(index + 11).toString()]
+                      as int?, // Fetch answers for questions 11-20
                 );
               });
             }
@@ -83,7 +84,6 @@ class _Questionnaire24th extends State<Questionnaire24th> {
       }
     }
   }
-
 
   Future<void> _updateAnswer(int index, int? value) async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -133,7 +133,6 @@ class _Questionnaire24th extends State<Questionnaire24th> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -190,8 +189,8 @@ class _Questionnaire24th extends State<Questionnaire24th> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 16.0),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -223,7 +222,9 @@ class _Questionnaire24th extends State<Questionnaire24th> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (int i = 5; i >= 1; i--) // Loop from 5 to 1
+                                      for (int i = 5;
+                                          i >= 1;
+                                          i--) // Loop from 5 to 1
                                         Container(
                                           width: 70.0,
                                           child: Center(
@@ -239,7 +240,6 @@ class _Questionnaire24th extends State<Questionnaire24th> {
                                     ],
                                   ),
                                 ),
-
                               ],
                             ),
                             SizedBox(height: 10.0),
@@ -275,11 +275,11 @@ class _Questionnaire24th extends State<Questionnaire24th> {
                                                   child: Radio<int>(
                                                     value: i, // Options 1 to 5
                                                     groupValue:
-                                                    _selectedOptions[index],
+                                                        _selectedOptions[index],
                                                     onChanged: (int? value) {
                                                       setState(() {
-                                                        _selectedOptions[index] =
-                                                            value;
+                                                        _selectedOptions[
+                                                            index] = value;
                                                       });
                                                       _updateAnswer(index,
                                                           value); // Update Firestore in real-time
@@ -306,7 +306,7 @@ class _Questionnaire24th extends State<Questionnaire24th> {
             SizedBox(height: 10.0),
             Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -335,7 +335,8 @@ class _Questionnaire24th extends State<Questionnaire24th> {
                           padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.symmetric(horizontal: 16.0)),
                           foregroundColor: MaterialStateProperty.all<Color>(
-                              Colors.black.withOpacity(0.6)), // Semi-black text color
+                              Colors.black
+                                  .withOpacity(0.6)), // Semi-black text color
                         ),
                         child: Text('Previous'),
                       ),
@@ -367,7 +368,6 @@ class _Questionnaire24th extends State<Questionnaire24th> {
             SizedBox(height: 20.0),
           ],
         ),
-
       ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
@@ -397,7 +397,9 @@ class _Questionnaire24th extends State<Questionnaire24th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(

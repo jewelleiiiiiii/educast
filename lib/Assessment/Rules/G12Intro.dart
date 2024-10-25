@@ -130,7 +130,9 @@ class _G12Intro extends State<G12Intro> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(

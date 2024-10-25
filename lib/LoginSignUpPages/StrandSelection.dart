@@ -46,7 +46,7 @@ class _StrandSelection extends State<StrandSelection> {
       });
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const HomeG12(),
+          builder: (context) => const HomeG12(gradeLevel: "12"),
         ),
       );
     }
@@ -55,121 +55,121 @@ class _StrandSelection extends State<StrandSelection> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => false, // Disable back button
-    child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 155, 15, 15),
-        centerTitle: true,
-        leading: IconButton(
-          icon: SizedBox(
-            width: 20,
-            height: 20,
-            child: Image.asset('assets/back.png'),
+      onWillPop: () async => false, // Disable back button
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 155, 15, 15),
+          centerTitle: true,
+          leading: IconButton(
+            icon: SizedBox(
+              width: 20,
+              height: 20,
+              child: Image.asset('assets/back.png'),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
         ),
-      ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 10,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 229, 228, 228),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
-                ),
-              ),
-              child: Column(
-                children: const [
-                  SizedBox(height: 30),
-                  Text(
-                    'Strands',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 155, 15, 15),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40.0),
-                  bottomRight: Radius.circular(40.0),
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  'Create Account',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+        body: Stack(
+          children: [
+            Positioned(
+              top: 10,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 20.0),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 229, 228, 228),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 150),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ListView(
-                    children: [
-                      _buildInterestSection('Academic', _academicInterests),
-                      const SizedBox(height: 30),
-                      Container(
-                        height: 2,
+                child: Column(
+                  children: const [
+                    SizedBox(height: 30),
+                    Text(
+                      'Strands',
+                      style: TextStyle(
+                        fontSize: 24,
                         color: Colors.black,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
-                  child: TextButton(
-                    onPressed: () async {
-                      // Update Firestore with the selected strand
-                      await _updateStrand();
-                    },
-                    child: const Text(
-                      'Ok',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 155, 15, 15),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Create Account',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 150),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ListView(
+                      children: [
+                        _buildInterestSection('Academic', _academicInterests),
+                        const SizedBox(height: 30),
+                        Container(
+                          height: 2,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
+                    child: TextButton(
+                      onPressed: () async {
+                        // Update Firestore with the selected strand
+                        await _updateStrand();
+                      },
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 

@@ -10,6 +10,7 @@ import '../Home/Info/GAS.dart';
 import '../Home/Info/HUMSS.dart';
 import '../Home/Info/STEM.dart';
 import '../Home/homeg10.dart';
+import '../Notification/notification_page.dart';
 
 class SearchG10 extends StatefulWidget {
   const SearchG10({super.key});
@@ -311,7 +312,7 @@ class _SearchG10 extends State<SearchG10> {
         screen = GasInfo();
         break;
       default:
-        screen = const HomeG10();
+        screen = const HomeG10(gradeLevel: "10");
     }
 
     Navigator.push(
@@ -326,293 +327,308 @@ class _SearchG10 extends State<SearchG10> {
     final iconSize = screenWidth * 0.10;
     return WillPopScope(
       onWillPop: () async => false, // Disable back button
-    child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.transparent, Colors.transparent],
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.transparent],
+              ),
             ),
           ),
         ),
-      ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/bg7.png',
-              fit: BoxFit.cover,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/bg7.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 200), // Keep the top scroll cut at 150
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                          16.0, 0, 16, 10), // Adjust bottom padding for spacing
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: searchController,
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                prefixIcon: const Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 200), // Keep the top scroll cut at 150
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16,
+                            10), // Adjust bottom padding for spacing
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: searchController,
+                                decoration: InputDecoration(
+                                  hintText: 'Search',
+                                  prefixIcon: const Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
                                 ),
+                                onChanged: (value) {
+                                  performSearch();
+                                },
                               ),
-                              onChanged: (value) {
-                                performSearch();
-                              },
                             ),
-                          ),
-                          const SizedBox(width: 10.0),
-                        ],
+                            const SizedBox(width: 10.0),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // Rest of your widgets go here
-                  if (showSearchResults) ...[
-                    for (int i = 0; i < visibleResults.length; i++)
-                      SearchResultTile(
-                        text: visibleResults[i],
-                        onTap: () {
-                          navigateToScreen(visibleResults[i]);
-                        },
-                      ),
-                    if (searchResults.length > 3) ...[
-                      const SizedBox(height: 10.0),
-                      TextButton(
-                        onPressed: toggleSeeMore,
+                    // Rest of your widgets go here
+                    if (showSearchResults) ...[
+                      for (int i = 0; i < visibleResults.length; i++)
+                        SearchResultTile(
+                          text: visibleResults[i],
+                          onTap: () {
+                            navigateToScreen(visibleResults[i]);
+                          },
+                        ),
+                      if (searchResults.length > 3) ...[
+                        const SizedBox(height: 10.0),
+                        TextButton(
+                          onPressed: toggleSeeMore,
+                          child: Text(
+                            visibleResults.length < searchResults.length
+                                ? 'See More'
+                                : 'See Less',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.keyboard_arrow_down),
+                      ],
+                    ],
+                    const SizedBox(height: 20.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          visibleResults.length < searchResults.length
-                              ? 'See More'
-                              : 'See Less',
-                          style: const TextStyle(
+                          'You may like',
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      const Icon(Icons.keyboard_arrow_down),
-                    ],
+                    ),
+                    for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
+                      YouMayLikeTile(
+                        title: title,
+                        onTap: () {
+                          navigateToScreen(title);
+                        },
+                      ),
+                    const SizedBox(height: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Top Courses in BatStateU-TNEU',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: DropdownButton<String>(
+                            dropdownColor: Colors.white,
+                            value: selectedFilter,
+                            isExpanded:
+                                true, // Ensures the dropdown button takes the full width
+                            items: <String>[
+                              'All',
+                              'STEM',
+                              'ABM',
+                              'GAS',
+                              'HUMSS'
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedFilter = newValue ?? 'All';
+                                _fetchTopCourses(); // Fetch new data when filter changes
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child: TopCoursesBarChart(topCourses: topCourses),
+                    ),
+                    const SizedBox(height: 30.0),
+                    // Add the chart here
                   ],
-                  const SizedBox(height: 20.0),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'You may like',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          height: MediaQuery.of(context).size.height * 0.10,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: const Border(
+              top: BorderSide(
+                color: Colors.grey,
+                width: 0.2,
+              ),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                offset: const Offset(0, -2),
+                blurRadius: 0,
+              ),
+            ],
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeG10(
+                                  gradeLevel: "10",
+                                )),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/home.png',
+                      width: iconSize,
+                      height: iconSize,
                     ),
                   ),
-                  for (var title in ['STEM', 'ABM', 'HUMSS', 'GAS'])
-                    YouMayLikeTile(
-                      title: title,
-                      onTap: () {
-                        navigateToScreen(title);
-                      },
-                    ),
-                  const SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Top Courses in BatStateU-TNEU',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchG10()),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/search.png',
+                      width: iconSize,
+                      height: iconSize,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width - 80,
-                        child: DropdownButton<String>(
-                          dropdownColor: Colors.white,
-                          value: selectedFilter,
-                          isExpanded:
-                              true, // Ensures the dropdown button takes the full width
-                          items: <String>['All', 'STEM', 'ABM', 'GAS', 'HUMSS']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedFilter = newValue ?? 'All';
-                              _fetchTopCourses(); // Fetch new data when filter changes
-                            });
-                          },
-                        ),
-                      ),
+                  SizedBox(width: iconSize),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        final user = FirebaseAuth.instance.currentUser;
+
+                        return NotificationPage(uuid: user!.uid);
+                      }));
+                    },
+                    icon: Image.asset(
+                      'assets/notif.png',
+                      width: iconSize,
+                      height: iconSize,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: TopCoursesBarChart(topCourses: topCourses),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ResultG10()),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/stats.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
                   ),
-                  const SizedBox(height: 30.0),
-                  // Add the chart here
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: const Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 0.2,
-            ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0, -2),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeG10()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/home.png',
-                    width: iconSize,
-                    height: iconSize,
+              Positioned(
+                top: -iconSize * 0.75,
+                left: MediaQuery.of(context).size.width / 2 - iconSize,
+                child: Container(
+                  width: iconSize * 2,
+                  height: iconSize * 2,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF08080),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.8),
+                      width: 10,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchG10()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/search.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                SizedBox(width: iconSize),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/notif.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/stats.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
-              child: Container(
-                width: iconSize * 2,
-                height: iconSize * 2,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF08080),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.8),
-                    width: 10,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
-                          .doc(user.uid);
+                  child: IconButton(
+                    onPressed: () async {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        final userResultDoc = FirebaseFirestore.instance
+                            .collection('userResultG10')
+                            .doc(user.uid);
 
-                      final docSnapshot = await userResultDoc.get();
+                        final docSnapshot = await userResultDoc.get();
 
-                      if (docSnapshot.exists) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlreadyAnswered()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => G10Intro()),
-                        );
-                      }
-                    } else {}
-                  },
-                  icon: Image.asset(
-                    'assets/main.png',
-                    width: iconSize * 1.3,
-                    height: iconSize * 1.3,
+                        if (docSnapshot.exists) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AlreadyAnswered()),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => G10Intro()),
+                          );
+                        }
+                      } else {}
+                    },
+                    icon: Image.asset(
+                      'assets/main.png',
+                      width: iconSize * 1.3,
+                      height: iconSize * 1.3,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }

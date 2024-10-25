@@ -215,7 +215,9 @@ class _AssessmentHistoryG10 extends State<AssessmentHistoryG10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG10(gradeLevel: "10")),
                     );
                   },
                   icon: Image.asset(

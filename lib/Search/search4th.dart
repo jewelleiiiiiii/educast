@@ -9,6 +9,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Notification/notification_page.dart';
+
 class Search4th extends StatefulWidget {
   const Search4th({super.key});
 
@@ -58,14 +60,16 @@ class _Search4thh extends State<Search4th> {
 
     try {
       final User? user = FirebaseAuth.instance.currentUser;
-      final String currentUserId = user?.uid ?? ''; // Safely get the current user's ID
+      final String currentUserId =
+          user?.uid ?? ''; // Safely get the current user's ID
 
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(currentUserId)
           .get();
 
-      final Map<String, dynamic>? userData = userSnapshot.data() as Map<String, dynamic>?;
+      final Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
 
       String userCourse = userData?['course'] ?? '';
 
@@ -78,7 +82,8 @@ class _Search4thh extends State<Search4th> {
           'IT Support Specialist',
           'Web Developer',
         ];
-      } else if (userCourse == 'Bachelor of Automotive Engineering Technology') {
+      } else if (userCourse ==
+          'Bachelor of Automotive Engineering Technology') {
         documentIds = [
           'Automotive Engineer',
           'Automotive Design Engineer',
@@ -86,8 +91,7 @@ class _Search4thh extends State<Search4th> {
           'Manufacturing Engineer',
           'Vehicle Testing Engineer',
         ];
-      }
-      else if (userCourse == 'Bachelor of Civil Engineering Technology') {
+      } else if (userCourse == 'Bachelor of Civil Engineering Technology') {
         documentIds = [
           'Civil Engineering Technologist',
           'Construction Manager',
@@ -111,8 +115,8 @@ class _Search4thh extends State<Search4th> {
           'CAD Operator',
           'Drafting Engineer',
         ];
-      }
-      else if (userCourse == 'Bachelor of Electrical Engineering Technology') {
+      } else if (userCourse ==
+          'Bachelor of Electrical Engineering Technology') {
         documentIds = [
           'Electrical Engineering Technician',
           'Electrical Maintenance Technician',
@@ -120,7 +124,8 @@ class _Search4thh extends State<Search4th> {
           'Electrical Project Coordinator',
           'Automation Technician',
         ];
-      } else if (userCourse == 'Bachelor of Electronics Engineering Technology') {
+      } else if (userCourse ==
+          'Bachelor of Electronics Engineering Technology') {
         documentIds = [
           'Electronics Engineering Technician',
           'Electronics Test Technician',
@@ -128,7 +133,7 @@ class _Search4thh extends State<Search4th> {
           'Electronics Maintenance Technician',
           'Broadcast Engineering Technician',
         ];
-      }  else if (userCourse == 'Bachelor of Food Engineering Technology') {
+      } else if (userCourse == 'Bachelor of Food Engineering Technology') {
         documentIds = [
           'Food Process Engineer',
           'Quality Control/Assurance Specialist',
@@ -136,7 +141,8 @@ class _Search4thh extends State<Search4th> {
           'Food Safety Officer',
           'Operations Supervisor in Food Manufacturing',
         ];
-      }  else if (userCourse == 'Bachelor of Mechanical Engineering Technology') {
+      } else if (userCourse ==
+          'Bachelor of Mechanical Engineering Technology') {
         documentIds = [
           'Mechanical Design Engineer',
           'Maintenance Engineer',
@@ -144,7 +150,8 @@ class _Search4thh extends State<Search4th> {
           'Automation Engineer',
           'Project Engineer',
         ];
-      } else if (userCourse == 'Bachelor of Mechatronics Engineering Technology') {
+      } else if (userCourse ==
+          'Bachelor of Mechatronics Engineering Technology') {
         documentIds = [
           'Automation Engineer',
           'Control Systems Engineer',
@@ -184,7 +191,8 @@ class _Search4thh extends State<Search4th> {
           if (docSnapshot.id.toLowerCase().contains(query)) {
             uniqueResults.add(docSnapshot.id);
           } else {
-            final Map<String, dynamic>? data = docSnapshot.data() as Map<String, dynamic>?;
+            final Map<String, dynamic>? data =
+                docSnapshot.data() as Map<String, dynamic>?;
             if (data != null) {
               data.forEach((key, value) {
                 if (value.toString().toLowerCase().contains(query)) {
@@ -227,10 +235,11 @@ class _Search4thh extends State<Search4th> {
 
     switch (normalizedTitle) {
       case 'SOFTWARE DEVELOPER':
-        screen = Softwaredev();  // Make sure this screen exists
+        screen = Softwaredev(); // Make sure this screen exists
         break;
       default:
-        screen = const Home4th();  // Make sure this screen exists
+        screen =
+            const Home4th(gradeLevel: "4th"); // Make sure this screen exists
     }
 
     Navigator.push(
@@ -238,7 +247,6 @@ class _Search4thh extends State<Search4th> {
       MaterialPageRoute(builder: (context) => screen),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -310,7 +318,8 @@ class _Search4thh extends State<Search4th> {
                         SearchResultTile(
                           text: visibleResults[i],
                           onTap: () {
-                            navigateToScreen(visibleResults[i]); // No need for context as string
+                            navigateToScreen(visibleResults[
+                                i]); // No need for context as string
                           },
                         ),
                       if (searchResults.length > 3) ...[
@@ -375,7 +384,6 @@ class _Search4thh extends State<Search4th> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -420,7 +428,9 @@ class _Search4thh extends State<Search4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(
@@ -433,8 +443,7 @@ class _Search4thh extends State<Search4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => Search4th()),
+                      MaterialPageRoute(builder: (context) => Search4th()),
                     );
                   },
                   icon: Image.asset(
@@ -445,7 +454,14 @@ class _Search4thh extends State<Search4th> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      return NotificationPage(uuid: user!.uid);
+                    }));
+                  },
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -500,7 +516,8 @@ class _Search4thh extends State<Search4th> {
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FourthIntro()),
+                          MaterialPageRoute(
+                              builder: (context) => FourthIntro()),
                         );
                       }
                     }
@@ -572,48 +589,119 @@ class YouMayLikeTile extends StatelessWidget {
     List<String> specificFields;
     switch (course) {
       case "Bachelor of Science in Information Technology":
-        specificFields = ['Software Developer','Network Administrator', 'Database Administrator', 'IT Support Specialist','Web Developer',];
+        specificFields = [
+          'Software Developer',
+          'Network Administrator',
+          'Database Administrator',
+          'IT Support Specialist',
+          'Web Developer',
+        ];
         break;
       case "Bachelor of Automotive Engineering Technology":
-        specificFields = ['Automotive Engineer', 'Automotive Design Engineer', 'Product Development Engineer', 'Manufacturing Engineer', 'Vehicle Testing Engineer',];
+        specificFields = [
+          'Automotive Engineer',
+          'Automotive Design Engineer',
+          'Product Development Engineer',
+          'Manufacturing Engineer',
+          'Vehicle Testing Engineer',
+        ];
         break;
       case "Bachelor of Civil Engineering Technology":
-        specificFields = ['Civil Engineering Technologist', 'Construction Manager', 'Structural Designer', 'Project Coordinator', 'Site Inspector',];
+        specificFields = [
+          'Civil Engineering Technologist',
+          'Construction Manager',
+          'Structural Designer',
+          'Project Coordinator',
+          'Site Inspector',
+        ];
         break;
       case "Bachelor of Computer Engineering Technology":
-        specificFields = ['Computer Engineering Technologist','Network Administrator','Systems Analyst','Embedded Systems Developer','Software Developer',];
+        specificFields = [
+          'Computer Engineering Technologist',
+          'Network Administrator',
+          'Systems Analyst',
+          'Embedded Systems Developer',
+          'Software Developer',
+        ];
         break;
       case "Bachelor of Drafting Engineering Technology":
-        specificFields = ['Drafting Technician', 'Mechanical Drafter', 'Architectural Drafter', 'CAD Operator', 'Drafting Engineer',];
+        specificFields = [
+          'Drafting Technician',
+          'Mechanical Drafter',
+          'Architectural Drafter',
+          'CAD Operator',
+          'Drafting Engineer',
+        ];
         break;
       case "Bachelor of Electrical Engineering Technology":
-        specificFields = ['Electrical Engineering Technician', 'Electrical Maintenance Technician', 'Electrical CAD Drafter', 'Electrical Project Coordinator', 'Automation Technician',];
+        specificFields = [
+          'Electrical Engineering Technician',
+          'Electrical Maintenance Technician',
+          'Electrical CAD Drafter',
+          'Electrical Project Coordinator',
+          'Automation Technician',
+        ];
         break;
       case "Bachelor of Electronics Engineering Technology":
-        specificFields = ['Electronics Engineering Technician', 'Electronics Test Technician', 'PCB (Printed Circuit Board) Designer', 'Electronics Maintenance Technician', 'Broadcast Engineering Technician',];
+        specificFields = [
+          'Electronics Engineering Technician',
+          'Electronics Test Technician',
+          'PCB (Printed Circuit Board) Designer',
+          'Electronics Maintenance Technician',
+          'Broadcast Engineering Technician',
+        ];
         break;
       case "Bachelor of Food Engineering Technology":
-        specificFields = ['Food Process Engineer', 'Quality Control/Assurance Specialist', 'Product Development Specialist', 'Food Safety Officer', 'Operations Supervisor in Food Manufacturing',];
+        specificFields = [
+          'Food Process Engineer',
+          'Quality Control/Assurance Specialist',
+          'Product Development Specialist',
+          'Food Safety Officer',
+          'Operations Supervisor in Food Manufacturing',
+        ];
         break;
       case "Bachelor of Mechanical Engineering Technology":
-        specificFields = ['Mechanical Design Engineer', 'Maintenance Engineer', 'Manufacturing Engineer', 'Automation Engineer', 'Project Engineer',];
+        specificFields = [
+          'Mechanical Design Engineer',
+          'Maintenance Engineer',
+          'Manufacturing Engineer',
+          'Automation Engineer',
+          'Project Engineer',
+        ];
         break;
       case "Bachelor of Mechatronics Engineering Technology":
-        specificFields = ['Automation Engineer', 'Control Systems Engineer', 'Robotics Engineer', 'Mechatronics Specialist in Manufacturing', 'Instrumentation Engineer',];
-          break;
+        specificFields = [
+          'Automation Engineer',
+          'Control Systems Engineer',
+          'Robotics Engineer',
+          'Mechatronics Specialist in Manufacturing',
+          'Instrumentation Engineer',
+        ];
+        break;
       case "Bachelor of Science in Psychology":
-        specificFields = ['Human Resources Officer', 'Recruitment Specialist', 'Guidance Counselor', 'Training and Development Officer', 'Behavioral Therapist',];
+        specificFields = [
+          'Human Resources Officer',
+          'Recruitment Specialist',
+          'Guidance Counselor',
+          'Training and Development Officer',
+          'Behavioral Therapist',
+        ];
         break;
       case "Bachelor of Science in Criminology":
-        specificFields = ['Police Officer', 'Crime Scene Investigator', 'Forensic Specialist', 'Criminal Investigator', 'Security Officer',];
+        specificFields = [
+          'Police Officer',
+          'Crime Scene Investigator',
+          'Forensic Specialist',
+          'Criminal Investigator',
+          'Security Officer',
+        ];
         break;
       default:
         return [];
     }
 
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('TopJobsInBatStateU')
-        .get();
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('TopJobsInBatStateU').get();
 
     final courseMap = <String, num>{};
     for (final doc in querySnapshot.docs) {
@@ -648,7 +736,7 @@ class YouMayLikeTile extends StatelessWidget {
 
     courseList.sort((a, b) => b['value'].compareTo(a['value']));
     final topTitles =
-    courseList.take(4).map((e) => e['name'] as String).toList();
+        courseList.take(4).map((e) => e['name'] as String).toList();
 
     return topTitles;
   }
@@ -660,7 +748,7 @@ class YouMayLikeTile extends StatelessWidget {
         page = Softwaredev();
         break;
       case 'Automotive Engineer':
-      page = Home4th();
+        page = Home4th(gradeLevel: "4th");
         break;
       default:
         page = Scaffold(
@@ -698,31 +786,30 @@ class YouMayLikeTile extends StatelessWidget {
 
         // Limit to 4 titles, or show all if fewer than 4
         final displayTitles =
-        topTitles.length > 4 ? topTitles.take(4).toList() : topTitles;
+            topTitles.length > 4 ? topTitles.take(4).toList() : topTitles;
 
         return Column(
           children: displayTitles
               .map((title) => Column(
-            children: [
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: -10.0, horizontal: 10),
-                // Adjust vertical padding as needed
-                leading: const Icon(Icons.local_fire_department),
-                title: Text(title),
-                onTap: () {
-                  _navigateToPage(title, context);
-                },
-              ), // Adjust spacing between ListTiles
-            ],
-          ))
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: -10.0, horizontal: 10),
+                        // Adjust vertical padding as needed
+                        leading: const Icon(Icons.local_fire_department),
+                        title: Text(title),
+                        onTap: () {
+                          _navigateToPage(title, context);
+                        },
+                      ), // Adjust spacing between ListTiles
+                    ],
+                  ))
               .toList(),
         );
       },
     );
   }
 }
-
 
 class TopCoursesBarChart extends StatefulWidget {
   final String course;
@@ -743,7 +830,8 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
 
   Future<void> _fetchTopCourses() async {
     try {
-      String uid = FirebaseAuth.instance.currentUser?.uid ?? ''; // Get the current user's UID
+      String uid = FirebaseAuth.instance.currentUser?.uid ??
+          ''; // Get the current user's UID
       if (uid.isEmpty) {
         print('User is not logged in');
         return;
@@ -751,21 +839,24 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
 
       // Reference to the 'users' collection
       DocumentSnapshot userDoc =
-      await FirebaseFirestore.instance.collection('users').doc(uid).get();
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (!userDoc.exists) {
         print('User document not found');
         return;
       }
 
-      String? userCourse = userDoc.get('course'); // Ensure this matches your Firestore field name
+      String? userCourse = userDoc
+          .get('course'); // Ensure this matches your Firestore field name
       if (userCourse == null || userCourse.isEmpty) {
         print('User course not found');
         return;
       }
 
-      DocumentSnapshot topJobsDoc =
-      await FirebaseFirestore.instance.collection('TopJobsInBatStateU').doc(userCourse).get();
+      DocumentSnapshot topJobsDoc = await FirebaseFirestore.instance
+          .collection('TopJobsInBatStateU')
+          .doc(userCourse)
+          .get();
 
       if (topJobsDoc.exists) {
         Map<String, dynamic> data = topJobsDoc.data() as Map<String, dynamic>;
@@ -775,7 +866,8 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
           topCourses = data.entries.map((entry) {
             return {
               'label': entry.key, // Job role
-              'value': entry.value ?? 0, // Ensure value is non-null (default to 0)
+              'value':
+                  entry.value ?? 0, // Ensure value is non-null (default to 0)
             };
           }).toList();
         });
@@ -786,7 +878,6 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
       print('Error fetching top courses: $e');
     }
   }
-
 
   @override
   void didUpdateWidget(TopCoursesBarChart oldWidget) {
@@ -824,8 +915,8 @@ class TopCoursesChart extends StatelessWidget {
   double _getMaxYValue() {
     return topCourses.isNotEmpty
         ? topCourses
-        .map((course) => course['value'].toDouble())
-        .reduce((a, b) => a > b ? a : b)
+            .map((course) => course['value'].toDouble())
+            .reduce((a, b) => a > b ? a : b)
         : 0.0;
   }
 
@@ -860,10 +951,7 @@ class TopCoursesChart extends StatelessWidget {
     List<Map<String, dynamic>> sortedCourses = List.from(topCourses)
       ..sort((a, b) => b['value'].compareTo(a['value']));
 
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width - 10;
+    double screenWidth = MediaQuery.of(context).size.width - 10;
 
     double dynamicWidth = sortedCourses.length * 90.0;
     double chartWidth = dynamicWidth > screenWidth ? dynamicWidth : screenWidth;
@@ -923,8 +1011,8 @@ class TopCoursesChart extends StatelessWidget {
                   getTitlesWidget: (double value, TitleMeta meta) {
                     int index = value.toInt();
                     if (index >= 0 && index < sortedCourses.length) {
-                      String shortName = _getShortCourseName(
-                          sortedCourses[index]['label']);
+                      String shortName =
+                          _getShortCourseName(sortedCourses[index]['label']);
                       return RotatedBox(
                         quarterTurns: 1,
                         child: Text(
@@ -945,7 +1033,7 @@ class TopCoursesChart extends StatelessWidget {
             borderData: FlBorderData(show: false),
             barGroups: List<BarChartGroupData>.generate(
               sortedCourses.length,
-                  (index) {
+              (index) {
                 return BarChartGroupData(
                   x: index,
                   barRods: [

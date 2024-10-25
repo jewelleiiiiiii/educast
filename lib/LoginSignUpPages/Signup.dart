@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/services/authentication.dart';
+import 'package:educast/services/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:educast/Home/homeg10.dart';
@@ -13,6 +14,8 @@ import 'package:google_sign_in/google_sign_in.dart'; // Ensure this import is co
 import 'dart:math';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+
+import '../common/grade_level.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -475,21 +478,31 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
             'gradeLevel': _selectedGradeLevel!,
             'email': widget.email,
           });
+          saveDeviceInfo(user.uid);
 
           // Navigate based on selected grade level
           if (_selectedGradeLevel == 'Grade 10') {
+            setState(() {
+              GradeLevel.gradeLevel = "10";
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => const HomeG10(),
+                builder: (context) => const HomeG10(gradeLevel: "10"),
               ),
             );
           } else if (_selectedGradeLevel == 'Grade 12') {
+            setState(() {
+              GradeLevel.gradeLevel = "12";
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const StrandSelection(),
               ),
             );
           } else if (_selectedGradeLevel == 'Fourth-year College') {
+            setState(() {
+              GradeLevel.gradeLevel = "4th";
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => CourseSelection(),

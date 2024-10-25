@@ -26,7 +26,6 @@ class AuthServices {
 
   Future<String> loginWithGoogle(BuildContext context) async {
     try {
-      print("HELLOOO");
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
@@ -47,14 +46,6 @@ class AuthServices {
       );
 
       await FirebaseAuth.instance.signInWithCredential(credential);
-
-      // if (context.mounted) {
-      //   // SchedulerBinding.instance.addPostFrameCallback((_) {
-      //   //   Navigator.pushReplacementNamed(context, '/blankPage');
-      //   // });
-
-      //   return "Success";
-      // }
 
       return 'Success';
     } on FirebaseAuthException catch (e) {
