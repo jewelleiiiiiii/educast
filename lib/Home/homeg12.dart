@@ -241,9 +241,9 @@ class _HomeG12State extends State<HomeG12> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
                                   Text(
-                                    '15 MINUTES!',
+                                    'ACHIEVE MORE!',
                                     style: TextStyle(
-                                      fontSize: 25,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
