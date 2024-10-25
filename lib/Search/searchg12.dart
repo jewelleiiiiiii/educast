@@ -10,6 +10,7 @@ import '../Home/Info/Abm.dart';
 import '../Home/Info/GAS.dart';
 import '../Home/Info/HUMSS.dart';
 import '../Home/Info/STEM.dart';
+import '../Notification/notification_page.dart';
 
 class SearchG12 extends StatefulWidget {
   const SearchG12({super.key});
@@ -154,7 +155,7 @@ class _SearchG12 extends State<SearchG12> {
         screen = GasInfo();
         break;
       default:
-        screen = const HomeG12();
+        screen = const HomeG12(gradeLevel: "12");
     }
 
     Navigator.push(
@@ -343,7 +344,9 @@ class _SearchG12 extends State<SearchG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -368,7 +371,14 @@ class _SearchG12 extends State<SearchG12> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      return NotificationPage(uuid: user!.uid);
+                    }));
+                  },
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,

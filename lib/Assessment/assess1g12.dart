@@ -55,7 +55,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
       if (snapshot.exists) {
         List<QuestionG12> fetchedQuestions = [];
 
-        _totalQuestions = snapshot.data()?.keys.length ?? 75; // Dynamically set total questions
+        _totalQuestions = snapshot.data()?.keys.length ??
+            75; // Dynamically set total questions
 
         for (int i = 1; i <= _totalQuestions; i++) {
           String fieldName = i.toString();
@@ -70,13 +71,13 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
       } else {
         print('No such document!');
         setState(() {
-          _isLoading = false;  // Stop loading even if document is missing
+          _isLoading = false; // Stop loading even if document is missing
         });
       }
     } catch (e) {
       print('Error fetching questions: $e');
       setState(() {
-        _isLoading = false;  // Stop loading on error
+        _isLoading = false; // Stop loading on error
       });
     }
   }
@@ -94,12 +95,15 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
         for (int i = 1; i <= _totalQuestions; i++) {
           String fieldName = i.toString();
           String optionString = snapshot.get(fieldName) ?? '';
-          print('Options for question $fieldName: $optionString'); // Debug statement
+          print(
+              'Options for question $fieldName: $optionString'); // Debug statement
 
-          List<String> optionList = optionString.split(';').map((option) => option.trim()).toList();
+          List<String> optionList =
+              optionString.split(';').map((option) => option.trim()).toList();
 
           while (optionList.length < 4) {
-            optionList.add(''); // Fill with empty strings if there are less than 4 options
+            optionList.add(
+                ''); // Fill with empty strings if there are less than 4 options
           }
 
           if (optionList.length > 4) {
@@ -127,7 +131,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
     }
   }
 
-  Future<void> _storeSelectedAnswer(int questionNumber, int selectedOptionValue) async {
+  Future<void> _storeSelectedAnswer(
+      int questionNumber, int selectedOptionValue) async {
     try {
       final User? user = _auth.currentUser;
       if (user != null) {
@@ -135,9 +140,13 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
         await FirebaseFirestore.instance
             .collection('userAnswerG12')
             .doc(uid)
-            .set({
-          '$questionNumber': selectedOptionValue,
-        }, SetOptions(merge: true)); // Use merge to avoid overwriting other fields
+            .set(
+                {
+              '$questionNumber': selectedOptionValue,
+            },
+                SetOptions(
+                    merge:
+                        true)); // Use merge to avoid overwriting other fields
       }
     } catch (e) {
       print('Error storing selected answer: $e');
@@ -169,7 +178,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
     }
 
     // Store the selected answer for the current question
-    _storeSelectedAnswer(_selectedIndex + 1, selectedOptionValue); // Question numbers start at 1
+    _storeSelectedAnswer(
+        _selectedIndex + 1, selectedOptionValue); // Question numbers start at 1
   }
 
   Future<void> _retrieveStoredAnswer() async {
@@ -183,10 +193,12 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
             .get();
 
         if (snapshot.exists) {
-          int questionNumber = _selectedIndex + 1; // Current question number (1-based)
+          int questionNumber =
+              _selectedIndex + 1; // Current question number (1-based)
           if (snapshot.data()!.containsKey('$questionNumber')) {
             setState(() {
-              _selectedOptionIndex = snapshot.get('$questionNumber') - 1; // Update index (0-based)
+              _selectedOptionIndex =
+                  snapshot.get('$questionNumber') - 1; // Update index (0-based)
             });
           } else {
             setState(() {
@@ -202,9 +214,11 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
 
   void _nextQuestionG12() {
     if (_selectedOptionIndex == -1) {
-      _storeSelectedAnswer(_selectedIndex + 1, 0); // Store 0 for unanswered question
+      _storeSelectedAnswer(
+          _selectedIndex + 1, 0); // Store 0 for unanswered question
     } else {
-      _storeSelectedAnswer(_selectedIndex + 1, _selectedOptionIndex + 1); // Store selected answer
+      _storeSelectedAnswer(_selectedIndex + 1,
+          _selectedOptionIndex + 1); // Store selected answer
     }
 
     if (_selectedIndex < _totalQuestions - 1) {
@@ -214,7 +228,6 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
       _retrieveStoredAnswer(); // Retrieve stored answer for the next question
     }
   }
-
 
   void _previousQuestionG12() {
     if (_selectedIndex > 0) {
@@ -267,7 +280,7 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
     // Navigate to HomeG12 page after processing
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomeG12()),
+      MaterialPageRoute(builder: (context) => const HomeG12(gradeLevel: "12")),
     );
   }
 
@@ -283,7 +296,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
             .get();
 
         // If the question is unanswered, set the answer to 0
-        if (!snapshot.exists || !snapshot.data()!.containsKey('$questionNumber')) {
+        if (!snapshot.exists ||
+            !snapshot.data()!.containsKey('$questionNumber')) {
           await FirebaseFirestore.instance
               .collection('userAnswerG12')
               .doc(uid)
@@ -355,7 +369,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 16.0),
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -377,9 +392,10 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                           Text(
                             _isLoading
                                 ? 'Loading question...'
-                                : _questions.isNotEmpty && _selectedIndex < _questions.length
-                                ? _questions[_selectedIndex].questionTextG12
-                                : 'No question available',
+                                : _questions.isNotEmpty &&
+                                        _selectedIndex < _questions.length
+                                    ? _questions[_selectedIndex].questionTextG12
+                                    : 'No question available',
                             style: const TextStyle(fontSize: 14.0),
                           ),
                         ],
@@ -391,7 +407,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16.0,
                           mainAxisSpacing: 16.0,
@@ -447,7 +464,8 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                               onPressed: _previousQuestionG12,
                               style: ButtonStyle(
                                 backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.grey[200]!),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.grey[200]!),
                               ),
                               child: const Text(
                                 'Previous',
@@ -503,7 +521,9 @@ class _QuestionnaireG12 extends State<QuestionnaireG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(

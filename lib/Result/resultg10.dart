@@ -7,6 +7,7 @@ import 'package:educast/Assessment/assess4g10.dart';
 import 'package:educast/Search/searchg10.dart';
 import '../Assessment/AssessmentHistory/AssessmentHistoryG10.dart';
 import '../Home/homeg10.dart';
+import '../Notification/notification_page.dart';
 
 class ResultG10 extends StatefulWidget {
   @override
@@ -33,237 +34,249 @@ class _ResultG10State extends State<ResultG10> {
     ));
     return WillPopScope(
       onWillPop: () async => false, // Disable back button
-    child: Scaffold(
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              'assets/bg8.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          SafeArea(
-            child: FutureBuilder<DocumentSnapshot>(
-              future: _getUserResult(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(child: Text("Something went wrong"));
-                }
-
-                if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return _buildResultPage(
-                    context,
-                    humssScore: 0,
-                    abmScore: 0,
-                    stemScore: 0,
-                    gasScore: 0,
-                    progressPercentage: 0,
-                    likelyToChooseText: "Take the assessment",
-                    likelyToChooseStrand: "to know the suitable strand for you",
-                    isBold: false,
-                  );
-                } else {
-                  var data = snapshot.data!.data() as Map<String, dynamic>;
-                  double humssScore = (data['Social'] as num).toDouble();
-                  double abmScore = ((data['Enterprising'] as num).toDouble() +
-                          (data['Conventional'] as num).toDouble()) /
-                      2;
-                  double stemScore = ((data['Realistic'] as num).toDouble() +
-                          (data['Investigative'] as num).toDouble()) /
-                      2;
-                  double gasScore = (data['Artistic'] as num).toDouble();
-
-                  List<double> scores = [
-                    humssScore,
-                    abmScore,
-                    stemScore,
-                    gasScore
-                  ];
-                  List<String> strands = [
-                    "Humanities, and Social Sciences",
-                    "Accountancy, Business, and Management",
-                    "Science, Technology, Engineering, and Mathematics",
-                    "General Academic Strand"
-                  ];
-
-                  double maxScore = scores.reduce((a, b) => a > b ? a : b);
-                  List<String> topStrands = [];
-
-                  for (int i = 0; i < scores.length; i++) {
-                    if (scores[i] == maxScore) {
-                      topStrands.add(strands[i]);
-                    }
-                  }
-
-                  String likelyToChooseText;
-                  String likelyToChooseStrand;
-                  bool isBold = true;
-
-                  if (topStrands.length == 1) {
-                    likelyToChooseText = "More likely to choose";
-                    likelyToChooseStrand = topStrands[0];
-                  } else if (topStrands.length == 2) {
-                    likelyToChooseText = "You excelled in two strands!";
-                    likelyToChooseStrand = "Check the details below.";
-                    isBold = false;
-                  } else if (topStrands.length == 3) {
-                    likelyToChooseText = "You excelled in three strands!";
-                    likelyToChooseStrand = "Check the details below.";
-                    isBold = false;
-                  } else {
-                    likelyToChooseText = "You are a good fit in all strands!";
-                    likelyToChooseStrand = "Check the details below.";
-                    isBold = false;
-                  }
-
-                  return _buildResultPage(
-                    context,
-                    humssScore: humssScore,
-                    abmScore: abmScore,
-                    stemScore: stemScore,
-                    gasScore: gasScore,
-                    progressPercentage: 80,
-                    likelyToChooseText: likelyToChooseText,
-                    likelyToChooseStrand: likelyToChooseStrand,
-                    isBold: isBold,
-                  );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: const Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 0.2,
-            ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0, -2),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
+      child: Scaffold(
+        body: Stack(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeG10()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/home.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchG10()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/search.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                SizedBox(width: iconSize),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/notif.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResultG10()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/stats.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-              ],
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                'assets/bg8.png',
+                fit: BoxFit.cover,
+              ),
             ),
-            Positioned(
-              top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
-              child: Container(
-                width: iconSize * 2,
-                height: iconSize * 2,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF08080),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.8),
-                    width: 10,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG10')
-                          .doc(user.uid);
+            SafeArea(
+              child: FutureBuilder<DocumentSnapshot>(
+                future: _getUserResult(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                      final docSnapshot = await userResultDoc.get();
+                  if (snapshot.hasError) {
+                    return Center(child: Text("Something went wrong"));
+                  }
 
-                      if (docSnapshot.exists) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Questionnaire1G10()),
-                        );
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return _buildResultPage(
+                      context,
+                      humssScore: 0,
+                      abmScore: 0,
+                      stemScore: 0,
+                      gasScore: 0,
+                      progressPercentage: 0,
+                      likelyToChooseText: "Take the assessment",
+                      likelyToChooseStrand:
+                          "to know the suitable strand for you",
+                      isBold: false,
+                    );
+                  } else {
+                    var data = snapshot.data!.data() as Map<String, dynamic>;
+                    double humssScore = (data['Social'] as num).toDouble();
+                    double abmScore =
+                        ((data['Enterprising'] as num).toDouble() +
+                                (data['Conventional'] as num).toDouble()) /
+                            2;
+                    double stemScore = ((data['Realistic'] as num).toDouble() +
+                            (data['Investigative'] as num).toDouble()) /
+                        2;
+                    double gasScore = (data['Artistic'] as num).toDouble();
+
+                    List<double> scores = [
+                      humssScore,
+                      abmScore,
+                      stemScore,
+                      gasScore
+                    ];
+                    List<String> strands = [
+                      "Humanities, and Social Sciences",
+                      "Accountancy, Business, and Management",
+                      "Science, Technology, Engineering, and Mathematics",
+                      "General Academic Strand"
+                    ];
+
+                    double maxScore = scores.reduce((a, b) => a > b ? a : b);
+                    List<String> topStrands = [];
+
+                    for (int i = 0; i < scores.length; i++) {
+                      if (scores[i] == maxScore) {
+                        topStrands.add(strands[i]);
                       }
-                    } else {}
-                  },
-                  icon: Image.asset(
-                    'assets/main.png',
-                    width: iconSize * 1.3,
-                    height: iconSize * 1.3,
-                  ),
-                ),
+                    }
+
+                    String likelyToChooseText;
+                    String likelyToChooseStrand;
+                    bool isBold = true;
+
+                    if (topStrands.length == 1) {
+                      likelyToChooseText = "More likely to choose";
+                      likelyToChooseStrand = topStrands[0];
+                    } else if (topStrands.length == 2) {
+                      likelyToChooseText = "You excelled in two strands!";
+                      likelyToChooseStrand = "Check the details below.";
+                      isBold = false;
+                    } else if (topStrands.length == 3) {
+                      likelyToChooseText = "You excelled in three strands!";
+                      likelyToChooseStrand = "Check the details below.";
+                      isBold = false;
+                    } else {
+                      likelyToChooseText = "You are a good fit in all strands!";
+                      likelyToChooseStrand = "Check the details below.";
+                      isBold = false;
+                    }
+
+                    return _buildResultPage(
+                      context,
+                      humssScore: humssScore,
+                      abmScore: abmScore,
+                      stemScore: stemScore,
+                      gasScore: gasScore,
+                      progressPercentage: 80,
+                      likelyToChooseText: likelyToChooseText,
+                      likelyToChooseStrand: likelyToChooseStrand,
+                      isBold: isBold,
+                    );
+                  }
+                },
               ),
             ),
           ],
         ),
+        bottomNavigationBar: Container(
+          height: MediaQuery.of(context).size.height * 0.10,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: const Border(
+              top: BorderSide(
+                color: Colors.grey,
+                width: 0.2,
+              ),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                offset: const Offset(0, -2),
+                blurRadius: 0,
+              ),
+            ],
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const HomeG10(gradeLevel: "10")),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/home.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchG10()),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/search.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
+                  ),
+                  SizedBox(width: iconSize),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        final user = FirebaseAuth.instance.currentUser;
+
+                        return NotificationPage(uuid: user!.uid);
+                      }));
+                    },
+                    icon: Image.asset(
+                      'assets/notif.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ResultG10()),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/stats.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: -iconSize * 0.75,
+                left: MediaQuery.of(context).size.width / 2 - iconSize,
+                child: Container(
+                  width: iconSize * 2,
+                  height: iconSize * 2,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF08080),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.8),
+                      width: 10,
+                    ),
+                  ),
+                  child: IconButton(
+                    onPressed: () async {
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        final userResultDoc = FirebaseFirestore.instance
+                            .collection('userResultG10')
+                            .doc(user.uid);
+
+                        final docSnapshot = await userResultDoc.get();
+
+                        if (docSnapshot.exists) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SubmissionConfirmation()),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const Questionnaire1G10()),
+                          );
+                        }
+                      } else {}
+                    },
+                    icon: Image.asset(
+                      'assets/main.png',
+                      width: iconSize * 1.3,
+                      height: iconSize * 1.3,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    ),
     );
   }
 

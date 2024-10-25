@@ -16,8 +16,8 @@ class AssessmentHistory4th extends StatefulWidget {
 
 class _AssessmentHistory4th extends State<AssessmentHistory4th> {
   List<String> _questions = List.generate(25, (index) => ''); // Adjusted to 25
-  List<int?> _selectedOptions = List.generate(25, (index) => null); // Adjusted to 25
-
+  List<int?> _selectedOptions =
+      List.generate(25, (index) => null); // Adjusted to 25
 
   @override
   void initState() {
@@ -30,10 +30,8 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
     print('Fetching questions for user: $uid');
     if (uid != null) {
       try {
-        final userDocument = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        final userDocument =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (userDocument.exists) {
           final userData = userDocument.data();
@@ -51,7 +49,8 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
               setState(() {
                 _questions = List.generate(
                   25, // Change here to 25
-                      (index) => questionData[(index + 1).toString()] ?? 'No Question',
+                  (index) =>
+                      questionData[(index + 1).toString()] ?? 'No Question',
                 );
               });
             }
@@ -70,7 +69,7 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
               setState(() {
                 _selectedOptions = List.generate(
                   25, // Change here to 25
-                      (index) => answerData[(index + 1).toString()] as int?,
+                  (index) => answerData[(index + 1).toString()] as int?,
                 );
               });
             }
@@ -192,8 +191,8 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 10.0),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -225,7 +224,9 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (int i = 5; i >= 1; i--) // Loop from 5 to 1
+                                      for (int i = 5;
+                                          i >= 1;
+                                          i--) // Loop from 5 to 1
                                         Container(
                                           width: 70.0,
                                           child: Center(
@@ -276,8 +277,9 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
                                                   child: Radio<int>(
                                                     value: i, // Options 1 to 5
                                                     groupValue:
-                                                    _selectedOptions[index],
-                                                    onChanged: null, // Make radio buttons uneditable
+                                                        _selectedOptions[index],
+                                                    onChanged:
+                                                        null, // Make radio buttons uneditable
                                                   ),
                                                 ),
                                               ),
@@ -302,10 +304,7 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -332,7 +331,9 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(
@@ -381,10 +382,7 @@ class _AssessmentHistory4th extends State<AssessmentHistory4th> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,

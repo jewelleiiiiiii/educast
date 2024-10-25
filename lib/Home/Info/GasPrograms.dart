@@ -51,7 +51,6 @@ class _GasPrograms extends State<GasPrograms> {
     }
   }
 
-
   void _updateRelatedProgramsText(String strand) {
     if (strand == 'Science, Technology, Engineering, and Mathematics') {
       relatedProgramsText = 'STEM-Related Programs';
@@ -101,18 +100,10 @@ class _GasPrograms extends State<GasPrograms> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
@@ -187,7 +178,7 @@ class _GasPrograms extends State<GasPrograms> {
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -196,8 +187,8 @@ class _GasPrograms extends State<GasPrograms> {
                           itemCount: userStrand == 'General Academic Strand'
                               ? 9
                               : courses.length > 4
-                              ? 4
-                              : courses.length,
+                                  ? 4
+                                  : courses.length,
                           itemBuilder: (context, index) {
                             List<Gradient> gradients = [
                               LinearGradient(
@@ -291,10 +282,10 @@ class _GasPrograms extends State<GasPrograms> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[index],
@@ -333,7 +324,7 @@ class _GasPrograms extends State<GasPrograms> {
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -379,10 +370,10 @@ class _GasPrograms extends State<GasPrograms> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[courseIndex],
@@ -411,10 +402,7 @@ class _GasPrograms extends State<GasPrograms> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -441,7 +429,9 @@ class _GasPrograms extends State<GasPrograms> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -489,10 +479,7 @@ class _GasPrograms extends State<GasPrograms> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -601,9 +588,8 @@ class _GasPrograms extends State<GasPrograms> {
       default:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeG12()),
+          MaterialPageRoute(builder: (context) => HomeG12(gradeLevel: "12")),
         );
     }
   }
 }
-

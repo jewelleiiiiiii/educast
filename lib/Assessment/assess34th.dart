@@ -29,10 +29,8 @@ class _Questionnaire34th extends State<Questionnaire34th> {
     print('Fetching questions for user: $uid');
     if (uid != null) {
       try {
-        final userDocument = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .get();
+        final userDocument =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
         if (userDocument.exists) {
           final userData = userDocument.data();
@@ -51,7 +49,8 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                 // Fetch questions 21 to 25 only
                 _questions = List.generate(
                   5,
-                      (index) => questionData[(index + 21).toString()] ?? 'No Question',
+                  (index) =>
+                      questionData[(index + 21).toString()] ?? 'No Question',
                 );
               });
             }
@@ -71,7 +70,7 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                 // Fetch answers for questions 21 to 25
                 _selectedOptions = List.generate(
                   5,
-                      (index) => answerData[(index + 21).toString()] as int?,
+                  (index) => answerData[(index + 21).toString()] as int?,
                 );
               });
             }
@@ -193,8 +192,8 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 16.0),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -226,7 +225,9 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      for (int i = 5; i >= 1; i--) // Loop from 5 to 1
+                                      for (int i = 5;
+                                          i >= 1;
+                                          i--) // Loop from 5 to 1
                                         Container(
                                           width: 70.0,
                                           child: Center(
@@ -242,7 +243,6 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                                     ],
                                   ),
                                 ),
-
                               ],
                             ),
                             SizedBox(height: 10.0),
@@ -278,11 +278,11 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                                                   child: Radio<int>(
                                                     value: i, // Options 1 to 5
                                                     groupValue:
-                                                    _selectedOptions[index],
+                                                        _selectedOptions[index],
                                                     onChanged: (int? value) {
                                                       setState(() {
-                                                        _selectedOptions[index] =
-                                                            value;
+                                                        _selectedOptions[
+                                                            index] = value;
                                                       });
                                                       _updateAnswer(index,
                                                           value); // Update Firestore in real-time
@@ -309,7 +309,7 @@ class _Questionnaire34th extends State<Questionnaire34th> {
             SizedBox(height: 10.0),
             Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -338,7 +338,8 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                           padding: MaterialStateProperty.all<EdgeInsets>(
                               EdgeInsets.symmetric(horizontal: 16.0)),
                           foregroundColor: MaterialStateProperty.all<Color>(
-                              Colors.black.withOpacity(0.6)), // Semi-black text color
+                              Colors.black
+                                  .withOpacity(0.6)), // Semi-black text color
                         ),
                         child: Text('Previous'),
                       ),
@@ -349,7 +350,8 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SubmissionConfirmation4th()),
+                                builder: (context) =>
+                                    SubmissionConfirmation4th()),
                           );
                         },
                         style: ButtonStyle(
@@ -370,7 +372,6 @@ class _Questionnaire34th extends State<Questionnaire34th> {
             SizedBox(height: 140.0),
           ],
         ),
-
       ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
@@ -400,7 +401,9 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(
@@ -474,7 +477,8 @@ class _Questionnaire34th extends State<Questionnaire34th> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SubmissionConfirmation4th()),
+                              builder: (context) =>
+                                  SubmissionConfirmation4th()),
                         );
                       } else {
                         Navigator.push(
@@ -499,7 +503,6 @@ class _Questionnaire34th extends State<Questionnaire34th> {
     );
   }
 }
-
 
 class SubmissionConfirmation4th extends StatefulWidget {
   @override
@@ -530,13 +533,11 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      final userAnswerDoc = FirebaseFirestore.instance
-          .collection('userAnswer4th')
-          .doc(user.uid);
+      final userAnswerDoc =
+          FirebaseFirestore.instance.collection('userAnswer4th').doc(user.uid);
 
-      final userResultDoc = FirebaseFirestore.instance
-          .collection('userResult4th')
-          .doc(user.uid);
+      final userResultDoc =
+          FirebaseFirestore.instance.collection('userResult4th').doc(user.uid);
 
       final docSnapshot = await userAnswerDoc.get();
 
@@ -580,7 +581,8 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
     int count = 0;
 
     for (int i = start; i <= end; i++) {
-      final answer = answers[i.toString()]; // Accessing the field name as a string
+      final answer =
+          answers[i.toString()]; // Accessing the field name as a string
       if (answer != null && answer is num) {
         sum += answer.toDouble();
         count++;
@@ -589,8 +591,6 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
 
     return count > 0 ? sum / count : 0; // Returning the average
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -615,7 +615,8 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home4th()),
+                MaterialPageRoute(
+                    builder: (context) => const Home4th(gradeLevel: "4th")),
               );
             },
           ),
@@ -687,7 +688,7 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 158, 39, 39),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -732,7 +733,9 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(
@@ -811,7 +814,8 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FourthIntro()),
+                          MaterialPageRoute(
+                              builder: (context) => FourthIntro()),
                         );
                       }
                     } else {}
@@ -830,7 +834,6 @@ class _SubmissionConfirmation4th extends State<SubmissionConfirmation4th> {
     );
   }
 }
-
 
 class AlreadyAnswered4th extends StatefulWidget {
   @override
@@ -873,9 +876,7 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) =>
-              Result4th()),
+      MaterialPageRoute(builder: (context) => Result4th()),
     );
   }
 
@@ -902,7 +903,8 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home4th()),
+                MaterialPageRoute(
+                    builder: (context) => const Home4th(gradeLevel: "4th")),
               );
             },
           ),
@@ -959,14 +961,13 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
                     SizedBox(height: 30.0),
                     ElevatedButton(
                       onPressed: _viewResults,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 158, 39, 39),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -1011,7 +1012,9 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Home4th(gradeLevel: "4th")),
                     );
                   },
                   icon: Image.asset(
@@ -1090,7 +1093,8 @@ class _AlreadyAnswered4th extends State<AlreadyAnswered4th> {
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => FourthIntro()),
+                          MaterialPageRoute(
+                              builder: (context) => FourthIntro()),
                         );
                       }
                     } else {}

@@ -194,7 +194,8 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeG10()),
+                    MaterialPageRoute(
+                        builder: (context) => const HomeG10(gradeLevel: "10")),
                   );
                 },
                 icon: Image.asset(
@@ -479,7 +480,8 @@ class _G10Rules2 extends State<G10Rules2> with TickerProviderStateMixin {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeG10()),
+                    MaterialPageRoute(
+                        builder: (context) => const HomeG10(gradeLevel: "10")),
                   );
                 },
                 icon: Image.asset(
@@ -795,7 +797,8 @@ class _G10Rules3 extends State<G10Rules3> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeG10()),
+                    MaterialPageRoute(
+                        builder: (context) => const HomeG10(gradeLevel: "10")),
                   );
                 },
                 icon: Image.asset(

@@ -116,7 +116,8 @@ class _GasInfo extends State<GasInfo> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomeG10()),
+              MaterialPageRoute(
+                  builder: (context) => const HomeG10(gradeLevel: "10")),
             );
           },
         ),
@@ -129,325 +130,382 @@ class _GasInfo extends State<GasInfo> {
             image: AssetImage('assets/bg3.png'),
             fit: BoxFit.cover,
           ),
-        ), child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 250),
-            child: FutureBuilder<Map<String, String>>(
-              future: _fetchLessonData(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No data available'));
-                } else {
-                  String lesson1Data = snapshot.data!['1']!;
-                  String lesson2Data = snapshot.data!['2']!;
-                  String lesson3Data = snapshot.data!['3']!;
-                  String lesson3_1 = snapshot.data!['3.1']!;
-                  String lesson3_2 = snapshot.data!['3.2']!;
-                  String lesson3_3 = snapshot.data!['3.3']!;
-                  String lesson3_4 = snapshot.data!['3.4']!;
-                  String lesson4Data = snapshot.data!['4']!;
-                  String career5_1 = snapshot.data!['5.1']!;
-                  String career5_2 = snapshot.data!['5.2']!;
-                  String career5_3 = snapshot.data!['5.3']!;
-                  String career5_4 = snapshot.data!['5.4']!;
-                  String career5_5 = snapshot.data!['5.5']!;
-                  String lesson5_6 = snapshot.data!['5.6']!;
-                  String lesson5_7 = snapshot.data!['5.7']!;
-                  String lesson5_8 = snapshot.data!['5.8']!;
-                  String lesson5_9 = snapshot.data!['5.9']!;
-                  String lesson5_10 = snapshot.data!['5.10']!;
-                  String lesson6_1 = snapshot.data!['6.1']!;
-                  String lesson6_2 = snapshot.data!['6.2']!;
-                  String lesson6_3 = snapshot.data!['6.3']!;
-                  String lesson6_4 = snapshot.data!['6.4']!;
-                  String lesson6_5 = snapshot.data!['6.5']!;
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 250),
+              child: FutureBuilder<Map<String, String>>(
+                future: _fetchLessonData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No data available'));
+                  } else {
+                    String lesson1Data = snapshot.data!['1']!;
+                    String lesson2Data = snapshot.data!['2']!;
+                    String lesson3Data = snapshot.data!['3']!;
+                    String lesson3_1 = snapshot.data!['3.1']!;
+                    String lesson3_2 = snapshot.data!['3.2']!;
+                    String lesson3_3 = snapshot.data!['3.3']!;
+                    String lesson3_4 = snapshot.data!['3.4']!;
+                    String lesson4Data = snapshot.data!['4']!;
+                    String career5_1 = snapshot.data!['5.1']!;
+                    String career5_2 = snapshot.data!['5.2']!;
+                    String career5_3 = snapshot.data!['5.3']!;
+                    String career5_4 = snapshot.data!['5.4']!;
+                    String career5_5 = snapshot.data!['5.5']!;
+                    String lesson5_6 = snapshot.data!['5.6']!;
+                    String lesson5_7 = snapshot.data!['5.7']!;
+                    String lesson5_8 = snapshot.data!['5.8']!;
+                    String lesson5_9 = snapshot.data!['5.9']!;
+                    String lesson5_10 = snapshot.data!['5.10']!;
+                    String lesson6_1 = snapshot.data!['6.1']!;
+                    String lesson6_2 = snapshot.data!['6.2']!;
+                    String lesson6_3 = snapshot.data!['6.3']!;
+                    String lesson6_4 = snapshot.data!['6.4']!;
+                    String lesson6_5 = snapshot.data!['6.5']!;
 
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-                    itemCount: lessons.length,
-                    itemBuilder: (context, index) {
-                      final lessonNum = (index + 1).toString().padLeft(2, '0');
-                      return Card(
-                        elevation: 3,
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: ExpansionTile(
-                          leading: Text(
-                            lessonNum,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 20),
+                      itemCount: lessons.length,
+                      itemBuilder: (context, index) {
+                        final lessonNum =
+                            (index + 1).toString().padLeft(2, '0');
+                        return Card(
+                          elevation: 3,
+                          margin: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: ExpansionTile(
+                            leading: Text(
+                              lessonNum,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          title: index == 0
-                              ? const Text('Introduction to GAS')
-                              : (index == 1
-                                  ? const Text('Why Choose GAS?')
-                                  : (index == 2
-                                      ? const Text(
-                                          'Career Opportunities in GAS')
-                                      : (index == 3
-                                          ? const Text(
-                                              'Skills Developed in GAS')
-                                          : const Text('')))),
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (index == 0)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                          'assets/abmm.png'), // Image for the first tile
-                                      Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              lesson1Data,
-                                              textAlign: TextAlign.justify,
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
-                                            const SizedBox(height: 30),
-                                            const Center(
-                                              child: Text(
-                                                "What is GAS?",
+                            title: index == 0
+                                ? const Text('Introduction to GAS')
+                                : (index == 1
+                                    ? const Text('Why Choose GAS?')
+                                    : (index == 2
+                                        ? const Text(
+                                            'Career Opportunities in GAS')
+                                        : (index == 3
+                                            ? const Text(
+                                                'Skills Developed in GAS')
+                                            : const Text('')))),
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (index == 0)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                            'assets/abmm.png'), // Image for the first tile
+                                        Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                lesson1Data,
+                                                textAlign: TextAlign.justify,
+                                                style: const TextStyle(
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(height: 30),
+                                              const Center(
+                                                child: Text(
+                                                  "What is GAS?",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                lesson2Data,
+                                                textAlign: TextAlign.justify,
+                                                style: const TextStyle(
+                                                    fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  if (index == 1)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                            'assets/abmm.png'), // Image for the second tile
+                                        Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                lesson3Data,
+                                                textAlign: TextAlign.justify,
+                                                style: const TextStyle(
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(height: 30),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 16),
+                                                child: Text("○ $lesson3_1",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
+                                              ),
+                                              const SizedBox(height: 15),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 16),
+                                                child: Text("○ $lesson3_2",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
+                                              ),
+                                              const SizedBox(height: 15),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 16),
+                                                child: Text("○ $lesson3_3",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
+                                              ),
+                                              const SizedBox(height: 15),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 16),
+                                                child: Text("○ $lesson3_4",
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                    style: const TextStyle(
+                                                        fontSize: 16)),
+                                              ),
+                                              const SizedBox(height: 15),
+                                              const SizedBox(height: 10),
+                                              Text(
+                                                lesson4Data,
+                                                textAlign: TextAlign.justify,
+                                                style: const TextStyle(
+                                                    fontSize: 16),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  if (index == 2)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              const Text(
+                                                "Professions Under GAS:",
                                                 style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              lesson2Data,
-                                              textAlign: TextAlign.justify,
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                if (index == 1)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                          'assets/abmm.png'), // Image for the second tile
-                                      Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              lesson3Data,
-                                              textAlign: TextAlign.justify,
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
-                                            const SizedBox(height: 30),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 16),
-                                              child: Text("○ $lesson3_1",
-                                                  textAlign: TextAlign.justify,
-                                                  style: const TextStyle(
-                                                      fontSize: 16)),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 16),
-                                              child: Text("○ $lesson3_2",
-                                                  textAlign: TextAlign.justify,
-                                                  style: const TextStyle(
-                                                      fontSize: 16)),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 16),
-                                              child: Text("○ $lesson3_3",
-                                                  textAlign: TextAlign.justify,
-                                                  style: const TextStyle(
-                                                      fontSize: 16)),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 16),
-                                              child: Text("○ $lesson3_4",
-                                                  textAlign: TextAlign.justify,
-                                                  style: const TextStyle(
-                                                      fontSize: 16)),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              lesson4Data,
-                                              textAlign: TextAlign.justify,
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                if (index == 2)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              "Professions Under GAS:",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
+                                              const SizedBox(height: 10),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "$career5_1",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$career5_2",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$career5_3",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$career5_4",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$career5_5",
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text("$career5_1",
-                                                    style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$career5_2",
-                                                    style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$career5_3",
-                                                    style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$career5_4",
-                                                    style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$career5_5",
-                                                    style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 50),
-                                            const Text(
-                                              "Top Jobs for ABM Graduates:",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
+                                              const SizedBox(height: 50),
+                                              const Text(
+                                                "Top Jobs for ABM Graduates:",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text("$lesson5_6",
+                                              const SizedBox(height: 10),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "$lesson5_6",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$lesson5_7",
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$lesson5_7",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$lesson5_8",
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$lesson5_8",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$lesson5_9",
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$lesson5_9",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                                const SizedBox(height: 15),
-                                                Text("$lesson5_10",
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                  const SizedBox(height: 15),
+                                                  Text(
+                                                    "$lesson5_10",
                                                     style: const TextStyle(
-                                                        fontSize: 16), textAlign: TextAlign.justify,),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                if (index == 3)
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Center(
-                                          child: Text(
-                                            "Skills Developed in ABM",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                        fontSize: 16),
+                                                    textAlign:
+                                                        TextAlign.justify,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          lesson6_1,
-                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          lesson6_2,
-                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          lesson6_3,
-                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          lesson6_4,
-                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          lesson6_5,
-                                          style: const TextStyle(fontSize: 16), textAlign: TextAlign.justify,
                                         ),
                                       ],
                                     ),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
+                                  if (index == 3)
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Center(
+                                            child: Text(
+                                              "Skills Developed in ABM",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            lesson6_1,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            lesson6_2,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            lesson6_3,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            lesson6_4,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            lesson6_5,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }

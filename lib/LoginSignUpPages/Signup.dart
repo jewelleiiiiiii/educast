@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educast/services/authentication.dart';
+import 'package:educast/services/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:educast/Home/homeg10.dart';
@@ -14,6 +15,7 @@ import 'dart:math';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
+import '../common/grade_level.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -25,19 +27,22 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final AuthServices _auth = AuthServices();
   bool isLoading = false;
   String _verificationCode = '';
 
   String generateCode() {
     var rng = Random();
-    String code = (100000 + rng.nextInt(900000)).toString(); // Generates a 6-digit code
+    String code =
+        (100000 + rng.nextInt(900000)).toString(); // Generates a 6-digit code
     return code;
   }
 
   Future<void> sendVerificationEmail(String email, String code) async {
-    final smtpServer = gmail('batstateu.tneu.educast@gmail.com', 'cfop qmzk ckxu ngln');
+    final smtpServer =
+        gmail('batstateu.tneu.educast@gmail.com', 'cfop qmzk ckxu ngln');
 
     final message = Message()
       ..from = Address('batstateu.tneu.educast@gmail.com', 'EduCAST')
@@ -96,7 +101,8 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      showSnackBar(context, "Password must be at least 8 characters long with one uppercase, and one lowercase letter, one number, and one special character.");
+      showSnackBar(context,
+          "Password must be at least 8 characters long with one uppercase, and one lowercase letter, one number, and one special character.");
       return;
     }
 
@@ -119,7 +125,8 @@ class _SignupPageState extends State<SignupPage> {
       // Proceed with verification and signup if the email is not registered
       _verificationCode = generateCode();
       await sendVerificationEmail(fullemail, _verificationCode);
-      print('Verification email sent to: $fullemail');
+      print(
+          'Verification email sent to: $fullemail,  code: $_verificationCode');
 
       // Navigate to the verification page after sending the code
       Navigator.push(
@@ -143,9 +150,6 @@ class _SignupPageState extends State<SignupPage> {
       });
     }
   }
-
-
-
 
   Future<void> _handledGoogleSignIn() async {
     try {
@@ -464,28 +468,41 @@ class _CreateAccountScreenState extends State<CreateAccountPage> {
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
           // Update additional information in Firestore
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({
             'firstName': _firstnameController.text,
             'lastName': _lastnameController.text,
             'campus': _selectedCampus!,
             'gradeLevel': _selectedGradeLevel!,
             'email': widget.email,
           });
+          saveDeviceInfo(user.uid);
 
           // Navigate based on selected grade level
           if (_selectedGradeLevel == 'Grade 10') {
+            setState(() {
+              GradeLevel.gradeLevel = "10";
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => const HomeG10(),
+                builder: (context) => const HomeG10(gradeLevel: "10"),
               ),
             );
           } else if (_selectedGradeLevel == 'Grade 12') {
+            setState(() {
+              GradeLevel.gradeLevel = "12";
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const StrandSelection(),
               ),
             );
           } else if (_selectedGradeLevel == 'Fourth-year College') {
+            setState(() {
+              GradeLevel.gradeLevel = "4th";
+            });
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => CourseSelection(),
@@ -867,7 +884,10 @@ class CodeVerificationPage extends StatefulWidget {
   final String verificationCode;
   final String password;
 
-  CodeVerificationPage({required this.email, required this.verificationCode, required this.password});
+  CodeVerificationPage(
+      {required this.email,
+      required this.verificationCode,
+      required this.password});
 
   @override
   _CodeVerificationPageState createState() => _CodeVerificationPageState();
@@ -890,7 +910,8 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateAccountPage(email: widget.email, password: widget.password),
+          builder: (context) =>
+              CreateAccountPage(email: widget.email, password: widget.password),
         ),
       );
     } catch (e) {
@@ -908,10 +929,12 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
         isLoading = true;
       });
       // Use an empty call to create a user in Firebase Auth without password
-      FirebaseAuth.instance.createUserWithEmailAndPassword(
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
         email: widget.email,
         password: widget.password,
-      ).then((userCredential) {
+      )
+          .then((userCredential) {
         createFirestoreUser(userCredential.user!.uid);
       }).catchError((e) {
         showSnackBar(context, e.message ?? "Failed to create user.");
@@ -946,9 +969,8 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: isLoading ? null : verifyCode,
-              child: isLoading
-                  ? CircularProgressIndicator()
-                  : Text('Verify Code'),
+              child:
+                  isLoading ? CircularProgressIndicator() : Text('Verify Code'),
             ),
           ],
         ),

@@ -46,7 +46,6 @@ class _StemPrograms extends State<StemPrograms> {
     }
   }
 
-
   void _updateRelatedProgramsText(String strand) {
     if (strand == 'Science, Technology, Engineering, and Mathematics') {
       relatedProgramsText = 'STEM-Related Programs';
@@ -96,7 +95,6 @@ class _StemPrograms extends State<StemPrograms> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -116,15 +114,15 @@ class _StemPrograms extends State<StemPrograms> {
                 elevation: 0,
                 backgroundColor: Colors.white,
                 automaticallyImplyLeading: false,
-
                 leading: IconButton(
                   icon: Image.asset(
-                    'assets/back.png',  // Path to your back.png
-                    width: 24,          // Adjust the size as needed
+                    'assets/back.png', // Path to your back.png
+                    width: 24, // Adjust the size as needed
                     height: 24,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);  // Navigates back to the previous page
+                    Navigator.pop(
+                        context); // Navigates back to the previous page
                   },
                 ),
               ),
@@ -175,17 +173,18 @@ class _StemPrograms extends State<StemPrograms> {
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
                             childAspectRatio: 2.5,
                           ),
-                          itemCount: userStrand == 'Science, Technology, Engineering, and Mathematics'
+                          itemCount: userStrand ==
+                                  'Science, Technology, Engineering, and Mathematics'
                               ? 9
                               : courses.length > 4
-                              ? 4
-                              : courses.length,
+                                  ? 4
+                                  : courses.length,
                           itemBuilder: (context, index) {
                             List<Gradient> gradients = [
                               LinearGradient(
@@ -279,8 +278,10 @@ class _StemPrograms extends State<StemPrograms> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[index],
@@ -319,7 +320,7 @@ class _StemPrograms extends State<StemPrograms> {
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -365,8 +366,10 @@ class _StemPrograms extends State<StemPrograms> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[courseIndex],
@@ -397,72 +400,78 @@ class _StemPrograms extends State<StemPrograms> {
                       SizedBox(height: 16.0),
 
                       // Second Courses Grid (Last 2 courses)
-                  Container(
-                    height: 80.0,
-                    color: Colors.transparent,
-                    child: GridView.builder(
-                      padding: EdgeInsets.zero,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        childAspectRatio: 2.5,
-                      ),
-                      // Set itemCount to 1 to show only the 10th course
-                      itemCount: courses.length >= 10 ? 1 : 0,
-                      itemBuilder: (context, index) {
-                        int courseIndex = 9; // 10th element in the list (0-based index)
-
-                        List<Gradient> gradients = [
-                          LinearGradient(
-                            colors: [
-                              Colors.blueAccent,
-                              Colors.purpleAccent.shade100
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                      Container(
+                        height: 80.0,
+                        color: Colors.transparent,
+                        child: GridView.builder(
+                          padding: EdgeInsets.zero,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                            childAspectRatio: 2.5,
                           ),
-                        ];
+                          // Set itemCount to 1 to show only the 10th course
+                          itemCount: courses.length >= 10 ? 1 : 0,
+                          itemBuilder: (context, index) {
+                            int courseIndex =
+                                9; // 10th element in the list (0-based index)
 
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              navigateToCoursePage(context, courses[courseIndex]);
-                            },
-                            borderRadius: BorderRadius.circular(16.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: gradients[index],
+                            List<Gradient> gradients = [
+                              LinearGradient(
+                                colors: [
+                                  Colors.blueAccent,
+                                  Colors.purpleAccent.shade100
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ];
+
+                            return Card(
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      courses[courseIndex], // Display the 10th course
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                      textAlign: TextAlign.center,
+                              child: InkWell(
+                                onTap: () {
+                                  navigateToCoursePage(
+                                      context, courses[courseIndex]);
+                                },
+                                borderRadius: BorderRadius.circular(16.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: gradients[index],
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          courses[
+                                              courseIndex], // Display the 10th course
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -471,10 +480,7 @@ class _StemPrograms extends State<StemPrograms> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -501,7 +507,9 @@ class _StemPrograms extends State<StemPrograms> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -549,10 +557,7 @@ class _StemPrograms extends State<StemPrograms> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -631,7 +636,7 @@ class _StemPrograms extends State<StemPrograms> {
       default:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeG12()),
+          MaterialPageRoute(builder: (context) => HomeG12(gradeLevel: "12")),
         );
     }
   }

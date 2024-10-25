@@ -14,8 +14,6 @@ class SubmissionConfirmationG12 extends StatefulWidget {
 class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
   late VideoPlayerController _controller;
 
-
-
   @override
   void initState() {
     super.initState();
@@ -54,8 +52,10 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
     }
 
     // Safely casting to a Map
-    Map<String, dynamic>? userAnswers = userAnswersSnapshot.data() as Map<String, dynamic>?;
-    Map<String, dynamic>? correctAnswers = correctAnswersSnapshot.data() as Map<String, dynamic>?;
+    Map<String, dynamic>? userAnswers =
+        userAnswersSnapshot.data() as Map<String, dynamic>?;
+    Map<String, dynamic>? correctAnswers =
+        correctAnswersSnapshot.data() as Map<String, dynamic>?;
 
     if (userAnswers == null || correctAnswers == null) {
       // Handle the case where the data could not be retrieved
@@ -85,36 +85,63 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
       if (userAnswers.containsKey(key) && correctAnswers.containsKey(key)) {
         if (userAnswers[key] == correctAnswers[key]) {
           // Safely access and increment the results
-          if (i <= 5) results["Mechanical Reasoning"] = (results["Mechanical Reasoning"] ?? 0) + 1;
-          else if (i <= 10) results["Spatial Reasoning"] = (results["Spatial Reasoning"] ?? 0) + 1;
-          else if (i <= 15) results["Verbal Reasoning"] = (results["Verbal Reasoning"] ?? 0) + 1;
-          else if (i <= 20) results["Numerical Ability"] = (results["Numerical Ability"] ?? 0) + 1;
-          else if (i <= 25) results["Language Usage"] = (results["Language Usage"] ?? 0) + 1;
-          else if (i <= 30) results["Word Knowledge"] = (results["Word Knowledge"] ?? 0) + 1;
-          else if (i <= 35) results["Perceptual Speed and Accuracy"] = (results["Perceptual Speed and Accuracy"] ?? 0) + 1;
-          else if (i <= 40) results["Analytical Ability"] = (results["Analytical Ability"] ?? 0) + 1;
-          else if (i <= 45) results["Basic Operations"] = (results["Basic Operations"] ?? 0) + 1;
-          else if (i <= 50) results["Word Problems"] = (results["Word Problems"] ?? 0) + 1;
-          else if (i <= 55) results["Word Association"] = (results["Word Association"] ?? 0) + 1;
-          else if (i <= 60) results["Logic"] = (results["Logic"] ?? 0) + 1;
-          else if (i <= 65) results["Grammar and Correct Usage"] = (results["Grammar and Correct Usage"] ?? 0) + 1;
-          else if (i <= 70) results["Vocabulary"] = (results["Vocabulary"] ?? 0) + 1;
-          else if (i <= 75) results["Data Interpretation"] = (results["Data Interpretation"] ?? 0) + 1;
+          if (i <= 5)
+            results["Mechanical Reasoning"] =
+                (results["Mechanical Reasoning"] ?? 0) + 1;
+          else if (i <= 10)
+            results["Spatial Reasoning"] =
+                (results["Spatial Reasoning"] ?? 0) + 1;
+          else if (i <= 15)
+            results["Verbal Reasoning"] =
+                (results["Verbal Reasoning"] ?? 0) + 1;
+          else if (i <= 20)
+            results["Numerical Ability"] =
+                (results["Numerical Ability"] ?? 0) + 1;
+          else if (i <= 25)
+            results["Language Usage"] = (results["Language Usage"] ?? 0) + 1;
+          else if (i <= 30)
+            results["Word Knowledge"] = (results["Word Knowledge"] ?? 0) + 1;
+          else if (i <= 35)
+            results["Perceptual Speed and Accuracy"] =
+                (results["Perceptual Speed and Accuracy"] ?? 0) + 1;
+          else if (i <= 40)
+            results["Analytical Ability"] =
+                (results["Analytical Ability"] ?? 0) + 1;
+          else if (i <= 45)
+            results["Basic Operations"] =
+                (results["Basic Operations"] ?? 0) + 1;
+          else if (i <= 50)
+            results["Word Problems"] = (results["Word Problems"] ?? 0) + 1;
+          else if (i <= 55)
+            results["Word Association"] =
+                (results["Word Association"] ?? 0) + 1;
+          else if (i <= 60)
+            results["Logic"] = (results["Logic"] ?? 0) + 1;
+          else if (i <= 65)
+            results["Grammar and Correct Usage"] =
+                (results["Grammar and Correct Usage"] ?? 0) + 1;
+          else if (i <= 70)
+            results["Vocabulary"] = (results["Vocabulary"] ?? 0) + 1;
+          else if (i <= 75)
+            results["Data Interpretation"] =
+                (results["Data Interpretation"] ?? 0) + 1;
         }
       }
     }
 
     // Store the results in the userResultG12 collection
-    await FirebaseFirestore.instance.collection('userResultG12').doc(uid).set(results);
+    await FirebaseFirestore.instance
+        .collection('userResultG12')
+        .doc(uid)
+        .set(results);
 
     // Optionally, navigate to a results screen or show a message
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ResultG12()), // Adjust as necessary
+      MaterialPageRoute(
+          builder: (context) => ResultG12()), // Adjust as necessary
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +166,8 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeG12()),
+                MaterialPageRoute(
+                    builder: (context) => const HomeG12(gradeLevel: "12")),
               );
             },
           ),
@@ -211,7 +239,7 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 158, 39, 39),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -256,7 +284,9 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -425,7 +455,8 @@ class _AlreadyAnsweredG12 extends State<AlreadyAnsweredG12> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeG12()),
+                MaterialPageRoute(
+                    builder: (context) => const HomeG12(gradeLevel: "12")),
               );
             },
           ),
@@ -482,14 +513,13 @@ class _AlreadyAnsweredG12 extends State<AlreadyAnsweredG12> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
                     SizedBox(height: 30.0),
                     ElevatedButton(
                       onPressed: _viewResults,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 158, 39, 39),
                         padding:
-                        EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -534,7 +564,9 @@ class _AlreadyAnsweredG12 extends State<AlreadyAnsweredG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(

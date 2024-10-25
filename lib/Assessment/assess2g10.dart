@@ -386,7 +386,8 @@ class _Questionnaire2G10 extends State<Questionnaire2G10> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeG10()),
+                  MaterialPageRoute(
+                      builder: (context) => const HomeG10(gradeLevel: "10")),
                 );
               },
               icon: Image.asset(

@@ -6,11 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../Notification/notification_page.dart';
+
 class ResultG12 extends StatefulWidget {
   @override
   _ResultG12 createState() => _ResultG12();
 }
-
 
 class _ResultG12 extends State<ResultG12> {
   Future<Map<String, dynamic>>? _userData;
@@ -54,7 +55,6 @@ class _ResultG12 extends State<ResultG12> {
 
   @override
   Widget build(BuildContext context) {
-
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -107,18 +107,22 @@ class _ResultG12 extends State<ResultG12> {
                   userResult['Data Interpretation'] ?? 0
                 ];
 
-                final topProgramInfo = _calculateTopPrograms(userScores, strand);
+                final topProgramInfo =
+                    _calculateTopPrograms(userScores, strand);
                 // Get the top program percentage
-                double calculatedProgressPercentage = topProgramInfo['topProgram'] != ''
-                    ? topProgramInfo['programPercentages'][topProgramInfo['topProgram']]
-                    : 0;
+                double calculatedProgressPercentage =
+                    topProgramInfo['topProgram'] != ''
+                        ? topProgramInfo['programPercentages']
+                            [topProgramInfo['topProgram']]
+                        : 0;
 
                 return _buildResultPage(
                   context,
                   assessmentLabels: assessmentLabels,
                   progressPercentage: calculatedProgressPercentage,
                   likelyToChooseText: topProgramInfo['likelyToChooseText'],
-                  likelyToChoosePrograms: topProgramInfo['likelyToChoosePrograms'],
+                  likelyToChoosePrograms:
+                      topProgramInfo['likelyToChoosePrograms'],
                   isBold: topProgramInfo['isBold'],
                   totalScores: topProgramInfo['totalScores'],
                   programPercentages: topProgramInfo['programPercentages'],
@@ -156,7 +160,9 @@ class _ResultG12 extends State<ResultG12> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -180,7 +186,14 @@ class _ResultG12 extends State<ResultG12> {
                 ),
                 SizedBox(width: iconSize),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      return NotificationPage(uuid: user!.uid);
+                    }));
+                  },
                   icon: Image.asset(
                     'assets/notif.png',
                     width: iconSize,
@@ -305,8 +318,18 @@ class _ResultG12 extends State<ResultG12> {
     // Set assessmentLabels based on the strand
     if (userStrand == "Science, Technology, Engineering, and Mathematics") {
       assessmentLabels = [
-        'BAET', 'BCivET', 'BCompET', 'BDT', 'BElecET', 'BElectroET',
-        'BFET', 'BMechET', 'BMechtronET', 'BSCrim', 'BSIT', 'BSPsych'
+        'BAET',
+        'BCivET',
+        'BCompET',
+        'BDT',
+        'BElecET',
+        'BElectroET',
+        'BFET',
+        'BMechET',
+        'BMechtronET',
+        'BSCrim',
+        'BSIT',
+        'BSPsych'
       ];
     } else if (userStrand == "Accountancy, Business, and Management") {
       assessmentLabels = ['BSCrim'];
@@ -314,8 +337,17 @@ class _ResultG12 extends State<ResultG12> {
       assessmentLabels = ['BSCrim', 'BSPsych'];
     } else if (userStrand == "General Academic Strand") {
       assessmentLabels = [
-        'BAET', 'BCivET', 'BCompET', 'BDT', 'BElecET', 'BElectroET',
-        'BFET', 'BMechET', 'BMechtronET', 'BSCrim', 'BSPsych'
+        'BAET',
+        'BCivET',
+        'BCompET',
+        'BDT',
+        'BElecET',
+        'BElectroET',
+        'BFET',
+        'BMechET',
+        'BMechtronET',
+        'BSCrim',
+        'BSPsych'
       ];
     } else {
       assessmentLabels = []; // Handle unknown strand case
@@ -326,7 +358,13 @@ class _ResultG12 extends State<ResultG12> {
       'userResult': userResult,
     };
   }
+<<<<<<< HEAD
   Map<String, dynamic> _calculateTopPrograms(List<int> userScores, String userStrand) {
+=======
+
+  Map<String, dynamic> _calculateTopPrograms(
+      List<int> userScores, String userStrand) {
+>>>>>>> main
     Map<String, double> totalScores = {};
     double grandTotalScore = 0;
 
@@ -370,8 +408,23 @@ class _ResultG12 extends State<ResultG12> {
     switch (userStrand) {
       case "Science, Technology, Engineering, and Mathematics":
         allowedPrograms = [
+<<<<<<< HEAD
           "BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET",
           "BFET", "BMechET", "BMechtronET", "BSCrim", "BSIT", "BSPsych"
+=======
+          "BAET",
+          "BCivET",
+          "BCompET",
+          "BDT",
+          "BElecET",
+          "BElectroET",
+          "BFET",
+          "BMechET",
+          "BMechtronET",
+          "BSCrim",
+          "BSIT",
+          "BSPsych"
+>>>>>>> main
         ];
         break;
       case "Accountancy, Business, and Management":
@@ -382,8 +435,22 @@ class _ResultG12 extends State<ResultG12> {
         break;
       case "General Academic Strand":
         allowedPrograms = [
+<<<<<<< HEAD
           "BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET",
           "BFET", "BMechET", "BMechtronET", "BSCrim", "BSPsych"
+=======
+          "BAET",
+          "BCivET",
+          "BCompET",
+          "BDT",
+          "BElecET",
+          "BElectroET",
+          "BFET",
+          "BMechET",
+          "BMechtronET",
+          "BSCrim",
+          "BSPsych"
+>>>>>>> main
         ];
         break;
       default:
@@ -392,14 +459,16 @@ class _ResultG12 extends State<ResultG12> {
 
     // Filter programPercentages to only include allowed programs
     Map<String, double> allowedProgramPercentages = Map.fromEntries(
-        programPercentages.entries.where((entry) => allowedPrograms.contains(entry.key))
-    );
+        programPercentages.entries
+            .where((entry) => allowedPrograms.contains(entry.key)));
 
     // Check if there are any allowed programs
     String topProgram = '';
     if (allowedProgramPercentages.isNotEmpty) {
       // Find the top program based on the highest percentage
-      topProgram = allowedProgramPercentages.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+      topProgram = allowedProgramPercentages.entries
+          .reduce((a, b) => a.value > b.value ? a : b)
+          .key;
     }
 
     // Update likelyToChooseText and likelyToChoosePrograms based on conditions
@@ -438,34 +507,31 @@ class _ResultG12 extends State<ResultG12> {
     };
   }
 
-
-
-
-
-  Widget _buildResultPage(BuildContext context, {
+  Widget _buildResultPage(
+    BuildContext context, {
     required List<String> assessmentLabels,
     required String likelyToChooseText,
     required String likelyToChoosePrograms,
     required bool isBold,
     required double progressPercentage,
-    required Map<String, double> totalScores,  // Added parameter
-    required Map<String, double> programPercentages,  // Added parameter
+    required Map<String, double> totalScores, // Added parameter
+    required Map<String, double> programPercentages, // Added parameter
   }) {
     double totalMaxScore = 0;
     List<Widget> widgets = [];
-
 
     List<Map<String, dynamic>> programs = assessmentLabels.map((label) {
       return {
         "label": label,
         "score": totalScores[label] ?? 0.0,
-        "percentage": programPercentages[label] ?? 0.0, // Ensure percentage is passed
+        "percentage":
+            programPercentages[label] ?? 0.0, // Ensure percentage is passed
       };
     }).toList();
 
     double maxScore = programs.isNotEmpty ? programs[0]['score'] : 0;
-    double calculatedProgressPercentage = totalMaxScore > 0 ? (maxScore /
-        totalMaxScore) * 100 : 0;
+    double calculatedProgressPercentage =
+        totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
 
     // Sort programs by percentage in descending order
     programs.sort((a, b) => b['percentage'].compareTo(a['percentage']));
@@ -491,10 +557,10 @@ class _ResultG12 extends State<ResultG12> {
                               width: 120,
                               height: 120,
                               child: CircularProgressIndicator(
-                                value: progressPercentage /100,
+                                value: progressPercentage / 100,
                                 strokeWidth: 10,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.red),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
                                 backgroundColor: Colors.red.shade100,
                               ),
                             ),
@@ -507,8 +573,7 @@ class _ResultG12 extends State<ResultG12> {
                               ),
                               child: Center(
                                 child: Text(
-                                  '${progressPercentage
-                                      .toStringAsFixed(2)}%',
+                                  '${progressPercentage.toStringAsFixed(2)}%',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -532,8 +597,8 @@ class _ResultG12 extends State<ResultG12> {
                         likelyToChoosePrograms,
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: isBold ? FontWeight.bold : FontWeight
-                              .normal,
+                          fontWeight:
+                              isBold ? FontWeight.bold : FontWeight.normal,
                           color: Colors.black,
                         ),
                       ),
@@ -592,7 +657,8 @@ class _ResultG12 extends State<ResultG12> {
                               ],
                             ),
                             SizedBox(height: 10),
-                            for (var program in programs) ...{  // Use spread operator
+                            for (var program in programs) ...{
+                              // Use spread operator
                               AssessmentContainer(
                                 label: program['label'],
                                 score: program['score'],
@@ -667,7 +733,8 @@ class AssessmentContainer extends StatelessWidget {
           ),
           SizedBox(height: 10),
           LinearProgressIndicator(
-            value: percentage / 100, // Use the percentage for progress indicator
+            value:
+                percentage / 100, // Use the percentage for progress indicator
             backgroundColor: Colors.grey.shade200,
             color: Colors.red,
           ),

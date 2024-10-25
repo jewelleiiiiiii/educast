@@ -15,9 +15,13 @@ import 'package:educast/LoginSignUpPages/Login.dart';
 import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../Notification/notification_page.dart';
+
 class Home4th extends StatefulWidget {
+  final String gradeLevel;
   const Home4th({
     super.key,
+    required this.gradeLevel,
   });
 
   @override
@@ -120,8 +124,7 @@ class _Home4thState extends State<Home4th> {
           "Automation Technician",
         ];
       });
-    }
-    else if (course == "Bachelor of Electronics Engineering Technology") {
+    } else if (course == "Bachelor of Electronics Engineering Technology") {
       setState(() {
         relatedJobsText = "BElectroET-related Jobs";
         jobs = [
@@ -132,8 +135,7 @@ class _Home4thState extends State<Home4th> {
           "Broadcast Engineering Technician",
         ];
       });
-    }
-    else if (course == "Bachelor of Food Engineering Technology") {
+    } else if (course == "Bachelor of Food Engineering Technology") {
       setState(() {
         relatedJobsText = "BFET-related Jobs";
         jobs = [
@@ -144,8 +146,7 @@ class _Home4thState extends State<Home4th> {
           "Operations Supervisor in Food Manufacturing",
         ];
       });
-    }
-    else if (course == "Bachelor of Mechanical Engineering Technology") {
+    } else if (course == "Bachelor of Mechanical Engineering Technology") {
       setState(() {
         relatedJobsText = "BMechET-related Jobs";
         jobs = [
@@ -156,8 +157,7 @@ class _Home4thState extends State<Home4th> {
           "Project Engineer",
         ];
       });
-    }
-    else if (course == "Bachelor of Mechatronics Engineering Technology") {
+    } else if (course == "Bachelor of Mechatronics Engineering Technology") {
       setState(() {
         relatedJobsText = "BMechtronET-related Jobs";
         jobs = [
@@ -168,8 +168,7 @@ class _Home4thState extends State<Home4th> {
           "Instrumentation Engineer",
         ];
       });
-    }
-    else if (course == "Bachelor of Science in Criminology") {
+    } else if (course == "Bachelor of Science in Criminology") {
       setState(() {
         relatedJobsText = "BSCrim-related Jobs";
         jobs = [
@@ -180,8 +179,7 @@ class _Home4thState extends State<Home4th> {
           "Security Officer",
         ];
       });
-    }
-    else if (course == "Bachelor of Science in Psychology") {
+    } else if (course == "Bachelor of Science in Psychology") {
       setState(() {
         relatedJobsText = "BSPsych-related Jobs";
         jobs = [
@@ -192,14 +190,14 @@ class _Home4thState extends State<Home4th> {
           "Behavioral Therapist",
         ];
       });
-    }
-    else {
+    } else {
       setState(() {
         relatedJobsText = "Related Jobs";
         jobs = []; // Clear jobs if course is not matched
       });
     }
   }
+
   void _toggleDrawer() {
     setState(() {
       _isDrawerOpen = !_isDrawerOpen;
@@ -336,25 +334,30 @@ class _Home4thState extends State<Home4th> {
                               width: 120,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final user = FirebaseAuth.instance.currentUser;
+                                  final user =
+                                      FirebaseAuth.instance.currentUser;
                                   if (user != null) {
-                                    final userResultDoc = FirebaseFirestore.instance
+                                    final userResultDoc = FirebaseFirestore
+                                        .instance
                                         .collection('userResult4th')
                                         .doc(user.uid);
 
-                                    final docSnapshot = await userResultDoc.get();
+                                    final docSnapshot =
+                                        await userResultDoc.get();
 
                                     if (docSnapshot.exists) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => AlreadyAnswered4th()),
+                                            builder: (context) =>
+                                                AlreadyAnswered4th()),
                                       );
                                     } else {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => FourthIntro()),
+                                            builder: (context) =>
+                                                FourthIntro()),
                                       );
                                     }
                                   } else {}
@@ -385,188 +388,215 @@ class _Home4thState extends State<Home4th> {
                 ],
               ),
             ),
-      SliverToBoxAdapter(
-        child: Container(
-          margin: EdgeInsets.zero,
-          padding: EdgeInsets.fromLTRB(
-            screenWidth * 0.05,
-            screenHeight * 0.05,
-            screenWidth * 0.05,
-            screenHeight * 0.01,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    relatedJobsText,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 10.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => const Programs()),
-                        // );
-                      },
-                      child: Text(
-                        "View All",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.fromLTRB(
+                  screenWidth * 0.05,
+                  screenHeight * 0.05,
+                  screenWidth * 0.05,
+                  screenHeight * 0.01,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          relatedJobsText,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
+                          textAlign: TextAlign.start,
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: List.generate(
-                        // Ensure we only generate cards based on the length of jobs
-                        jobs.length >= 2 ? 2 : jobs.length, // Limit to 2 or the actual number of jobs available
-                            (index) {
-                          List<Gradient> gradients = [
-                            LinearGradient(
-                              colors: [Colors.blueAccent, Colors.purpleAccent.shade100],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            LinearGradient(
-                              colors: [Colors.teal.shade300, Colors.cyan.shade100],
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                            ),
-                          ];
-
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                navigateToCoursePage(context, jobs[index]);
-                              },
-                              child: Container(
-                                height: 80,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  gradient: gradients[index % gradients.length],
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      jobs[index],
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      maxLines: null,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8.0), // Space between two columns
-                  Expanded(
-                    child: Column(
-                      children: List.generate(
-                        // Ensure we only generate cards based on the remaining jobs
-                        jobs.length > 2 ? 2 : (jobs.length > 2 ? jobs.length - 2 : 0), // Limit to 2 or the remaining jobs
-                            (index) {
-                          List<Gradient> gradients = [
-                            LinearGradient(
-                              colors: [Colors.pink.shade600, Colors.orange.shade300],
-                              begin: Alignment.bottomLeft,
-                              end: Alignment.topRight,
-                            ),
-                            LinearGradient(
-                              colors: [Colors.indigo.shade500, Colors.blueGrey.shade200],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          ];
-
-                          // Calculate the actual index for the jobs list
-                          int jobIndex = index + 2;
-
-                          return jobIndex < jobs.length // Check if index is within range
-                              ? Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),child: InkWell(
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.0),
+                          child: GestureDetector(
                             onTap: () {
-                              navigateToCoursePage(context, jobs[index]);
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => const Programs()),
+                              // );
                             },
-                            child: Container(
-                              height: 80,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                gradient: gradients[index % gradients.length],
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    jobs[jobIndex],
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: null,
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                ),
+                            child: Text(
+                              "View All",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
                               ),
                             ),
                           ),
-                          )
-                              : SizedBox(); // Return an empty box if no job is available
-                        },
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: 8.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              // Ensure we only generate cards based on the length of jobs
+                              jobs.length >= 2
+                                  ? 2
+                                  : jobs
+                                      .length, // Limit to 2 or the actual number of jobs available
+                              (index) {
+                                List<Gradient> gradients = [
+                                  LinearGradient(
+                                    colors: [
+                                      Colors.blueAccent,
+                                      Colors.purpleAccent.shade100
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  LinearGradient(
+                                    colors: [
+                                      Colors.teal.shade300,
+                                      Colors.cyan.shade100
+                                    ],
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                  ),
+                                ];
+
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      navigateToCoursePage(
+                                          context, jobs[index]);
+                                    },
+                                    child: Container(
+                                      height: 80,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        gradient:
+                                            gradients[index % gradients.length],
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            jobs[index],
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            maxLines: null,
+                                            overflow: TextOverflow.visible,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8.0), // Space between two columns
+                        Expanded(
+                          child: Column(
+                            children: List.generate(
+                              // Ensure we only generate cards based on the remaining jobs
+                              jobs.length > 2
+                                  ? 2
+                                  : (jobs.length > 2
+                                      ? jobs.length - 2
+                                      : 0), // Limit to 2 or the remaining jobs
+                              (index) {
+                                List<Gradient> gradients = [
+                                  LinearGradient(
+                                    colors: [
+                                      Colors.pink.shade600,
+                                      Colors.orange.shade300
+                                    ],
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topRight,
+                                  ),
+                                  LinearGradient(
+                                    colors: [
+                                      Colors.indigo.shade500,
+                                      Colors.blueGrey.shade200
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                ];
+
+                                // Calculate the actual index for the jobs list
+                                int jobIndex = index + 2;
+
+                                return jobIndex <
+                                        jobs.length // Check if index is within range
+                                    ? Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            navigateToCoursePage(
+                                                context, jobs[index]);
+                                          },
+                                          child: Container(
+                                            height: 80,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              gradient: gradients[
+                                                  index % gradients.length],
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Text(
+                                                  jobs[jobIndex],
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: null,
+                                                  overflow:
+                                                      TextOverflow.visible,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(); // Return an empty box if no job is available
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-
-            ],
-          ),
-        ),
-      ),
-
-
-      SliverToBoxAdapter(
+            ),
+            SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -699,8 +729,7 @@ class _Home4thState extends State<Home4th> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                           SettingsPage()),
+                                          builder: (context) => SettingsPage()),
                                     );
                                   },
                                 ),
@@ -717,7 +746,8 @@ class _Home4thState extends State<Home4th> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => HistoryPage4th()),
+                                          builder: (context) =>
+                                              HistoryPage4th()),
                                     );
                                   },
                                 ),
@@ -734,8 +764,7 @@ class _Home4thState extends State<Home4th> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                           AboutPage()),
+                                          builder: (context) => AboutPage()),
                                     );
                                   },
                                 ),
@@ -752,8 +781,7 @@ class _Home4thState extends State<Home4th> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                           FeedbackPage()),
+                                          builder: (context) => FeedbackPage()),
                                     );
                                   },
                                 ),
@@ -805,114 +833,11 @@ class _Home4thState extends State<Home4th> {
             ),
           ],
         ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home4th()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/home.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Search4th()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/search.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                SizedBox(width: iconSize),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/notif.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Result4th()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/stats.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
-              child: Container(
-                width: iconSize * 2,
-                height: iconSize * 2,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF08080),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.8),
-                    width: 10,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResult4th')
-                          .doc(user.uid);
-
-                      final docSnapshot = await userResultDoc.get();
-
-                      if (docSnapshot.exists) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlreadyAnswered4th()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FourthIntro()),
-                        );
-                      }
-                    } else {}
-                  },
-                  icon: Image.asset(
-                    'assets/main.png',
-                    width: iconSize * 1.3,
-                    height: iconSize * 1.3,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: BottomNavitation4th(iconSize: iconSize),
       ),
     );
   }
+
   void navigateToCoursePage(BuildContext context, String course) {
     switch (course) {
       case 'Software Developer':
@@ -954,8 +879,133 @@ class _Home4thState extends State<Home4th> {
       default:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Home4th()),
+          MaterialPageRoute(builder: (context) => Home4th(gradeLevel: "4th")),
         );
     }
+  }
+}
+
+class BottomNavitation4th extends StatelessWidget {
+  const BottomNavitation4th({
+    super.key,
+    required this.iconSize,
+  });
+
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Home4th(gradeLevel: "4th")),
+                );
+              },
+              icon: Image.asset(
+                'assets/home.png',
+                width: iconSize,
+                height: iconSize,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Search4th()),
+                );
+              },
+              icon: Image.asset(
+                'assets/search.png',
+                width: iconSize,
+                height: iconSize,
+              ),
+            ),
+            SizedBox(width: iconSize),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  final user = FirebaseAuth.instance.currentUser;
+
+                  return NotificationPage(uuid: user!.uid);
+                }));
+              },
+              icon: Image.asset(
+                'assets/notif.png',
+                width: iconSize,
+                height: iconSize,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Result4th()),
+                );
+              },
+              icon: Image.asset(
+                'assets/stats.png',
+                width: iconSize,
+                height: iconSize,
+              ),
+            ),
+          ],
+        ),
+        Positioned(
+          top: -iconSize * 0.75,
+          left: MediaQuery.of(context).size.width / 2 - iconSize,
+          child: Container(
+            width: iconSize * 2,
+            height: iconSize * 2,
+            decoration: BoxDecoration(
+              color: Color(0xFFF08080),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withOpacity(0.8),
+                width: 10,
+              ),
+            ),
+            child: IconButton(
+              onPressed: () async {
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  final userResultDoc = FirebaseFirestore.instance
+                      .collection('userResult4th')
+                      .doc(user.uid);
+
+                  final docSnapshot = await userResultDoc.get();
+
+                  if (docSnapshot.exists) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AlreadyAnswered4th()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FourthIntro()),
+                    );
+                  }
+                } else {}
+              },
+              icon: Image.asset(
+                'assets/main.png',
+                width: iconSize * 1.3,
+                height: iconSize * 1.3,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

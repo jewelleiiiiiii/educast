@@ -131,7 +131,9 @@ class _G10Intro extends State<G10Intro> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG10()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG10(gradeLevel: "10")),
                     );
                   },
                   icon: Image.asset(

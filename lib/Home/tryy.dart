@@ -46,7 +46,6 @@ class _try extends State<tryy> {
     }
   }
 
-
   void _updateRelatedProgramsText(String strand) {
     if (strand == 'Science, Technology, Engineering, and Mathematics') {
       relatedProgramsText = 'STEM-Related Programs';
@@ -96,7 +95,6 @@ class _try extends State<tryy> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -118,12 +116,13 @@ class _try extends State<tryy> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                   icon: Image.asset(
-                    'assets/back.png',  // Path to your back.png
-                    width: 24,          // Adjust the size as needed
+                    'assets/back.png', // Path to your back.png
+                    width: 24, // Adjust the size as needed
                     height: 24,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);  // Navigates back to the previous page
+                    Navigator.pop(
+                        context); // Navigates back to the previous page
                   },
                 ),
               ),
@@ -174,7 +173,7 @@ class _try extends State<tryy> {
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -183,8 +182,8 @@ class _try extends State<tryy> {
                           itemCount: userStrand == 'General Academic Strand'
                               ? 9
                               : courses.length > 4
-                              ? 4
-                              : courses.length,
+                                  ? 4
+                                  : courses.length,
                           itemBuilder: (context, index) {
                             List<Gradient> gradients = [
                               LinearGradient(
@@ -278,8 +277,10 @@ class _try extends State<tryy> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[index],
@@ -318,7 +319,7 @@ class _try extends State<tryy> {
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
                           gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -364,8 +365,10 @@ class _try extends State<tryy> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[courseIndex],
@@ -393,11 +396,8 @@ class _try extends State<tryy> {
           ),
         ],
       ),
-  bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+      bottomNavigationBar: Container(
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -424,7 +424,9 @@ class _try extends State<tryy> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeG12()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const HomeG12(gradeLevel: "12")),
                     );
                   },
                   icon: Image.asset(
@@ -472,10 +474,7 @@ class _try extends State<tryy> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -554,7 +553,7 @@ class _try extends State<tryy> {
       default:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeG12()),
+          MaterialPageRoute(builder: (context) => HomeG12(gradeLevel: "12")),
         );
     }
   }
