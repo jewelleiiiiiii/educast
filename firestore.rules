@@ -1,8 +1,87 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
+
+match /users/{userId} {
+  // Allow both authenticated and unauthenticated users to read user data
+  allow read: if true;
+
+  // Allow the authenticated user to write to their own document
+  // OR allow the specific admin UID to write to any document
+  allow write: if request.auth != null && (request.auth.uid == userId || request.auth.uid == '9pNIBaQnd2eWoQryRRmT9vIb4Dw1' || request.auth.uid == 'nsYEw4vqkyUhD5L2fgJwYHXZA2T2');
+}
+
+
+match /feedback/{document=**} {
+  allow read: if true;
+  allow write: if true;
+}
+
+
+ match /userAnswerG10/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+ match /userAnswer4th/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+     match /userAnswerG12/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /strandcontent/{document=**} {
+  allow read: if request.auth != null; // Allow authenticated users to read
+  allow write: if request.auth != null; // Allow authenticated users to write
+}
+match /jobcontent/{document=**} {
+  allow read: if request.auth != null; // Allow authenticated users to read
+  allow write: if request.auth != null; // Allow authenticated users to write
+}
+
+match /JobsperProgram/{document=**} {
+  allow read: if request.auth != null; // Allow authenticated users to read
+  allow write: if request.auth != null; // Allow authenticated users to write
+}
+
+
+    match /userAction/{userId} {
+    	allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+   match /questions/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /userResultG10/{userId} {
+      allow read: if request.auth != null; // Allow any authenticated user to read user results
+      allow write: if request.auth != null; // Allow any authenticated user to write user results
+    }
+     match /userResult4th/{userId} {
+      allow read: if request.auth != null; // Allow any authenticated user to read user results
+      allow write: if request.auth != null; // Allow any authenticated user to write user results
+    }
+    match /userResultG12/{userId} {
+      allow read: if request.auth != null; // Allow any authenticated user to read user results
+      allow write: if request.auth != null; // Allow any authenticated user to write user results
+    }
+
+    match /programcontent/{document=**} {
+      allow read, write: if true;
+    }
+    
+    match /TopCoursesInBatStateU/{document=**} {
+    allow read, write: if request.auth != null || true;
+    }
+    
+    match /TopJobsInBatStateU/{document=**} {
+    allow read: if request.auth != null; // Allow any authenticated user to read user results
+    allow write: if request.auth != null; // Allow any authenticated user to write user results
+    
+    }
+    
+    match /questions4th/{document=**} {
+    allow read, write: if request.auth != null || true;
+    }
+
   }
 }
