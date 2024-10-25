@@ -24,6 +24,8 @@ import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:educast/Search/searchg12.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../Notification/notification_page.dart';
+
 class HomeG12 extends StatefulWidget {
   const HomeG12({
     super.key,
@@ -136,21 +138,17 @@ class _HomeG12State extends State<HomeG12> {
       _isDrawerOpen = false;
     });
   }
+
 // Method to check if the "View All" text should be visible based on the user's strand.
   bool _shouldShowViewAll(String strand) {
-    return strand == 'Science, Technology, Engineering, and Mathematics' || strand == 'General Academic Strand';
+    return strand == 'Science, Technology, Engineering, and Mathematics' ||
+        strand == 'General Academic Strand';
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
@@ -168,10 +166,7 @@ class _HomeG12State extends State<HomeG12> {
                 automaticallyImplyLeading: false,
                 flexibleSpace: Padding(
                   padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .padding
-                        .top,
+                    top: MediaQuery.of(context).padding.top,
                     left: screenWidth * 0.03,
                     right: paddingHorizontal,
                   ),
@@ -224,7 +219,7 @@ class _HomeG12State extends State<HomeG12> {
                     Container(
                       height: screenHeight * 0.19,
                       margin:
-                      EdgeInsets.symmetric(horizontal: paddingHorizontal),
+                          EdgeInsets.symmetric(horizontal: paddingHorizontal),
                       decoration: BoxDecoration(
                         image: const DecorationImage(
                           image: AssetImage('assets/1.png'),
@@ -238,7 +233,7 @@ class _HomeG12State extends State<HomeG12> {
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding:
-                              const EdgeInsets.only(right: 150.0, left: 20),
+                                  const EdgeInsets.only(right: 150.0, left: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,24 +267,29 @@ class _HomeG12State extends State<HomeG12> {
                                 width: 120,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    final user = FirebaseAuth.instance.currentUser;
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
                                     if (user != null) {
-                                      final userResultDoc = FirebaseFirestore.instance
+                                      final userResultDoc = FirebaseFirestore
+                                          .instance
                                           .collection('userResultG12')
                                           .doc(user.uid);
 
-                                      final docSnapshot = await userResultDoc.get();
+                                      final docSnapshot =
+                                          await userResultDoc.get();
 
                                       if (docSnapshot.exists) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => AlreadyAnsweredG12()),
+                                              builder: (context) =>
+                                                  AlreadyAnsweredG12()),
                                         );
                                       } else {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => G12Intro()),
+                                          MaterialPageRoute(
+                                              builder: (context) => G12Intro()),
                                         );
                                       }
                                     } else {}
@@ -356,17 +356,21 @@ class _HomeG12State extends State<HomeG12> {
                                   if (userStrand == "General Academic Strand") {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => GasPrograms()),
+                                      MaterialPageRoute(
+                                          builder: (context) => GasPrograms()),
                                     );
-                                  } else if (userStrand == "Science, Technology, Engineering, and Mathematics") {
+                                  } else if (userStrand ==
+                                      "Science, Technology, Engineering, and Mathematics") {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => StemPrograms()),
+                                      MaterialPageRoute(
+                                          builder: (context) => StemPrograms()),
                                     );
                                   } else {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => HomeG12()),
+                                      MaterialPageRoute(
+                                          builder: (context) => HomeG12()),
                                     );
                                   }
                                 },
@@ -387,7 +391,8 @@ class _HomeG12State extends State<HomeG12> {
                         height: 150.0,
                         child: GridView.builder(
                           padding: EdgeInsets.zero,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -434,7 +439,8 @@ class _HomeG12State extends State<HomeG12> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
-                              child: InkWell( // Make the container clickable
+                              child: InkWell(
+                                // Make the container clickable
                                 onTap: () {
                                   // Add dynamic navigation logic here
                                   navigateToCoursePage(context, courses[index]);
@@ -449,10 +455,10 @@ class _HomeG12State extends State<HomeG12> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           courses[index],
@@ -503,7 +509,12 @@ class _HomeG12State extends State<HomeG12> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return const NotificationPage();
+                            }));
+                          },
                           child: Image.asset(
                             'assets/IS.jpg',
                             fit: BoxFit.cover,
@@ -644,7 +655,7 @@ class _HomeG12State extends State<HomeG12> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                             FeedbackPage()),
+                                                FeedbackPage()),
                                       );
                                     },
                                   ),
@@ -662,7 +673,7 @@ class _HomeG12State extends State<HomeG12> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const LoginPage()),
+                                                const LoginPage()),
                                       );
                                     },
                                   ),
@@ -680,10 +691,7 @@ class _HomeG12State extends State<HomeG12> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.10,
+        height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
           border: const Border(
@@ -758,10 +766,7 @@ class _HomeG12State extends State<HomeG12> {
             ),
             Positioned(
               top: -iconSize * 0.75,
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 2 - iconSize,
+              left: MediaQuery.of(context).size.width / 2 - iconSize,
               child: Container(
                 width: iconSize * 2,
                 height: iconSize * 2,
@@ -880,7 +885,7 @@ class _HomeG12State extends State<HomeG12> {
         );
         break;
       default:
-      // Handle default case or navigate to a generic page
+        // Handle default case or navigate to a generic page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomeG12()),
