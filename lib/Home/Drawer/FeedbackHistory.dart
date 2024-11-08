@@ -7,7 +7,6 @@ class FeedbackHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the current user's UID
     User? user = FirebaseAuth.instance.currentUser;
 
     // Check if the user is logged in
@@ -60,6 +59,7 @@ class FeedbackHistoryPage extends StatelessWidget {
             String feedbackField = 'feedback$index';
             String starRatingField = 'starRating$index';
             String timestampField = 'timestamp$index';
+            String replyField = 'reply$index';
 
             // Break the loop if no more feedback fields are found
             if (feedbackData[feedbackField] == null) {
@@ -70,7 +70,7 @@ class FeedbackHistoryPage extends StatelessWidget {
             String feedbackText = feedbackData[feedbackField] ?? 'No feedback';
             int starRating = feedbackData[starRatingField] ?? 0;
             Timestamp timestamp = feedbackData[timestampField] ?? Timestamp.now();
-
+            String replyText = feedbackData[replyField] ?? 'No feedback';
             // Create a feedback item widget
             feedbackItems.add(
               Container(
@@ -98,7 +98,9 @@ class FeedbackHistoryPage extends StatelessWidget {
                     SizedBox(height: 8),
                     Text('Star Rating: $starRating'),
                     SizedBox(height: 4),
-                    Text('Submitted on: ${timestamp.toDate()}'), // Convert timestamp to DateTime
+                    Text('Submitted on: ${timestamp.toDate()}'),
+                    SizedBox(height: 4),
+                    Text('Reply: $replyText'),
                   ],
                 ),
               ),

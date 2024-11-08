@@ -11,15 +11,17 @@ class SubmissionConfirmationG12 extends StatefulWidget {
   _SubmissionConfirmationG12 createState() => _SubmissionConfirmationG12();
 }
 
-class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
+class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> with WidgetsBindingObserver {
   late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this); // Add observer
     _controller = VideoPlayerController.asset('assets/alarm.mp4')
       ..initialize().then((_) {
         setState(() {});
+        _controller.setVolume(0); // Mute the video
         _controller.play();
         _controller.setLooping(true);
       });
@@ -27,9 +29,20 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // Remove observer
+    _controller.pause(); // Pause the video
     _controller.dispose();
     super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      // Pause video when app loses focus
+      _controller.pause();
+    }
+  }
+
 
   Future<void> _viewResults() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -62,22 +75,22 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
       return;
     }
 
-    Map<String, int> results = {
-      "Mechanical Reasoning": 0,
-      "Spatial Reasoning": 0,
-      "Verbal Reasoning": 0,
-      "Numerical Ability": 0,
-      "Language Usage": 0,
-      "Word Knowledge": 0,
-      "Perceptual Speed and Accuracy": 0,
-      "Analytical Ability": 0,
-      "Basic Operations": 0,
-      "Word Problems": 0,
-      "Word Association": 0,
-      "Logic": 0,
-      "Grammar and Correct Usage": 0,
-      "Vocabulary": 0,
-      "Data Interpretation": 0,
+    Map<String, double> results = {
+      "Mechanical Reasoning": 0.0,
+      "Spatial Reasoning": 0.0,
+      "Verbal Reasoning": 0.0,
+      "Numerical Ability": 0.0,
+      "Language Usage": 0.0,
+      "Word Knowledge": 0.0,
+      "Perceptual Speed and Accuracy": 0.0,
+      "Analytical Ability": 0.0,
+      "Basic Operations": 0.0,
+      "Word Problems": 0.0,
+      "Word Association": 0.0,
+      "Logic": 0.0,
+      "Grammar and Correct Usage": 0.0,
+      "Vocabulary": 0.0,
+      "Data Interpretation": 0.0,
     };
 
     for (int i = 1; i <= 75; i++) {
@@ -241,131 +254,6 @@ class _SubmissionConfirmationG12 extends State<SubmissionConfirmationG12> {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.10,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: const Border(
-            top: BorderSide(
-              color: Colors.grey,
-              width: 0.2,
-            ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0, -2),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const HomeG12(gradeLevel: "12")),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/home.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SearchG12()),
-                    // );
-                  },
-                  icon: Image.asset(
-                    'assets/search.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                SizedBox(width: iconSize),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/notif.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ResultG12()),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/stats.png',
-                    width: iconSize,
-                    height: iconSize,
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: -iconSize * 0.75,
-              left: MediaQuery.of(context).size.width / 2 - iconSize,
-              child: Container(
-                width: iconSize * 2,
-                height: iconSize * 2,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF08080),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.8),
-                    width: 10,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      final userResultDoc = FirebaseFirestore.instance
-                          .collection('userResultG12')
-                          .doc(user.uid);
-
-                      final docSnapshot = await userResultDoc.get();
-
-                      if (docSnapshot.exists) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AlreadyAnsweredG12()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => G12Intro()),
-                        );
-                      }
-                    } else {}
-                  },
-                  icon: Image.asset(
-                    'assets/main.png',
-                    width: iconSize * 1.3,
-                    height: iconSize * 1.3,
-                  ),
                 ),
               ),
             ),

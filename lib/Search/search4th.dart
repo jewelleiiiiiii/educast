@@ -827,47 +827,51 @@ class TopCoursesBarChart extends StatefulWidget {
 
 class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
   List<Map<String, dynamic>> topCourses = [];
+  String selectedDropdownOption = 'Top Chosen Jobs';
 
+  // Fetch top courses based on the selected dropdown option
   Future<void> _fetchTopCourses() async {
     try {
-      String uid = FirebaseAuth.instance.currentUser?.uid ??
-          ''; // Get the current user's UID
+      String uid = FirebaseAuth.instance.currentUser?.uid ?? ''; // User ID
       if (uid.isEmpty) {
         print('User is not logged in');
         return;
       }
 
-      // Reference to the 'users' collection
       DocumentSnapshot userDoc =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (!userDoc.exists) {
         print('User document not found');
         return;
       }
 
-      String? userCourse = userDoc
-          .get('course'); // Ensure this matches your Firestore field name
+      String? userCourse = userDoc.get('course');
       if (userCourse == null || userCourse.isEmpty) {
         print('User course not found');
         return;
       }
 
+      // Determine collection based on the selected dropdown option
+      String collectionName = selectedDropdownOption == 'Top Chosen Jobs'
+          ? 'topJobsInBatStateU'
+          : 'topSalaryJobs';
+
+      // Fetch document for user's course from the selected collection
       DocumentSnapshot topJobsDoc = await FirebaseFirestore.instance
-          .collection('TopJobsInBatStateU')
+          .collection(collectionName)
           .doc(userCourse)
           .get();
 
       if (topJobsDoc.exists) {
         Map<String, dynamic> data = topJobsDoc.data() as Map<String, dynamic>;
-        print("Fetched Data for $userCourse: $data");
+        print("Fetched Data for $userCourse from $collectionName: $data");
 
         setState(() {
           topCourses = data.entries.map((entry) {
             return {
-              'label': entry.key, // Job role
-              'value':
-                  entry.value ?? 0, // Ensure value is non-null (default to 0)
+              'label': entry.key,
+              'value': entry.value ?? 0,
             };
           }).toList();
         });
@@ -883,7 +887,8 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
   void didUpdateWidget(TopCoursesBarChart oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.course != widget.course ||
-        oldWidget.selectedOption != widget.selectedOption) {
+        oldWidget.selectedOption != widget.selectedOption ||
+        oldWidget.selectedOption != selectedDropdownOption) {
       _fetchTopCourses();
     }
   }
@@ -891,17 +896,45 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
   @override
   void initState() {
     super.initState();
-    _fetchTopCourses(); // Fetch courses initially
+    _fetchTopCourses();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300, // Fixed height for the chart
-      child: TopCoursesChart(topCourses: topCourses),
+    return Column(
+      children: [
+        // Dropdown to select between "Top Chosen Jobs" and "Top Salary Jobs"
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: DropdownButton<String>(
+            value: selectedDropdownOption,
+            items: [
+              DropdownMenuItem(
+                value: 'Top Chosen Jobs',
+                child: Text('Top Chosen Jobs'),
+              ),
+              DropdownMenuItem(
+                value: 'Top Salary Jobs',
+                child: Text('Top Salary Jobs'),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                selectedDropdownOption = value ?? 'Top Chosen Jobs';
+                _fetchTopCourses(); // Re-fetch data based on selection
+              });
+            },
+          ),
+        ),
+        SizedBox(
+          height: 300,
+          child: TopCoursesChart(topCourses: topCourses),
+        ),
+      ],
     );
   }
 }
+
 
 class TopCoursesChart extends StatelessWidget {
   final List<Map<String, dynamic>> topCourses;
@@ -973,8 +1006,8 @@ class TopCoursesChart extends StatelessWidget {
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 60,
-                  interval: interval,
+                  reservedSize: 80, // Increased from 60 for larger Y-axis width
+                  interval: 100000,
                   getTitlesWidget: (double value, TitleMeta meta) {
                     return Text(
                       value.toInt().toString(),
@@ -990,8 +1023,8 @@ class TopCoursesChart extends StatelessWidget {
               rightTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 60,
-                  interval: interval,
+                  reservedSize: 80, // Matching leftTitles adjustment
+                  interval: 100000,
                   getTitlesWidget: (double value, TitleMeta meta) {
                     return Text(
                       value.toInt().toString(),
@@ -1004,7 +1037,7 @@ class TopCoursesChart extends StatelessWidget {
                   },
                 ),
               ),
-              bottomTitles: AxisTitles(
+            bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 75,

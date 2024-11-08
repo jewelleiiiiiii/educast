@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:educast/Assessment/AssessmentHistory/AssessmentHistoryG12.dart';
 import 'package:educast/Assessment/Rules/G12Intro.dart';
 import 'package:educast/Assessment/assess2g12.dart';
 import 'package:educast/Home/homeg12.dart';
+import 'package:educast/Search/searchg12.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,46 +22,13 @@ class _ResultG12 extends State<ResultG12> {
   @override
   void initState() {
     super.initState();
-    _userData = _fetchUserData(); // Initialize the future properly
+    _userData = _fetchUserData();
   }
-
-  final Map<String, int> maxScores = {
-    'BAET': 255,
-    'BCivET': 265,
-    'BCompET': 295,
-    'BDT': 215,
-    'BElecET': 270,
-    'BElectroET': 275,
-    'BFET': 295,
-    'BMechET': 265,
-    'BMechtronET': 280,
-    'BSCrim': 335,
-    'BSIT': 300,
-    'BSPsych': 295,
-  };
-
-  final Map<String, List<int>> programWeights = {
-    'BAET': [5, 5, 2, 4, 2, 1, 4, 5, 5, 3, 2, 5, 2, 2, 4],
-    'BCivET': [4, 5, 2, 5, 2, 1, 4, 5, 5, 4, 2, 5, 2, 2, 5],
-    'BCompET': [4, 3, 3, 5, 3, 3, 4, 5, 5, 5, 3, 5, 3, 3, 5],
-    'BDT': [3, 5, 2, 3, 1, 1, 5, 4, 4, 3, 2, 4, 1, 2, 3],
-    'BElecET': [5, 4, 2, 5, 2, 2, 4, 5, 5, 4, 2, 5, 2, 2, 5],
-    'BElectroET': [5, 4, 2, 5, 2, 2, 4, 5, 5, 5, 2, 5, 2, 2, 5],
-    'BFET': [4, 4, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    'BMechET': [5, 5, 2, 5, 2, 1, 4, 5, 5, 4, 2, 5, 2, 2, 4],
-    'BMechtronET': [5, 4, 2, 5, 2, 2, 5, 5, 5, 4, 3, 5, 2, 2, 5],
-    'BSIT': [3, 3, 4, 5, 4, 5, 4, 5, 5, 5, 5, 5, 4, 5, 5],
-    'BSCrim': [2, 3, 5, 3, 5, 5, 4, 4, 3, 3, 5, 5, 5, 5, 3],
-    'BSPsych': [1, 2, 5, 3, 5, 5, 3, 4, 3, 3, 5, 5, 5, 5, 5],
-  };
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
     final iconSize = screenWidth * 0.10;
-    final paddingHorizontal = screenWidth * 0.04;
 
     return Scaffold(
       body: Stack(
@@ -82,57 +51,132 @@ class _ResultG12 extends State<ResultG12> {
                 }
 
                 var userData = snapshot.data!;
-                var strand = userData['strand'] ?? 'Unknown';
+                var userStrand = userData['strand'] ?? 'Unknown';
                 var userResult = userData['userResult'];
 
-                print(userData);
-                print(strand);
-                print(userResult);
-
-                List<double> userScores = [
-                  userResult['Mechanical Reasoning'] ?? 0.00,
-                  userResult['Spatial Reasoning'] ?? 0.00,
-                  userResult['Verbal Reasoning'] ?? 0.00,
-                  userResult['Numerical Ability'] ?? 0.00,
-                  userResult['Language Usage'] ?? 0.00,
-                  userResult['Word Knowledge'] ?? 0.00,
-                  userResult['Perceptual Speed and Accuracy'] ?? 0.00,
-                  userResult['Analytical Ability'] ?? 0.00,
-                  userResult['Basic Operations'] ?? 0.00,
-                  userResult['Word Problems'] ?? 0.00,
-                  userResult['Word Association'] ?? 0.00,
-                  userResult['Logic'] ?? 0.00,
-                  userResult['Grammar and Correct Usage'] ?? 0.00,
-                  userResult['Vocabulary'] ?? 0.00,
-                  userResult['Data Interpretation'] ?? 0.00
+                // Calculate scores as described
+                Map<String, double> calculatedScores = {};
+                List<String> parameters = [
+                  'Mechanical Reasoning', 'Spatial Reasoning', 'Verbal Reasoning',
+                  'Numerical Ability', 'Language Usage', 'Word Knowledge',
+                  'Perceptual Speed and Accuracy', 'Analytical Ability',
+                  'Basic Operations', 'Word Problems', 'Word Association',
+                  'Logic', 'Grammar and Correct Usage', 'Vocabulary',
+                  'Data Interpretation'
                 ];
 
-                final topProgramInfo =
-                    _calculateTopPrograms(userScores, strand);
-                // Get the top program percentage
-                double calculatedProgressPercentage =
-                    topProgramInfo['topProgram'] != ''
-                        ? topProgramInfo['programPercentages']
-                            [topProgramInfo['topProgram']]
-                        : 0;
+                for (var parameter in parameters) {
+                  double score = userResult[parameter] ?? 0.0;
+                  double calculatedScore = (score / 5) * 100;
+                  calculatedScores[parameter] = calculatedScore;
+                }
+
+                // Define allowed programs
+                List<String> allowedPrograms;
+                switch (userStrand) {
+                  case "Science, Technology, Engineering, and Mathematics":
+                    allowedPrograms = [
+                      "BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET",
+                      "BFET", "BMechET", "BMechtronET", "BSCrim", "BSIT", "BSPsych"
+                    ];
+                    break;
+                  case "Accountancy, Business, and Management":
+                    allowedPrograms = ["BSCrim"];
+                    break;
+                  case "Humanities and Social Sciences":
+                    allowedPrograms = ["BSCrim", "BSPsych"];
+                    break;
+                  case "General Academic Strand":
+                    allowedPrograms = [
+                      "BAET", "BCivET", "BCompET", "BDT", "BElecET", "BElectroET",
+                      "BFET", "BMechET", "BMechtronET", "BSCrim", "BSPsych"
+                    ];
+                    break;
+                  default:
+                    allowedPrograms = [];
+                }
+
+                // Calculate program percentages
+                Map<String, double> programPercentages = {};
+                Map<String, List<String>> programCriteria = {
+                  'BAET': ['Mechanical Reasoning', 'Perceptual Speed and Accuracy', 'Spatial Reasoning', 'Numerical Ability'],
+                  'BCivET': ['Analytical Ability', 'Spatial Reasoning', 'Data Interpretation', 'Grammar and Correct Usage'],
+                  'BCompET': ['Logic', 'Basic Operations', 'Data Interpretation', 'Word Problems'],
+                  'BDT': ['Analytical Ability', 'Spatial Reasoning', 'Vocabulary', 'Mechanical Reasoning'],
+                  'BElecET': ['Logic', 'Numerical Ability', 'Perceptual Speed and Accuracy', 'Grammar and Correct Usage'],
+                  'BElectroET': ['Basic Operations', 'Data Interpretation', 'Spatial Reasoning', 'Mechanical Reasoning'],
+                  'BFET': ['Numerical Ability', 'Perceptual Speed and Accuracy', 'Word Knowledge', 'Grammar and Correct Usage'],
+                  'BMechET': ['Analytical Ability', 'Mechanical Reasoning', 'Word Problems', 'Vocabulary'],
+                  'BMechtronET': ['Logic', 'Mechanical Reasoning', 'Perceptual Speed and Accuracy', 'Verbal Reasoning'],
+                  'BSIT': ['Analytical Ability', 'Logic', 'Data Interpretation', 'Word Association'],
+                  'BSCrim': ['Analytical Ability', 'Logic', 'Perceptual Speed and Accuracy', 'Spatial Reasoning'],
+                  'BSPsych': ['Verbal Reasoning', 'Vocabulary', 'Word Knowledge', 'Data Interpretation'],
+                };
+
+                for (var program in allowedPrograms) {
+                  if (programCriteria.containsKey(program)) {
+                    List<String> criteria = programCriteria[program]!;
+                    double sum = criteria.fold(0.0, (total, param) => total + (calculatedScores[param] ?? 0.0));
+                    double percentage = sum / criteria.length; // Average percentage
+                    programPercentages[program] = percentage;
+                  }
+                }
+
+                // Determine the top programs
+                String likelyToChooseText;
+                String likelyToChoosePrograms;
+                bool isBold = true;
+                double topPercentage = 0.0;
+
+                if (calculatedScores.values.every((score) => score == 0.0)) {
+                  likelyToChooseText = "Take the assessment to know";
+                  likelyToChoosePrograms = "the suitable program for you";
+                  isBold = false;
+                } else {
+                  var filteredProgramMatchCount = programPercentages.entries.where((entry) => allowedPrograms.contains(entry.key));
+
+                  if (filteredProgramMatchCount.isNotEmpty) {
+                    // Find the maximum percentage
+                    double maxPercentage = filteredProgramMatchCount.map((entry) => entry.value).reduce((a, b) => a > b ? a : b);
+                    topPercentage = maxPercentage;
+
+                    // Find all programs that have the maximum percentage
+                    var topPrograms = filteredProgramMatchCount
+                        .where((entry) => entry.value == maxPercentage)
+                        .map((entry) => entry.key)
+                        .toList();
+
+                    if (topPrograms.length > 1) {
+                      likelyToChooseText = "You excelled in multiple programs!";
+                      likelyToChoosePrograms = topPrograms.join(", ");
+                    } else {
+                      likelyToChooseText = "More likely to choose";
+                      likelyToChoosePrograms = topPrograms.first;
+                    }
+
+                    isBold = true;
+                  } else {
+                    likelyToChooseText = "No suitable programs found based on your strand.";
+                    likelyToChoosePrograms = "Please check the details below.";
+                    isBold = false;
+                  }
+                }
 
                 return _buildResultPage(
                   context,
                   assessmentLabels: assessmentLabels,
-                  progressPercentage: calculatedProgressPercentage,
-                  likelyToChooseText: topProgramInfo['likelyToChooseText'],
-                  likelyToChoosePrograms:
-                      topProgramInfo['likelyToChoosePrograms'],
-                  isBold: topProgramInfo['isBold'],
-                  totalScores: topProgramInfo['totalScores'],
-                  programPercentages: topProgramInfo['programPercentages'],
+                  progressPercentage: topPercentage,
+                  likelyToChooseText: likelyToChooseText,
+                  likelyToChoosePrograms: likelyToChoosePrograms,
+                  isBold: isBold,
+                  programPercentages: programPercentages,
                 );
               },
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
+        bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.10,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -173,10 +217,10 @@ class _ResultG12 extends State<ResultG12> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SearchG12()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SearchG12()),
+                    );
                   },
                   icon: Image.asset(
                     'assets/search.png',
@@ -273,7 +317,6 @@ class _ResultG12 extends State<ResultG12> {
       throw Exception("No user is currently signed in.");
     }
 
-    // Fetch the user's strand from 'users' collection
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -283,7 +326,6 @@ class _ResultG12 extends State<ResultG12> {
       throw Exception("User document does not exist.");
     }
 
-    // Attempt to fetch user result from 'userResultG12' collection
     DocumentSnapshot resultDoc = await FirebaseFirestore.instance
         .collection('userResultG12')
         .doc(user.uid)
@@ -334,129 +376,6 @@ class _ResultG12 extends State<ResultG12> {
   }
 
 
-  Map<String, dynamic> _calculateTopPrograms(
-      List<double> userScores, String userStrand) {
-    Map<String, double> totalScores = {};
-    double grandTotalScore = 0;
-
-    // Check if all userScores are 0.00
-    bool allScoresZero = userScores.every((score) => score == 0.00);
-
-    // Calculate total scores for each program
-    programWeights.forEach((program, weights) {
-      double totalScore = 0;
-      for (int i = 0; i < userScores.length; i++) {
-        totalScore += userScores[i] * weights[i];
-      }
-      totalScores[program] = totalScore;
-      grandTotalScore += totalScore;
-    });
-
-    // Calculate program percentages
-    Map<String, double> programPercentages = {};
-    totalScores.forEach((program, score) {
-      double maxScore = maxScores[program]!.toDouble(); // Use maxScores map
-      double percentage = (score / maxScore) * 100; // Percentage calculation
-      programPercentages[program] = percentage;
-    });
-
-    // Filter allowed programs based on user's strand
-    List<String> allowedPrograms;
-    switch (userStrand) {
-      case "Science, Technology, Engineering, and Mathematics":
-        allowedPrograms = [
-          "BAET",
-          "BCivET",
-          "BCompET",
-          "BDT",
-          "BElecET",
-          "BElectroET",
-          "BFET",
-          "BMechET",
-          "BMechtronET",
-          "BSCrim",
-          "BSIT",
-          "BSPsych"
-        ];
-        break;
-      case "Accountancy, Business, and Management":
-        allowedPrograms = ["BSCrim"];
-        break;
-      case "Humanities and Social Sciences":
-        allowedPrograms = ["BSCrim", "BSPsych"];
-        break;
-      case "General Academic Strand":
-        allowedPrograms = [
-          "BAET",
-          "BCivET",
-          "BCompET",
-          "BDT",
-          "BElecET",
-          "BElectroET",
-          "BFET",
-          "BMechET",
-          "BMechtronET",
-          "BSCrim",
-          "BSPsych"
-        ];
-        break;
-      default:
-        allowedPrograms = []; // No allowed programs if strand is unknown
-    }
-
-    // Filter programPercentages to only include allowed programs
-    Map<String, double> allowedProgramPercentages = Map.fromEntries(
-        programPercentages.entries
-            .where((entry) => allowedPrograms.contains(entry.key)));
-
-    // Check if there are any allowed programs
-    String topProgram = '';
-    if (allowedProgramPercentages.isNotEmpty) {
-      // Find the top program based on the highest percentage
-      topProgram = allowedProgramPercentages.entries
-          .reduce((a, b) => a.value > b.value ? a : b)
-          .key;
-    }
-
-    String likelyToChooseText;
-    String likelyToChoosePrograms;
-    bool isBold = true;
-
-    // Determine the likelyToChoose text based on top programs or all scores being zero
-    if (allScoresZero) {
-      likelyToChooseText = "Take the assessment to know";
-      likelyToChoosePrograms = "the suitable program for you";
-      isBold = false;
-    } else if (topProgram.isNotEmpty) {
-      likelyToChooseText = "More likely to choose";
-      likelyToChoosePrograms = topProgram;
-    } else if (allowedProgramPercentages.length == 2) {
-      likelyToChooseText = "You excelled in two programs!";
-      likelyToChoosePrograms = "Check the details below.";
-      isBold = false;
-    } else if (allowedProgramPercentages.length == 3) {
-      likelyToChooseText = "You excelled in three programs!";
-      likelyToChoosePrograms = "Check the details below.";
-      isBold = false;
-    } else if (allowedProgramPercentages.isEmpty) {
-      likelyToChooseText = "No suitable programs found based on your strand.";
-      likelyToChoosePrograms = "Please check the details below.";
-      isBold = false;
-    } else {
-      likelyToChooseText = "Check the details below.";
-      likelyToChoosePrograms = "No programs available.";
-      isBold = false;
-    }
-
-    return {
-      'topProgram': topProgram,
-      'likelyToChooseText': likelyToChooseText,
-      'likelyToChoosePrograms': likelyToChoosePrograms,
-      'isBold': isBold,
-      'totalScores': totalScores,
-      'programPercentages': programPercentages,
-    };
-  }
   Widget _buildResultPage(
     BuildContext context, {
     required List<String> assessmentLabels,
@@ -464,24 +383,18 @@ class _ResultG12 extends State<ResultG12> {
     required String likelyToChoosePrograms,
     required bool isBold,
     required double progressPercentage,
-    required Map<String, double> totalScores, // Added parameter
     required Map<String, double> programPercentages, // Added parameter
   }) {
-    double totalMaxScore = 0;
+
     List<Widget> widgets = [];
 
     List<Map<String, dynamic>> programs = assessmentLabels.map((label) {
       return {
         "label": label,
-        "score": totalScores[label] ?? 0.0,
         "percentage":
             programPercentages[label] ?? 0.0, // Ensure percentage is passed
       };
     }).toList();
-
-    double maxScore = programs.isNotEmpty ? programs[0]['score'] : 0;
-    double calculatedProgressPercentage =
-        totalMaxScore > 0 ? (maxScore / totalMaxScore) * 100 : 0;
 
     // Sort programs by percentage in descending order
     programs.sort((a, b) => b['percentage'].compareTo(a['percentage']));
@@ -491,7 +404,7 @@ class _ResultG12 extends State<ResultG12> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 110),
+            padding: const EdgeInsets.only(top: 150),
             child: SingleChildScrollView(
               child: Center(
                 child: SizedBox(
@@ -589,12 +502,12 @@ class _ResultG12 extends State<ResultG12> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => AssessmentHistoryG12(),
-                                    //   ),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AssessmentHistoryG12(),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'View details',
@@ -611,7 +524,7 @@ class _ResultG12 extends State<ResultG12> {
                               // Use spread operator
                               AssessmentContainer(
                                 label: program['label'],
-                                score: program['score'],
+
                                 percentage: program['percentage'],
                               ),
                             },
@@ -633,13 +546,11 @@ class _ResultG12 extends State<ResultG12> {
 
 class AssessmentContainer extends StatelessWidget {
   final String label;
-  final double score;
   final double percentage;
 
   const AssessmentContainer({
     super.key,
     required this.label,
-    required this.score,
     required this.percentage,
   });
 

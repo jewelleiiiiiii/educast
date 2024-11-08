@@ -1,4 +1,3 @@
-
 import 'package:educast/Assessment/Rules/G12Intro.dart';
 import 'package:educast/Assessment/assess2g12.dart';
 import 'package:educast/Home/homeg12.dart';
@@ -18,6 +17,7 @@ class AssessmentHistoryG12 extends StatefulWidget {
 class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
   List<String> _questions = List.generate(75, (index) => '');
   List<int?> _selectedOptions = List.generate(75, (index) => null);
+  List<int?> _correctAnswers = List.generate(75, (index) => null);
 
   @override
   void initState() {
@@ -39,14 +39,32 @@ class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
           if (questionData != null) {
             setState(() {
               _questions = List.generate(
-                42,
-                    (index) =>
-                questionData[(index + 1).toString()] ?? 'No Question',
+                75,
+                    (index) => questionData[(index + 1).toString()] ?? 'No Question',
               );
             });
           }
         } else {
           print('Questions document does not exist');
+        }
+
+        // Fetch answer key
+        final answerKeyDocument = await FirebaseFirestore.instance
+            .collection('questions')
+            .doc('grade12Key')
+            .get();
+        if (answerKeyDocument.exists) {
+          final answerKeyData = answerKeyDocument.data();
+          if (answerKeyData != null) {
+            setState(() {
+              _correctAnswers = List.generate(
+                75,
+                    (index) => answerKeyData[(index + 1).toString()] as int?,
+              );
+            });
+          }
+        } else {
+          print('Answer key document does not exist');
         }
 
         // Fetch user answers
@@ -75,14 +93,8 @@ class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     final iconSize = screenWidth * 0.10;
     final paddingHorizontal = screenWidth * 0.04;
 
@@ -115,8 +127,6 @@ class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 158, 39, 39),
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.zero,
-                  topRight: Radius.zero,
                   bottomLeft: Radius.circular(30.0),
                   bottomRight: Radius.circular(30.0),
                 ),
@@ -132,48 +142,68 @@ class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
               ),
             ),
             SizedBox(height: 20.0),
-            // Sticky header section
             Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 children: [
                   Expanded(
-                    flex: 1, // Flex factor for question number
+                    flex: 1,
                     child: Text(
                       'NO.',
                       style: TextStyle(
-                        fontSize: 14.0,
+                        fontSize: 11.0,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  SizedBox(width: 10.0),
                   Expanded(
-                    flex: 3, // Flex factor for question text
+                    flex: 1,
                     child: Text(
                       "QUESTION",
                       style: TextStyle(
-                        fontSize: 14.0,
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  SizedBox(width: 50),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "ANSWER",
+                      style: TextStyle(
+                        fontSize: 11.0,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(width: 10.0),
                   Expanded(
-                    flex: 2, // Flex factor for user answer
-                    child: Center(
-                      child:Text(
-                        "ANSWER", // Display answer as letter
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
+                    flex: 1,
+                    child: Text(
+                      "KEY",
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
                       ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "REMARKS",
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
@@ -333,7 +363,7 @@ class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
       ),
     );
   }
-  // Helper function to map answer numbers to letters
+
   String _mapAnswerToLetter(int? answer) {
     switch (answer) {
       case 1:
@@ -358,49 +388,32 @@ class _AssessmentHistoryG12 extends State<AssessmentHistoryG12> {
         children: List.generate(end - start, (index) {
           final questionIndex = start + index;
           if (questionIndex < _questions.length) {
-            final questionNumber = questionIndex + 1; // Adding 1 for readability
+            final questionNumber = questionIndex + 1;
             final questionText = _questions[questionIndex];
-            final userAnswer = _mapAnswerToLetter(_selectedOptions[questionIndex]); // Map answer to letter
+            final userAnswer = _mapAnswerToLetter(_selectedOptions[questionIndex]);
+            final correctAnswer = _mapAnswerToLetter(_correctAnswers[questionIndex]);
+            final remark = _selectedOptions[questionIndex] == _correctAnswers[questionIndex]
+                ? "Correct"
+                : "Wrong";
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Expanded(flex: 1, child: Text('$questionNumber')),
+                  Expanded(flex: 2, child: Text(questionText, textAlign: TextAlign.justify,),),
+                  SizedBox(width: 50),
+                  Expanded(flex: 1, child: Text(userAnswer)),
+                  Expanded(flex: 1, child: Text(correctAnswer)),
                   Expanded(
-                    flex: 1, // Flex factor for question number
+                    flex: 1,
                     child: Text(
-                      '$questionNumber',
+                      remark,
                       style: TextStyle(
-                        fontSize: 14.0,
+                        color: remark == "Correct" ? Colors.green : Colors.red,
+                        fontSize: 12,
                       ),
-                      textAlign: TextAlign.left,
                     ),
-                  ),
-                  SizedBox(width: 10.0),
-                  Expanded(
-                    flex: 3, // Flex factor for question text
-                    child: Text(
-                      questionText,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  SizedBox(width: 10.0),
-                  Expanded(
-                    flex: 2, // Flex factor for user answer
-                    child: Center(
-                      child:Text(
-                      userAnswer, // Display answer as letter
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
                   ),
                 ],
               ),
