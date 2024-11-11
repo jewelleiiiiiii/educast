@@ -854,7 +854,7 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
 
       // Determine collection based on the selected dropdown option
       String collectionName = selectedDropdownOption == 'Top Chosen Jobs'
-          ? 'topJobsInBatStateU'
+          ? 'TopJobsInBatStateU'
           : 'topSalaryJobs';
 
       // Fetch document for user's course from the selected collection
@@ -875,6 +875,9 @@ class _TopCoursesBarChartState extends State<TopCoursesBarChart> {
             };
           }).toList();
         });
+        print('User course: $userCourse');
+        print('Collection name: $collectionName');
+
       } else {
         print('No document found for the course: $userCourse');
       }
