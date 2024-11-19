@@ -2,6 +2,8 @@ import 'package:educast/Home/homeg12.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Home4th.dart';
+
 class Softwaredev extends StatefulWidget {
   @override
   _Softwaredev createState() => _Softwaredev();
@@ -110,7 +112,7 @@ class _Softwaredev extends State<Softwaredev> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => const HomeG12(gradeLevel: "12")),
+                  builder: (context) => const Home4th(gradeLevel: "Fourth-year College")),
             );
           },
         ),
