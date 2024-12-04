@@ -1,3 +1,4 @@
+import 'package:educast/Assessment/Rules/G10Intro.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -189,14 +190,14 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.vertical,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Container(
-                                  width: 200,
+                                  width: (MediaQuery.of(context).size.width - 80),
                                   child: Center(
                                     child: Text(
                                       'QUESTIONS',
@@ -209,30 +210,6 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                   ),
                                 ),
                                 SizedBox(width: 10.0),
-                                Container(
-                                  width: 300,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      for (String label in [
-                                        'AGREE',
-                                        'DISAGREE'
-                                      ])
-                                        Container(
-                                          width: 150.0,
-                                          child: Center(
-                                            child: Text(
-                                              label,
-                                              style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                             SizedBox(height: 10.0),
@@ -244,67 +221,81 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                                   String question = entry.value;
 
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
+                                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: 200,
-                                          child: Text(
-                                            question,
-                                            style: TextStyle(
-                                              fontSize: 14.0,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                        Center(
+                                          child:
+                                          Text(
+                                          question,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
                                           ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        SizedBox(width: 10.0),
+                                        ),
+
+                                        const SizedBox(height: 8.0),
                                         Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            Container(
-                                              width: 150.0,
-                                              child: Center(
-                                                child: Radio<int>(
-                                                  value: 0, // AGREE
-                                                  groupValue:
-                                                      _selectedOptions[index],
-                                                  onChanged: (int? value) {
-                                                    setState(() {
-                                                      _selectedOptions[index] =
-                                                          value;
-                                                    });
-                                                    _updateAnswer(index,
-                                                        value); // Update Firestore in real-time
-                                                  },
-                                                ),
-                                              ),
+                                            // Agree Column
+                                            Column(
+                                              children: [
+                                                const Text("Agree", style: TextStyle(color: Colors.red)),Theme(
+                                                  data: Theme.of(context).copyWith(
+                                                    unselectedWidgetColor: Colors.red, // Set the unselected color to green
+                                                  ),
+                                                  child: Radio<int>(
+                                                    value: 0, // AGREE
+                                                    groupValue: _selectedOptions[index],
+                                                    onChanged: (int? value) {
+                                                      setState(() {
+                                                        _selectedOptions[index] = value!;
+                                                      });
+                                                      _updateAnswer(index, value); // Update Firestore in real-time
+                                                    },
+                                                    activeColor: Colors.red, // Set the selected color to green
+                                                  ),
+                                                )
+
+                                              ],
                                             ),
-                                            Container(
-                                              width: 150.0,
-                                              child: Center(
-                                                child: Radio<int>(
+                                            const SizedBox(width: 140.0),
+                                            Column(
+                                              children: [
+                                                const Text("Disagree", style: TextStyle(color: Colors.red)),
+                                                Radio<int>(
                                                   value: 1, // DISAGREE
-                                                  groupValue:
-                                                      _selectedOptions[index],
+                                                  groupValue: _selectedOptions[index],
                                                   onChanged: (int? value) {
                                                     setState(() {
-                                                      _selectedOptions[index] =
-                                                          value;
+                                                      _selectedOptions[index] = value!;
                                                     });
-                                                    _updateAnswer(index,
-                                                        value); // Update Firestore in real-time
+                                                    _updateAnswer(index, value); // Update Firestore in real-time
                                                   },
+                                                  activeColor: Colors.red,
                                                 ),
-                                              ),
+                                              ],
                                             ),
                                           ],
                                         ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(vertical: 5.0),
+                                          height: 1.0,
+                                          width: MediaQuery.of(context).size.width - .20,// Line thickness
+                                          color: Colors.grey , // Test with a visible color
+                                        ),
+
                                       ],
                                     ),
                                   );
                                 }),
                               ],
-                            ),
+                            )
+
                           ],
                         ),
                       ),
@@ -379,8 +370,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              const HomeG10(gradeLevel: "10")),
+                          builder: (context) => const HomeG10(gradeLevel: "Grade 10")),
                     );
                   },
                   icon: Image.asset(
@@ -393,8 +383,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchG10()),
+                      MaterialPageRoute(builder: (context) => const SearchG10()),
                     );
                   },
                   icon: Image.asset(
@@ -434,7 +423,7 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                 width: iconSize * 2,
                 height: iconSize * 2,
                 decoration: BoxDecoration(
-                  color: Color(0xFFF08080),
+                  color: const Color(0xFFF08080),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.white.withOpacity(0.8),
@@ -461,10 +450,10 @@ class _Questionnaire1G10 extends State<Questionnaire1G10> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Questionnaire1G10()),
+                              builder: (context) => const G10Intro()),
                         );
                       }
-                    } else {}
+                    }
                   },
                   icon: Image.asset(
                     'assets/main.png',

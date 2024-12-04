@@ -195,7 +195,7 @@ class _G10Rules extends State<G10Rules> with TickerProviderStateMixin {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const HomeG10(gradeLevel: "10")),
+                        builder: (context) => const HomeG10(gradeLevel: "Grade 10")),
                   );
                 },
                 icon: Image.asset(

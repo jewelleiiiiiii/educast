@@ -197,14 +197,14 @@ class _Questionnaire14th extends State<Questionnaire14th> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                        scrollDirection: Axis.vertical,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
                                 Container(
-                                  width: 200,
+                                  width: screenWidth - 80,
                                   child: Center(
                                     child: Text(
                                       'QUESTIONS',
@@ -217,85 +217,73 @@ class _Questionnaire14th extends State<Questionnaire14th> {
                                   ),
                                 ),
                                 SizedBox(width: 10.0),
-                                Container(
-                                  width: 350,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      for (int i = 5;
-                                          i >= 1;
-                                          i--) // Loop from 5 to 1
-                                        Container(
-                                          width: 70.0,
-                                          child: Center(
-                                            child: Text(
-                                              i.toString(),
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                             SizedBox(height: 10.0),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ..._questions.asMap().entries.map((entry) {
-                                  int index = entry.key;
-                                  String question = entry.value;
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ..._questions.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      String question = entry.value;
 
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 200,
-                                          child: Text(
-                                            question,
-                                            style: TextStyle(
-                                              fontSize: 14.0,
-                                            ),
-                                            textAlign: TextAlign.left,
-                                          ),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              question,
+                              style: TextStyle(
+                                fontSize: 14.0,
+
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Adjust spacing
+                              children: [
+                                for (int i = 5; i >= 1; i--) // Loop for each option
+                                  Column(
+                                    children: [
+                                      Text(
+                                        i.toString(),
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red,
                                         ),
-                                        SizedBox(width: 10.0),
-                                        Row(
-                                          children: [
-                                            for (int i = 5; i >= 1; i--)
-                                              Container(
-                                                width: 70.0,
-                                                child: Center(
-                                                  child: Radio<int>(
-                                                    value: i, // Options 1 to 5
-                                                    groupValue:
-                                                        _selectedOptions[index],
-                                                    onChanged: (int? value) {
-                                                      setState(() {
-                                                        _selectedOptions[
-                                                            index] = value;
-                                                      });
-                                                      _updateAnswer(index,
-                                                          value); // Update Firestore in real-time
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
+                                      ),
+                                      Radio<int>(
+                                        value: i,
+                                        groupValue: _selectedOptions[index],
+                                        onChanged: (int? value) {
+                                          setState(() {
+                                            _selectedOptions[index] = value;
+                                          });
+                                          _updateAnswer(index, value); // Firestore update
+                                        },
+                                        activeColor: Colors.red,
+                                      ),
+                                    ],
+                                  ),
                               ],
                             ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 5.0),
+                              height: 1.0,
+                              width: MediaQuery.of(context).size.width - .20,// Line thickness
+                              color: Colors.grey , // Test with a visible color
+                            ),
                           ],
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+
+                ],
                         ),
                       ),
                     ),

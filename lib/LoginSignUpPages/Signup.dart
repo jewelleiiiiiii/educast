@@ -9,13 +9,13 @@ import 'package:educast/LoginSignUpPages/Login.dart';
 import 'package:educast/LoginSignUpPages/LoginSignupPage.dart';
 import 'package:educast/LoginSignUpPages/StrandSelection.dart';
 import 'package:educast/services/snackbar.dart';
-import 'package:google_sign_in/google_sign_in.dart'; // Ensure this import is correct\
-// import 'package:logger/logger.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:math';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-
 import '../common/grade_level.dart';
+import 'dart:math';
+import 'dart:async';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -32,23 +32,24 @@ class _SignupPageState extends State<SignupPage> {
   final AuthServices _auth = AuthServices();
   bool isLoading = false;
   String _verificationCode = '';
+  late DateTime _codeGenerationTime;
 
   String generateCode() {
     var rng = Random();
-    String code =
-        (100000 + rng.nextInt(900000)).toString(); // Generates a 6-digit code
-    return code;
+    _verificationCode = (100000 + rng.nextInt(900000)).toString(); // Generates a 6-digit code
+    _codeGenerationTime = DateTime.now(); // Store the time when the code is generated
+    return _verificationCode;
   }
 
   Future<void> sendVerificationEmail(String email, String code) async {
     final smtpServer =
-        gmail('batstateu.tneu.educast@gmail.com', 'cfop qmzk ckxu ngln');
+    gmail('batstateu.tneu.educast@gmail.com', 'cfop qmzk ckxu ngln');
 
     final message = Message()
       ..from = Address('batstateu.tneu.educast@gmail.com', 'EduCAST')
       ..recipients.add(email)
       ..subject = 'Email Verification Code'
-      ..text = 'Your verification code is: $code';
+      ..text = 'Your verification code is: $code\nThis code will expire in 5 minutes.';
 
     try {
       final sendReport = await send(message, smtpServer);
@@ -57,6 +58,27 @@ class _SignupPageState extends State<SignupPage> {
       print('Message not sent. ${e.toString()}');
     }
   }
+
+  bool isCodeValid(String inputCode) {
+    if (_verificationCode.isEmpty) {
+      print('No code generated.');
+      return false;
+    }
+
+    if (DateTime.now().difference(_codeGenerationTime).inMinutes > 5) {
+      showSnackBar(context, "Code expired.");
+      return false;
+    }
+
+    if (inputCode == _verificationCode) {
+      print('Code verified successfully.');
+      return true;
+    } else {
+      print('Invalid code.');
+      return false;
+    }
+  }
+
 
   bool _isPasswordValid(String password) {
     // Minimum 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character
@@ -136,6 +158,7 @@ class _SignupPageState extends State<SignupPage> {
             email: fullemail,
             verificationCode: _verificationCode,
             password: _passwordController.text,
+            verificationCodeGenerationTime: _codeGenerationTime, // Pass the generation time
           ),
         ),
       );
@@ -883,11 +906,14 @@ class CodeVerificationPage extends StatefulWidget {
   final String email;
   final String verificationCode;
   final String password;
+  final DateTime verificationCodeGenerationTime;
 
-  CodeVerificationPage(
-      {required this.email,
-      required this.verificationCode,
-      required this.password});
+  CodeVerificationPage({
+    required this.email,
+    required this.verificationCode,
+    required this.password,
+    required this.verificationCodeGenerationTime,
+  });
 
   @override
   _CodeVerificationPageState createState() => _CodeVerificationPageState();
@@ -896,57 +922,92 @@ class CodeVerificationPage extends StatefulWidget {
 class _CodeVerificationPageState extends State<CodeVerificationPage> {
   final TextEditingController _codeController = TextEditingController();
   bool isLoading = false;
+  String _currentVerificationCode = '';
+  late DateTime _codeGenerationTime;
 
-  // Create Firestore entry after verification
+  @override
+  void initState() {
+    super.initState();
+    _currentVerificationCode = widget.verificationCode;
+    _codeGenerationTime = widget.verificationCodeGenerationTime;
+  }
+
+  String generateCode() {
+    var rng = Random();
+    _currentVerificationCode = (100000 + rng.nextInt(900000)).toString();
+    _codeGenerationTime = DateTime.now();
+    return _currentVerificationCode;
+  }
+
+  Future<void> sendVerificationEmail(String email, String code) async {
+    final smtpServer = gmail('batstateu.tneu.educast@gmail.com', 'cfop qmzk ckxu ngln');
+
+    final message = Message()
+      ..from = Address('batstateu.tneu.educast@gmail.com', 'EduCAST')
+      ..recipients.add(email)
+      ..subject = 'New Verification Code'
+      ..text = 'Your new verification code is: $code\nThis code will expire in 5 minutes.';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ${sendReport.toString()}');
+    } on MailerException catch (e) {
+      print('Message not sent: ${e.toString()}');
+    }
+  }
+
+  Future<void> sendNewCode() async {
+    String newCode = generateCode();
+    await sendVerificationEmail(widget.email, newCode);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('A new verification code has been sent to your email.')),
+    );
+  }
+
+  void verifyCode() {
+    final currentTime = DateTime.now();
+    final expirationTime = _codeGenerationTime.add(Duration(minutes: 5));
+
+    if (currentTime.isAfter(expirationTime)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Code expired. Please request a new one.')),
+      );
+      return;
+    }
+
+    if (_codeController.text == _currentVerificationCode) {
+      setState(() => isLoading = true);
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: widget.email, password: widget.password)
+          .then((userCredential) {
+        createFirestoreUser(userCredential.user!.uid);
+      }).catchError((e) {
+        showSnackBar(context, e.message ?? "Failed to create user.");
+        setState(() => isLoading = false);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Incorrect verification code')),
+      );
+    }
+  }
+
   Future<void> createFirestoreUser(String uid) async {
     try {
-      // Store user data in Firestore
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'email': widget.email,
-        // Add other necessary user data here
       });
 
-      // Navigate to the CreateAccountPage to update user info
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              CreateAccountPage(email: widget.email, password: widget.password),
+          builder: (context) => CreateAccountPage(email: widget.email, password: widget.password),
         ),
       );
     } catch (e) {
       showSnackBar(context, "Failed to create Firestore document.");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  void verifyCode() {
-    if (_codeController.text == widget.verificationCode) {
-      setState(() {
-        isLoading = true;
-      });
-      // Use an empty call to create a user in Firebase Auth without password
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-        email: widget.email,
-        password: widget.password,
-      )
-          .then((userCredential) {
-        createFirestoreUser(userCredential.user!.uid);
-      }).catchError((e) {
-        showSnackBar(context, e.message ?? "Failed to create user.");
-        setState(() {
-          isLoading = false;
-        });
-      });
-    } else {
-      // Code is incorrect, show an error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Incorrect verification code')),
-      );
+      setState(() => isLoading = false);
     }
   }
 
@@ -962,15 +1023,20 @@ class _CodeVerificationPageState extends State<CodeVerificationPage> {
             Text('A verification code has been sent to your email.'),
             TextField(
               controller: _codeController,
-              decoration: InputDecoration(
-                labelText: 'Enter Code',
-              ),
+              decoration: InputDecoration(labelText: 'Enter Code'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: isLoading ? null : verifyCode,
-              child:
-                  isLoading ? CircularProgressIndicator() : Text('Verify Code'),
+              child: isLoading ? CircularProgressIndicator() : Text('Verify Code'),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: sendNewCode,
+              child: Text(
+                'Send New Code',
+                style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+              ),
             ),
           ],
         ),
